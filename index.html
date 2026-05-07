@@ -308,6 +308,9 @@
                 <button onclick="switchTab('comparacao')" id="tab-comparacao" class="tab-btn inactive pb-3 text-sm uppercase tracking-wider flex items-center gap-2 text-brand-600">
                     <i data-lucide="columns" class="w-4 h-4"></i> Comparação 
                 </button>
+                <button onclick="switchTab('simulador')" id="tab-simulador" class="tab-btn inactive pb-3 text-sm uppercase tracking-wider flex items-center gap-2 text-sky-600">
+                    <i data-lucide="calculator" class="w-4 h-4"></i> Simulador 
+                </button>
             </div>
 
             <div id="mainContent">
@@ -1159,12 +1162,15 @@
                             <!-- Cards injectados aqui pelo JavaScript -->
                         </div>
                     </div>
+                </div>
 
+                <!-- VIEW 7: SIMULADOR -->
+                <div id="viewSimulador" class="hidden flex-col gap-6 animate-fade-in-down">
                     <!-- SIMULADOR DE ESCALA E PRODUTIVIDADE -->
-                    <div class="print-hide bg-white p-4 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 flex flex-col mt-6">
+                    <div class="print-hide bg-white p-4 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 flex flex-col">
                         <div class="flex items-center gap-3 mb-6">
-                            <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
-                                <i data-lucide="calculator" class="w-5 h-5 text-indigo-600"></i>
+                            <div class="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center">
+                                <i data-lucide="calculator" class="w-5 h-5 text-sky-600"></i>
                             </div>
                             <div>
                                 <h2 class="text-lg font-black text-slate-800 uppercase tracking-tight leading-none">Simulador de Cenários e Escala</h2>
@@ -1239,17 +1245,17 @@
                                     <p class="text-[10px] text-slate-500 font-medium mt-1">Estimado por cada estufa ativa</p>
                                 </div>
 
-                                <div class="bg-indigo-50 p-5 rounded-2xl border-2 border-indigo-100 flex flex-col justify-center sm:col-span-2 relative overflow-hidden">
-                                    <i data-lucide="target" class="absolute right-4 top-1/2 -translate-y-1/2 w-24 h-24 text-indigo-600 opacity-5"></i>
-                                    <span class="text-[11px] font-bold text-indigo-500 uppercase tracking-widest flex items-center gap-1 mb-2 relative z-10">Para bater a meta de <span id="simMetaDisplay">1.000</span> kg/dia:</span>
+                                <div class="bg-sky-50 p-5 rounded-2xl border-2 border-sky-100 flex flex-col justify-center sm:col-span-2 relative overflow-hidden">
+                                    <i data-lucide="target" class="absolute right-4 top-1/2 -translate-y-1/2 w-24 h-24 text-sky-600 opacity-5"></i>
+                                    <span class="text-[11px] font-bold text-sky-600 uppercase tracking-widest flex items-center gap-1 mb-2 relative z-10">Para bater a meta de <span id="simMetaDisplay">1.000</span> kg/dia:</span>
                                     
                                     <div class="flex items-baseline gap-3 relative z-10">
-                                        <p id="simOutEstufas" class="text-5xl font-black text-indigo-700 leading-none">0</p>
-                                        <span class="text-sm font-bold text-indigo-500 uppercase">Estufas simultâneas</span>
+                                        <p id="simOutEstufas" class="text-5xl font-black text-sky-700 leading-none">0</p>
+                                        <span class="text-sm font-bold text-sky-600 uppercase">Estufas simultâneas</span>
                                     </div>
                                     
-                                    <p class="text-xs text-indigo-600/80 font-bold mt-3 relative z-10 flex items-center gap-1">
-                                        <i data-lucide="sprout" class="w-4 h-4"></i> Equivale a aprox. <span id="simOutPlantasReq" class="font-black text-indigo-700">0</span> plantas ativas
+                                    <p class="text-xs text-sky-700/80 font-bold mt-3 relative z-10 flex items-center gap-1">
+                                        <i data-lucide="sprout" class="w-4 h-4"></i> Equivale a aprox. <span id="simOutPlantasReq" class="font-black text-sky-700">0</span> plantas ativas
                                     </p>
                                 </div>
                             </div>
@@ -1534,7 +1540,7 @@
         }
 
         function switchTab(tabName) {
-            ['previsao', 'produtividade', 'calendario', 'ranking', 'analise', 'comparacao'].forEach(t => {
+            ['previsao', 'produtividade', 'calendario', 'ranking', 'analise', 'comparacao', 'simulador'].forEach(t => {
                 const btn = document.getElementById('tab-' + t);
                 const view = document.getElementById('view' + t.charAt(0).toUpperCase() + t.slice(1));
                 if (t === tabName) {
@@ -1542,9 +1548,10 @@
                     if (t === 'ranking') btn.classList.add('text-brand-600');
                     if (t === 'analise') btn.classList.add('text-indigo-600');
                     if (t === 'comparacao') btn.classList.add('text-brand-600');
+                    if (t === 'simulador') btn.classList.add('text-sky-600');
                     view.classList.remove('hidden'); view.classList.add('flex');
                 } else {
-                    btn.classList.remove('active', 'text-brand-600', 'text-indigo-600'); btn.classList.add('inactive');
+                    btn.classList.remove('active', 'text-brand-600', 'text-indigo-600', 'text-sky-600'); btn.classList.add('inactive');
                     view.classList.add('hidden'); view.classList.remove('flex');
                 }
             });
@@ -2822,12 +2829,45 @@
             } else if (!document.getElementById('viewComparacao').classList.contains('hidden')) {
                 activeTab = 'Comparacao';
                 reportTitle = 'Relatório de Comparação de Lotes';
+            } else if (!document.getElementById('viewSimulador').classList.contains('hidden')) {
+                activeTab = 'Simulador';
+                reportTitle = 'Simulador de Cenários e Escala';
             }
 
             let summaryHtml = '';
             let detailHtml = '';
 
-            if (activeTab === 'Comparacao') {
+            if (activeTab === 'Simulador') {
+                const plantas = getSimVal('simPlantas');
+                const aprov = getSimVal('simAprov');
+                const frutos = getSimVal('simFrutos');
+                const peso = getSimVal('simPesoMedio');
+                const dias = getSimVal('simDiasColheita');
+                const meta = getSimVal('simMetaKg');
+                const totalKg = document.getElementById('simOutTotalKg').innerText;
+                const kgDia = document.getElementById('simOutKgDia').innerText;
+                const estufas = document.getElementById('simOutEstufas').innerText;
+                const plantasReq = document.getElementById('simOutPlantasReq').innerText;
+
+                summaryHtml = `
+                    <table class="ind-table" style="margin-top: 20px;">
+                        <tr class="ind-title-row"><td colspan="2">1. Parâmetros da Simulação</td></tr>
+                        <tr><td class="ind-bold" style="width: 50%">Plantas por Estufa</td><td>${plantas.toLocaleString('pt-BR')}</td></tr>
+                        <tr><td class="ind-bold">Aproveitamento (%)</td><td>${aprov}%</td></tr>
+                        <tr><td class="ind-bold">Frutos por Pé</td><td>${frutos}</td></tr>
+                        <tr><td class="ind-bold">Peso Médio (g)</td><td>${peso}g</td></tr>
+                        <tr><td class="ind-bold">Duração da Colheita (Dias)</td><td>${dias}</td></tr>
+                        <tr><td class="ind-bold">Meta Diária (Kg)</td><td>${meta.toLocaleString('pt-BR')} kg</td></tr>
+                    </table>
+                    <table class="ind-table" style="margin-top: 10px;">
+                        <tr class="ind-title-row"><td colspan="2">2. Resultados da Simulação</td></tr>
+                        <tr><td class="ind-bold" style="width: 50%">Total Produzido na Estufa</td><td>${totalKg} kg</td></tr>
+                        <tr><td class="ind-bold">Produção Diária (Média)</td><td>${kgDia} kg/dia</td></tr>
+                        <tr><td class="ind-bold">Estufas Simultâneas Necessárias</td><td>${estufas} estufas</td></tr>
+                        <tr><td class="ind-bold">Total de Plantas Ativas Necessárias</td><td>${plantasReq} plantas</td></tr>
+                    </table>
+                `;
+            } else if (activeTab === 'Comparacao') {
                 let compHeaders = '';
                 let compUnidades = '';
                 let compPeso = '';
