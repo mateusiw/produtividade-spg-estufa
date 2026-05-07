@@ -404,7 +404,7 @@
                             </div>
                             <div class="flex-auto w-full sm:w-auto min-w-[90px] lg:max-w-[120px] transition-all duration-300">
                                 <label class="text-[11px] font-bold text-slate-400 uppercase mb-2 block tracking-wider">Aproveit.(%)</label>
-                                <input type="number" id="deliveryRatePrev" value="50" class="w-full p-2 border border-slate-200 rounded-xl text-sm font-semibold transition-colors focus:ring-2 focus:ring-brand-500/50 bg-white" oninput="applyFiltersPrev()">
+                                <input type="number" id="deliveryRatePrev" value="85" class="w-full p-2 border border-slate-200 rounded-xl text-sm font-semibold transition-colors focus:ring-2 focus:ring-brand-500/50 bg-white" oninput="applyFiltersPrev()">
                             </div>
                             <button type="button" onclick="clearFilters('Prev')" class="flex-auto sm:flex-none shrink-0 min-w-[100px] w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition-all h-[38px]">
                                 <i data-lucide="eraser" class="w-4 h-4"></i> Limpar
@@ -483,6 +483,7 @@
 
                 <!-- VIEW 2: PRODUTIVIDADE -->
                 <div id="viewProdutividade" class="hidden flex-col gap-6 animate-fade-in-down">
+                    
                     <div class="print-hide bg-white p-4 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 relative z-30">
                         <div class="flex flex-wrap gap-3 sm:gap-4 items-end">
                             <div class="flex-auto w-full sm:w-auto min-w-[200px] lg:max-w-[260px] transition-all duration-300">
@@ -573,6 +574,32 @@
                             <button type="button" onclick="fetchData()" class="flex-auto sm:flex-none shrink-0 min-w-[120px] w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold shadow-lg h-[38px] transition-all">
                                 <i data-lucide="refresh-cw" class="w-4 h-4"></i> Atualizar
                             </button>
+                        </div>
+                    </div>
+
+                    <!-- RESUMO SAZONAL / PERÍODO -->
+                    <div class="print-hide bg-gradient-to-br from-indigo-500 to-brand-600 p-5 sm:p-6 rounded-[24px] text-white flex flex-col relative overflow-hidden shadow-soft">
+                        <i data-lucide="sun-snow" class="absolute -right-4 -bottom-4 w-32 h-32 text-white opacity-10"></i>
+                        <h3 class="text-sm font-black uppercase tracking-wide flex items-center gap-2 mb-2 relative z-10"><i data-lucide="calendar-clock" class="w-4 h-4"></i> Análise de Período e Sazonalidade</h3>
+                        <p class="text-sm sm:text-base text-indigo-50 font-medium relative z-10">
+                            Sua colheita <strong class="text-white bg-white/20 px-2 py-0.5 rounded" id="prodResumoPeriodoData">em todo o histórico</strong> resultou em 
+                            <strong class="text-white text-xl" id="prodResumoPeriodoKg">0</strong> kg totais e 
+                            <strong class="text-white text-xl" id="prodResumoPeriodoUn">0</strong> unidades, alcançando um peso médio de 
+                            <strong class="text-white text-xl bg-white/20 px-2 py-0.5 rounded"><span id="prodResumoPeriodoMed">0</span>g</strong> por fruto.
+                        </p>
+
+                        <div class="mt-6 bg-white/10 rounded-2xl border border-white/20 overflow-hidden relative z-10">
+                            <div class="p-3 border-b border-white/20 bg-black/10"><h4 class="text-xs font-black uppercase tracking-wider text-indigo-100">Setores que produziram nesta época</h4></div>
+                            <div class="max-h-[250px] overflow-y-auto hide-scrollbar">
+                                <table class="w-full text-left">
+                                    <thead class="bg-black/20 text-[10px] uppercase font-bold text-indigo-200 sticky top-0 backdrop-blur-md">
+                                        <tr><th class="p-3 pl-4">Bloco / Ciclo</th><th class="p-3 text-right">Unidades</th><th class="p-3 text-right">Peso (Kg)</th><th class="p-3 text-right pr-4">Média (g)</th></tr>
+                                    </thead>
+                                    <tbody id="prodBlocosPeriodoBody" class="text-sm divide-y divide-white/10">
+                                        <!-- Preenchido via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                     
@@ -1408,9 +1435,16 @@
                         { label: 'Últimos 30 dias', range: () => { const d = new Date(); d.setDate(d.getDate() - 30); return [d, new Date()]; } },
                         { label: 'Este mês', range: () => [new Date(new Date().getFullYear(), new Date().getMonth(), 1), new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)] },
                         { label: 'Mês passado', range: () => [new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1), new Date(new Date().getFullYear(), new Date().getMonth(), 0)] },
-                        { label: 'Este trimestre', range: () => { const m = new Date().getMonth(); const q = Math.floor(m / 3); return [new Date(new Date().getFullYear(), q * 3, 1), new Date(new Date().getFullYear(), (q + 1) * 3, 0)]; } },
-                        { label: 'Este ano', range: () => [new Date(new Date().getFullYear(), 0, 1), new Date()] },
-                        { label: 'Ano passado', range: () => [new Date(new Date().getFullYear() - 1, 0, 1), new Date(new Date().getFullYear() - 1, 11, 31)] },
+                        { label: 'Verão (Dez - Mar)', range: () => { 
+                            const today = new Date();
+                            const year = today.getMonth() <= 2 ? today.getFullYear() - 1 : today.getFullYear();
+                            return [new Date(year, 11, 1), new Date(year + 1, 2, 31)];
+                        }},
+                        { label: 'Inverno (Jun - Set)', range: () => { 
+                            const today = new Date();
+                            const year = today.getMonth() < 5 ? today.getFullYear() - 1 : today.getFullYear();
+                            return [new Date(year, 5, 1), new Date(year, 8, 30)];
+                        }},
                         { label: 'Limpar', range: () => [] }
                     ];
 
@@ -1782,7 +1816,7 @@
             
             if (tab === 'Prev') {
                 const rate = document.getElementById('deliveryRatePrev');
-                if (rate) rate.value = "50";
+                if (rate) rate.value = "85";
             }
             
             const sortedCrops = Array.from(allCrops).sort();
@@ -1910,15 +1944,39 @@
                     }
                 }
             });
-            const dTrabs = pDays.size || 1; const pMedKg = pCab > 0 ? (pKg / pCab) : 0.383;
+            const dTrabs = pDays.size || 1; const pMedKg = pCab > 0 ? (pKg / pCab) : 0.160;
             let ritmo = pCab > 0 ? Math.round(pCab / dTrabs) : 1500;
+
+            // --- CÁLCULO DINÂMICO DE FRUTOS POR PÉ ---
+            let concluidosU = 0;
+            let concluidosPlantas = 0;
+            const lotesConcluidos = pend.filter(p => normalizeStr(p.status) === normalizeStr("Concluído"));
+            lotesConcluidos.forEach(lote => {
+                concluidosPlantas += lote.qtd_plantas || 0;
+                const bNorm = normalizeStr(lote.nome);
+                const cNorm = normalizeStr(lote.ciclo);
+                hist.forEach(r => {
+                    if (normalizeStr(r.bloco) === bNorm && normalizeStr(r.ciclo) === cNorm) {
+                        concluidosU += r.qtd_cabecas || 0;
+                    }
+                });
+            });
+            let frutosPorPe = 15;
+            if (concluidosPlantas > 0 && concluidosU > 0) {
+                let mediaReal = Math.round(concluidosU / concluidosPlantas);
+                if (mediaReal > 0) frutosPorPe = mediaReal;
+            }
+            // -----------------------------------------
+
             const proj = []; const taxa = rate/100; const processedKeys = new Set(); let dUn=0, dKg=0;
             const saldoDist = {}; for(let k in delivered) saldoDist[k] = delivered[k].u;
             const blks = pend.map(bl => ({...bl, dObj: parseGoogleDate(bl.data_colheita)})).filter(bl => bl.dObj).sort((a,b) => a.dObj - b.dObj);
             blks.forEach(bl => {
                 const k = `${normalizeStr(bl.nome)}|${normalizeStr(bl.ciclo)}|${normalizeStr(bl.cultura)}`;
-                const sDisp = saldoDist[k] || 0; const abater = Math.min(bl.qtd_plantas, sDisp);
-                saldoDist[k] -= abater; bl.jaEntregueAttr = abater; bl.pRest = bl.qtd_plantas - abater;
+                const sDisp = saldoDist[k] || 0; 
+                const estimativaUnidades = bl.qtd_plantas * frutosPorPe;
+                const abater = Math.min(estimativaUnidades, sDisp);
+                saldoDist[k] -= abater; bl.jaEntregueAttr = abater; bl.pRest = estimativaUnidades - abater;
             });
             blks.forEach(bl => {
                 if(bF.length > 0 && !bF.includes(normalizeStr(bl.nome))) return;
@@ -1936,7 +1994,7 @@
                 if(!processedKeys.has(k)){ dUn += delivered[k]?.u || 0; dKg += delivered[k]?.kg || 0; processedKeys.add(k); }
                 if(bl.pRest > 0){
                     let pEfet = bl.pRest * taxa; const dCols = Math.max(1, Math.ceil(pEfet / ritmo));
-                    proj.push({ bloco: bl.nome, ciclo: bl.ciclo, cultura: bl.cultura, variedade: bl.variedade, status: bl.status, dObj: bl.dObj, jaEnt: bl.jaEntregueAttr, pRest: bl.pRest, pEfet, vKg: pEfet * pMedKg, dCols, kgDia: (pEfet*pMedKg)/dCols, unDia: pEfet/dCols, lastD: lastDeliv[k] });
+                    proj.push({ bloco: bl.nome, ciclo: bl.ciclo, cultura: bl.cultura, variedade: bl.variedade, status: bl.status, dObj: bl.dObj, jaEnt: bl.jaEntregueAttr, pRest: bl.pRest, pEfet, vKg: pEfet * pMedKg, dCols, kgDia: (pEfet*pMedKg)/dCols, unDia: pEfet/dCols, lastD: lastDeliv[k], plantas: bl.qtd_plantas });
                 }
             });
             const groupedDay = {}; const groupedWeek = {}; let totalKg=0, totalUn=0, totalField=0;
@@ -1977,7 +2035,7 @@
                 targetStart = new Date(startStr + "T00:00:00");
                 targetEnd = new Date(endStr + "T23:59:59");
             }
-            const prod = { totalU: 0, totalKg: 0, totalCx: 0, days: new Set(), diario: {}, vars: {}, dispTotalP: 0, minD: null, maxD: null };
+            const prod = { totalU: 0, totalKg: 0, totalCx: 0, days: new Set(), diario: {}, vars: {}, dispTotalP: 0, minD: null, maxD: null, blocos: {} };
             const lotesTrabalhados = new Set();
             hist.forEach(r => {
                 const d = parseGoogleDate(r.data_entrega); if(!d) return;
@@ -1997,6 +2055,14 @@
                     if(!prod.maxD || d > prod.maxD) prod.maxD = d;
                     const k = `${normalizeStr(r.bloco)}|${normalizeStr(r.ciclo)}|${normalizeStr(r.cultura)}`;
                     lotesTrabalhados.add(k);
+                    
+                    const blkKey = `${normalizeStr(r.bloco)}|${normalizeStr(r.ciclo)}`;
+                    if (!prod.blocos[blkKey]) {
+                        prod.blocos[blkKey] = { nome: r.bloco, ciclo: r.ciclo, un: 0, kg: 0 };
+                    }
+                    prod.blocos[blkKey].un += r.qtd_cabecas;
+                    prod.blocos[blkKey].kg += r.peso_total_kg;
+
                     const ds = d.toISOString().split('T')[0]; prod.days.add(ds);
                     if(!prod.diario[ds]) prod.diario[ds] = {un:0,kg:0,cx:0}; prod.diario[ds].un += r.qtd_cabecas; prod.diario[ds].kg += r.peso_total_kg; prod.diario[ds].cx += (r.caixas || 0);
                     const vc = r.variedade_comercial || "Não Inf."; if(!prod.vars[vc]) prod.vars[vc] = {un:0,kg:0,cx:0}; prod.vars[vc].un += r.qtd_cabecas; prod.vars[vc].kg += r.peso_total_kg; prod.vars[vc].cx += (r.caixas || 0);
@@ -2518,7 +2584,7 @@
                 res.tabela.forEach(b => {
                     const tr = document.createElement('tr'); const s = (b.status||"").toUpperCase();
                     const sColor = s.includes('ANDAMENTO') ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600';
-                    tr.innerHTML = `<td class="p-4 sm:p-5 font-semibold text-slate-700 whitespace-nowrap">${b.dObj.toLocaleDateString('pt-BR')}</td><td class="p-4 sm:p-5"><div class="font-black text-slate-800">${b.bloco}</div><div class="text-[10px] text-slate-500">CICLO ${b.ciclo} • ${b.cultura} • <span class="text-brand-600 font-semibold">${b.variedade}</span></div></td><td class="p-4 sm:p-5 text-center"><span class="px-3 py-1 rounded-lg text-[10px] font-black ${sColor}">${b.status}</span></td><td class="p-4 sm:p-5 text-center"><div class="bg-slate-50 rounded-xl p-2 inline-block border"><span class="font-black text-slate-800">${Math.round(b.pEfet).toLocaleString('pt-BR')}</span> un<div class="text-[9px] text-slate-400 mt-1">C: ${b.pRest.toLocaleString('pt-BR')} | E: ${b.jaEnt.toLocaleString('pt-BR')}</div></div></td><td class="p-4 sm:p-5 text-right font-black text-brand-700 text-lg">${Math.round(b.vKg).toLocaleString('pt-BR')}</td>`;
+                    tr.innerHTML = `<td class="p-4 sm:p-5 font-semibold text-slate-700 whitespace-nowrap">${b.dObj.toLocaleDateString('pt-BR')}</td><td class="p-4 sm:p-5"><div class="font-black text-slate-800">${b.bloco}</div><div class="text-[10px] text-slate-500">CICLO ${b.ciclo} • ${b.cultura} • <span class="text-brand-600 font-semibold">${b.variedade}</span></div></td><td class="p-4 sm:p-5 text-center"><span class="px-3 py-1 rounded-lg text-[10px] font-black ${sColor}">${b.status}</span></td><td class="p-4 sm:p-5 text-center"><div class="bg-slate-50 rounded-xl p-2 inline-block border"><span class="font-black text-slate-800">${Math.round(b.pEfet).toLocaleString('pt-BR')}</span> un<div class="text-[9px] text-slate-400 mt-1">C: ${Math.round(b.pRest).toLocaleString('pt-BR')} | E: ${Math.round(b.jaEnt).toLocaleString('pt-BR')}</div><div class="text-[8px] text-slate-400 font-bold mt-1">${b.plantas.toLocaleString('pt-BR')} plantas</div></div></td><td class="p-4 sm:p-5 text-right font-black text-brand-700 text-lg">${Math.round(b.vKg).toLocaleString('pt-BR')}</td>`;
                     tbody.appendChild(tr);
                 });
             }
@@ -2563,6 +2629,37 @@
             createPieChart('chartProdPesoPie', vn, vkg, pieColors);
             createPieChart('chartProdMediaPie', vn, vmed, pieColors, true);
             createPieChart('chartProdCaixasPie', vn, vcx, pieColors);
+
+            // Atualização do Resumo Sazonal / Período
+            let periodoTexto = "em todo o histórico";
+            const dateInput = document.getElementById('startMonthProd').value;
+            if (dateInput) periodoTexto = `no período de ${dateInput.replace(' to ', ' até ')}`;
+
+            safeSetText('prodResumoPeriodoData', periodoTexto);
+            safeSetText('prodResumoPeriodoKg', Math.round(p.totalKg).toLocaleString('pt-BR'));
+            safeSetText('prodResumoPeriodoUn', p.totalU.toLocaleString('pt-BR'));
+            safeSetText('prodResumoPeriodoMed', p.totalU > 0 ? Math.round((p.totalKg / p.totalU) * 1000).toLocaleString('pt-BR') : '0');
+
+            const tbody = document.getElementById('prodBlocosPeriodoBody');
+            if (tbody) {
+                tbody.innerHTML = '';
+                const blocosArr = Object.values(p.blocos).sort((a,b) => b.kg - a.kg);
+                if (blocosArr.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-indigo-200">Nenhuma colheita neste período.</td></tr>';
+                } else {
+                    blocosArr.forEach(b => {
+                        const m = b.un > 0 ? Math.round((b.kg / b.un) * 1000) : 0;
+                        tbody.innerHTML += `
+                            <tr>
+                                <td class="p-3 pl-4 font-black text-white">${b.nome} <span class="text-[10px] text-indigo-200 font-semibold ml-1">C${b.ciclo}</span></td>
+                                <td class="p-3 text-right font-semibold text-indigo-50">${b.un.toLocaleString('pt-BR')} un</td>
+                                <td class="p-3 text-right font-black text-white">${Math.round(b.kg).toLocaleString('pt-BR')} kg</td>
+                                <td class="p-3 text-right pr-4 font-bold text-indigo-200">${m} g</td>
+                            </tr>
+                        `;
+                    });
+                }
+            }
         }
 
         function updateCalendarioView(cal) {
@@ -3007,53 +3104,6 @@
                                 <td>Aproveitamento</td>
                                 <td>Perdas</td>
                                 <td>Dias de Produção</td>
-                            </tr>
-                            <tr class="ind-center ind-bold" style="font-size: 10pt;">
-                                <td>${p.dispTotalP.toLocaleString('pt-BR')}</td>
-                                <td>${p.totalU.toLocaleString('pt-BR')}</td>
-                                <td>${Math.round(p.totalKg).toLocaleString('pt-BR')}</td>
-                                <td>${p.pMedG.toLocaleString('pt-BR')}</td>
-                                <td>${p.totalCx.toLocaleString('pt-BR')}</td>
-                                <td>${p.percC}%</td>
-                                <td>${p.percPerda}%</td>
-                                <td>${p.diasProducao.toLocaleString('pt-BR')}</td>
-                            </tr>
-                        </table>
-                    `;
-
-                    const vn = Object.keys(p.vars);
-                    let rows = vn.map(v => `
-                        <tr>
-                            <td class="ind-bold">${v}</td>
-                            <td class="ind-right">${p.vars[v].un.toLocaleString('pt-BR')}</td>
-                            <td class="ind-right">${Math.round(p.vars[v].kg).toLocaleString('pt-BR')}</td>
-                            <td class="ind-right">${(p.vars[v].un > 0 ? (p.vars[v].kg / p.vars[v].un) : 0).toFixed(3)}</td>
-                            <td class="ind-right">${p.vars[v].cx.toLocaleString('pt-BR')}</td>
-                        </tr>
-                    `).join('');
-                    
-                    detailHtml = `
-                    <table class="ind-table">
-                        <tr class="ind-title-row"><td colspan="5">3. Desempenho por Variedade Comercial</td></tr>
-                        <tr class="ind-header">
-                            <th style="width: 40%">Variedade</th>
-                            <th class="ind-right" style="width: 15%">Unidades</th>
-                            <th class="ind-right" style="width: 15%">Peso (Kg)</th>
-                            <th class="ind-right" style="width: 15%">Média (kg/un)</th>
-                            <th class="ind-right" style="width: 15%">Caixas</th>
-                        </tr>
-                        ${rows || '<tr><td colspan="5" class="ind-center">Nenhum dado encontrado para os filtros selecionados.</td></tr>'}
-                    </table>`;
-                    
-                } else if (activeTab === 'Cal') {
-                    const cal = lastProcessedData.cal;
-                    summaryHtml = `
-                        <table class="ind-table">
-                            <tr class="ind-title-row"><td colspan="3">2. Resumo de Ocupação</td></tr>
-                            <tr class="ind-header ind-center">
-                                <td>Total de Plantas Registradas</td>
-                                <td>Total de Lotes Consolidados</td>
-                                <td>Ciclo Real Médio (dias no campo)</td>
                             </tr>
                             <tr class="ind-center ind-bold" style="font-size: 10pt;">
                                 <td>${cal.totalP.toLocaleString('pt-BR')}</td>
