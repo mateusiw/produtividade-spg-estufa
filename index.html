@@ -100,7 +100,7 @@
                         <label for="password" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Senha</label>
                         <div class="relative"><div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i data-lucide="lock" class="h-5 w-5 text-slate-400"></i></div>
                         <input id="password" name="password" type="password" required class="appearance-none block w-full pl-10 pr-10 py-3 border border-slate-200 rounded-xl shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 text-sm font-semibold transition-all" placeholder="••••••••">
-                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-slate-400 hover:text-slate-600 transition-colors" onclick="togglePasswordVisibility()"><i data-lucide="eye" id="eyeIcon" class="h-5 w-5"></i></div></div>
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-slate-400 hover:text-slate-600 transition-colors" onclick="togglePasswordVisibility()" id="togglePwdBtn"><i data-lucide="eye" class="h-5 w-5"></i></div></div>
                     </div>
                     <div class="flex items-center">
                         <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 accent-brand-600 focus:ring-brand-500 border-slate-300 rounded cursor-pointer transition-colors">
@@ -245,7 +245,7 @@
                     <div class="print-hide bg-gradient-to-br from-indigo-500 to-brand-600 p-5 sm:p-6 rounded-[24px] text-white flex flex-col relative overflow-hidden shadow-soft">
                         <i data-lucide="sun-snow" class="absolute -right-4 -bottom-4 w-32 h-32 text-white opacity-10"></i>
                         <h3 class="text-sm font-black uppercase tracking-wide flex items-center gap-2 mb-2 relative z-10"><i data-lucide="calendar-clock" class="w-4 h-4"></i> Análise de Período e Sazonalidade</h3>
-                        <p class="text-sm sm:text-base text-indigo-50 font-medium relative z-10">Sua colheita <strong class="text-white bg-white/20 px-2 py-0.5 rounded" id="prodResumoPeriodoData">em todo o histórico</strong> resultou em <strong class="text-white text-xl" id="prodResumoPeriodoKg">0</strong> kg totais e <strong class="text-white text-xl" id="prodResumoPeriodoUn">0</strong> unidades, alcançando um peso médio de <strong class="text-white text-xl bg-white/20 px-2 py-0.5 rounded"><span id="prodResumoPeriodoMed">0</span>g</strong> por fruto.</p>
+                        <p class="text-sm sm:text-base text-indigo-50 font-medium relative z-10"><span id="prodResumoPeriodoData">Em todo o histórico</span> resultou em <strong class="text-white text-xl" id="prodResumoPeriodoKg">0</strong> kg totais e <strong class="text-white text-xl" id="prodResumoPeriodoUn">0</strong> unidades, alcançando um peso médio de <strong class="text-white text-xl bg-white/20 px-2 py-0.5 rounded"><span id="prodResumoPeriodoMed">0</span>g</strong> por fruto.</p>
                         <div class="mt-6 bg-white/10 rounded-2xl border border-white/20 overflow-hidden relative z-10">
                             <div class="p-3 border-b border-white/20 bg-black/10"><h4 class="text-xs font-black uppercase tracking-wider text-indigo-100">Setores que produziram nesta época</h4></div>
                             <div class="max-h-[250px] overflow-y-auto hide-scrollbar"><table class="w-full text-left"><thead class="bg-black/20 text-[10px] uppercase font-bold text-indigo-200 sticky top-0 backdrop-blur-md"><tr><th class="p-3 pl-4">Setor / Ciclo</th><th class="p-3 text-center">Plantio</th><th class="p-3 text-center">Início Colh.</th><th class="p-3 text-center">Fim Colh.</th><th class="p-3 text-center" title="Dias de Ciclo / Dias de Produção (Janela)">Ciclo / Prod.</th><th class="p-3 text-right">Unidades</th><th class="p-3 text-right">Peso (Kg)</th><th class="p-3 text-right pr-4">Média (g)</th></tr></thead><tbody id="prodBlocosPeriodoBody" class="text-sm divide-y divide-white/10"></tbody></table></div>
@@ -539,7 +539,7 @@
             </div>
         </div>
 
-        <div id="loadingModal" class="fixed inset-0 bg-slate-900/40 z-[80] hidden flex justify-center items-center backdrop-blur-sm"><div class="bg-white rounded-3xl p-8 w-11/12 max-w-sm text-center shadow-float border border-slate-100"><i data-lucide="loader-2" class="h-8 w-8 text-slate-800 animate-spin mx-auto mb-4"></i><h3 class="text-lg font-black text-slate-800">Sincronizando Dados</h3></div></div>
+        <div id="loadingModal" class="fixed inset-0 bg-slate-900/40 z-[80] hidden flex justify-center items-center backdrop-blur-sm"><div class="bg-white rounded-3xl p-8 w-11/12 max-w-sm text-center shadow-float border border-slate-100"><div id="loadingIconContainer"><i data-lucide="loader-2" class="h-8 w-8 text-slate-800 animate-spin mx-auto mb-4"></i></div><h3 class="text-lg font-black text-slate-800">Sincronizando Dados</h3></div></div>
     </div>
 
     <!-- RECIPIENTE EXCLUSIVO PARA IMPRESSÃO -->
@@ -592,9 +592,14 @@
 
         function togglePasswordVisibility() {
             const pwdInput = document.getElementById('password');
-            const eyeIcon = document.getElementById('eyeIcon');
-            if (pwdInput.type === 'password') { pwdInput.type = 'text'; eyeIcon.setAttribute('data-lucide', 'eye-off'); } 
-            else { pwdInput.type = 'password'; eyeIcon.setAttribute('data-lucide', 'eye'); }
+            const btn = document.getElementById('togglePwdBtn');
+            if (pwdInput.type === 'password') { 
+                pwdInput.type = 'text'; 
+                btn.innerHTML = '<i data-lucide="eye-off" class="h-5 w-5"></i>'; 
+            } else { 
+                pwdInput.type = 'password'; 
+                btn.innerHTML = '<i data-lucide="eye" class="h-5 w-5"></i>'; 
+            }
             lucide.createIcons(); 
         }
 
@@ -618,8 +623,8 @@
             sessionStorage.removeItem('spg_logged_in'); localStorage.removeItem('spg_logged_in');
             document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('appContent').classList.add('hidden');
             document.getElementById('password').value = '';
-            const pwdInput = document.getElementById('password'); const eyeIcon = document.getElementById('eyeIcon');
-            pwdInput.type = 'password'; eyeIcon.setAttribute('data-lucide', 'eye'); lucide.createIcons();
+            const pwdInput = document.getElementById('password'); const btn = document.getElementById('togglePwdBtn');
+            pwdInput.type = 'password'; btn.innerHTML = '<i data-lucide="eye" class="h-5 w-5"></i>'; lucide.createIcons();
         }
 
         function showApp() {
@@ -669,9 +674,34 @@
         }
 
         async function fetchData() {
-            document.getElementById('loadingModal').classList.remove('hidden');
+            const loadingModal = document.getElementById('loadingModal');
+            const loadingText = loadingModal.querySelector('h3');
+            const iconContainer = document.getElementById('loadingIconContainer');
+            
+            loadingModal.classList.remove('hidden');
+            loadingText.innerText = "Sincronizando Dados...";
+            if (iconContainer) iconContainer.innerHTML = '<i data-lucide="loader-2" class="h-8 w-8 text-slate-800 animate-spin mx-auto mb-4"></i>';
+            lucide.createIcons();
+
             try {
-                const response = await fetch(`${SCRIPT_URL}?action=getData`); cachedApiData = await response.json();
+                const response = await fetch(`${SCRIPT_URL}?action=getData`, { redirect: "follow" });
+                
+                if (!response.ok) {
+                    throw new Error(`Erro na rede: ${response.status} ${response.statusText}`);
+                }
+                
+                const textData = await response.text();
+                try {
+                    cachedApiData = JSON.parse(textData);
+                } catch (parseError) {
+                    console.error("Dados recebidos da API não são um JSON válido:", textData);
+                    throw new Error("O App Script não retornou um formato JSON válido. Verifique se o link está correto e o script publicado como 'Qualquer pessoa'.");
+                }
+
+                if (!cachedApiData) cachedApiData = {};
+                if (!cachedApiData.historico) cachedApiData.historico = [];
+                if (!cachedApiData.pendentes) cachedApiData.pendentes = [];
+
                 buildFilterMaps(cachedApiData); populateFilterDropdowns();
                 ['Prev', 'Prod', 'Cal', 'Rank', 'Analise'].forEach(tab => {
                     const brocolisOpt = Array.from(allCrops).find(c => c.toUpperCase().includes('BRÓCOLIS') || c.toUpperCase() === 'BROCOLIS');
@@ -680,7 +710,27 @@
                 ['Prev', 'Prod', 'Cal', 'Rank', 'Analise'].forEach(t => { updateVarietyDropdownForTab(t); updateCycleDropdownForTab(t); });
                 applyFiltersPrev(); applyFiltersProd(); applyFiltersCal(); applyFiltersRank(); applyFiltersAnalise();
                 renderCompareCards(); initSimulatorDefaults();
-            } catch (err) { console.error("Erro na busca:", err); } finally { document.getElementById('loadingModal').classList.add('hidden'); }
+                
+                loadingModal.classList.add('hidden');
+            } catch (err) { 
+                console.error("Erro detalhado na busca:", err); 
+                
+                if (iconContainer) iconContainer.innerHTML = '<i data-lucide="x-circle" class="h-8 w-8 text-rose-500 mx-auto mb-4"></i>';
+                loadingText.innerText = "Erro ao carregar dados:\n" + err.message;
+                lucide.createIcons();
+                
+                if (!document.getElementById('retryBtn')) {
+                    const retryBtn = document.createElement('button');
+                    retryBtn.id = 'retryBtn';
+                    retryBtn.className = "mt-6 px-4 py-2 bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold rounded-xl transition-colors text-sm w-full";
+                    retryBtn.innerText = "Tentar Novamente";
+                    retryBtn.onclick = () => {
+                        if(document.getElementById('retryBtn')) document.getElementById('retryBtn').remove();
+                        fetchData();
+                    };
+                    loadingModal.querySelector('div').appendChild(retryBtn);
+                }
+            }
         }
 
         function switchTab(tabName) {
@@ -1001,7 +1051,7 @@
         function getSimVal(id) { const e = document.getElementById(id); if (!e) return 0; return parseFloat(e.value.replace(/\./g, '')) || 0; }
 
         function initSimulatorDefaults() {
-            if (!cachedApiData) return;
+            if (!cachedApiData || !cachedApiData.historico || !cachedApiData.pendentes) return;
             const h = new Date(); const s = document.getElementById('simAddData');
             if(s && !s.value) s.value = `${h.getFullYear()}-${String(h.getMonth()+1).padStart(2,'0')}-${String(h.getDate()).padStart(2,'0')}`;
             let tU=0, tKg=0, cU=0, cP=0; cachedApiData.historico.forEach(r => { tU += r.qtd_cabecas||0; tKg += r.peso_total_kg||0; });
@@ -1127,7 +1177,13 @@
             createSimpleBarChart('chartProdUnidadesBar',lb,un,'#749d83','Unidades',false,' un'); createSimpleBarChart('chartProdPesoBar',lb,kg,'#e3d39e','Peso (kg)',false,' kg'); createSimpleBarChart('chartProdMediaBar',lb,md,'#9ca3af','Peso Médio',true,' kg'); createSimpleBarChart('chartProdCaixasBar',lb,cx,'#86b693','Caixas',false,' cx');
             const vn=Object.keys(p.vars), vu=vn.map(v=>p.vars[v].un), vkg=vn.map(v=>Math.round(p.vars[v].kg)), vmd=vn.map(v=>p.vars[v].un>0?(p.vars[v].kg/p.vars[v].un):0), vcx=vn.map(v=>p.vars[v].cx), pC=['#10b981','#f59e0b','#8b5cf6','#f43f5e','#14b8a6','#f97316','#84cc16','#d946ef'];
             createPieChart('chartProdUnidadesPie',vn,vu,pC); createPieChart('chartProdPesoPie',vn,vkg,pC); createPieChart('chartProdMediaPie',vn,vmd,pC,true); createPieChart('chartProdCaixasPie',vn,vcx,pC);
-            safeSetText('prodResumoPeriodoData', document.getElementById('startMonthProd').value ? `no período de ${document.getElementById('startMonthProd').value.replace(' to ', ' até ')}` : "em todo o histórico"); safeSetText('prodResumoPeriodoKg', Math.round(p.totalKg).toLocaleString('pt-BR')); safeSetText('prodResumoPeriodoUn', p.totalU.toLocaleString('pt-BR')); safeSetText('prodResumoPeriodoMed', p.totalU>0?Math.round((p.totalKg/p.totalU)*1000).toLocaleString('pt-BR'):'0');
+            
+            // Correção de segurança para evitar erro de .value null
+            const smp = document.getElementById('startMonthProd');
+            const labelData = (smp && smp.value) ? `no período de ${smp.value.replace(' to ', ' até ')}` : "em todo o histórico";
+            safeSetText('prodResumoPeriodoData', labelData);
+            
+            safeSetText('prodResumoPeriodoKg', Math.round(p.totalKg).toLocaleString('pt-BR')); safeSetText('prodResumoPeriodoUn', p.totalU.toLocaleString('pt-BR')); safeSetText('prodResumoPeriodoMed', p.totalU>0?Math.round((p.totalKg/p.totalU)*1000).toLocaleString('pt-BR'):'0');
             const tb = document.getElementById('prodBlocosPeriodoBody'); if (tb) { tb.innerHTML=''; const ba=Object.values(p.blocos).sort((a,b)=>b.kg-a.kg); if(ba.length===0) tb.innerHTML='<tr><td colspan="8" class="p-4 text-center text-indigo-200">Nenhuma colheita neste período.</td></tr>'; else ba.forEach(b=>{ const dP = b.plantio ? b.plantio.toLocaleDateString('pt-BR') : '--'; const dI = b.inicio ? b.inicio.toLocaleDateString('pt-BR') : '--'; const dF = b.fim ? b.fim.toLocaleDateString('pt-BR') : '--'; const cic = (b.inicio && b.plantio) ? Math.ceil((b.inicio - b.plantio)/86400000) : '--'; const prd = (b.fim && b.inicio) ? Math.ceil((b.fim - b.inicio)/86400000)+1 : '--'; tb.innerHTML+=`<tr><td class="p-3 pl-4 font-black text-white">${b.nome} <span class="text-[10px] text-indigo-200 font-semibold ml-1">C${b.ciclo}</span></td><td class="p-3 text-center text-[11px] font-semibold text-indigo-100">${dP}</td><td class="p-3 text-center text-[11px] font-semibold text-sky-200">${dI}</td><td class="p-3 text-center text-[11px] font-semibold text-indigo-100">${dF}</td><td class="p-3 text-center text-[11px] font-bold"><span class="bg-indigo-900/40 px-1.5 py-0.5 rounded text-indigo-200">${cic}d</span> <span class="text-indigo-400">/</span> <span class="bg-brand-900/40 px-1.5 py-0.5 rounded text-sky-200">${prd}d</span></td><td class="p-3 text-right font-semibold text-indigo-50">${b.un.toLocaleString('pt-BR')} un</td><td class="p-3 text-right font-black text-white">${Math.round(b.kg).toLocaleString('pt-BR')} kg</td><td class="p-3 text-right pr-4 font-bold text-indigo-200">${b.un>0?Math.round((b.kg/b.un)*1000):0} g</td></tr>`; }); }
         }
 
@@ -1225,8 +1281,11 @@
                 compareCardsState.forEach(c => { const d=processCompareCardData(c.bloco, c.ciclo); cH+=`<th class="ind-center" style="width:${100/compareCardsState.length}%">${c.bloco?`${c.bloco} ${c.ciclo?`(C${c.ciclo})`:''}`:'-'}</th>`; cU+=`<td class="ind-center">${d.totalU.toLocaleString('pt-BR')}</td>`; cP+=`<td class="ind-center">${Math.round(d.totalKg).toLocaleString('pt-BR')} kg</td>`; cM+=`<td class="ind-center">${d.pMedG.toLocaleString('pt-BR')} g</td>`; cA+=`<td class="ind-center ind-bold" style="color: #059669">${d.percC}%</td>`; cPl+=`<td class="ind-center">${d.dispTotalP.toLocaleString('pt-BR')}</td>`; cD+=`<td class="ind-center">${d.diasProducao}</td>`; cCx+=`<td class="ind-center">${d.totalCx.toLocaleString('pt-BR')}</td>`; cPe+=`<td class="ind-center ind-bold" style="color: #e11d48">${d.percPerda}%</td>`; });
                 sum = `<table class="ind-table" style="margin-top: 20px;"><tr class="ind-title-row"><td style="width: 15%">Métrica</td>${cH}</tr><tr><td class="ind-bold">Aproveitamento Final</td>${cA}</tr><tr><td class="ind-bold">Peso Médio Global</td>${cM}</tr><tr><td class="ind-bold">Unidades Colhidas</td>${cU}</tr><tr><td class="ind-bold">Peso Total (Kg)</td>${cP}</tr><tr><td class="ind-bold">Total de Plantas</td>${cPl}</tr><tr><td class="ind-bold">Perdas / Pendentes</td>${cPe}</tr><tr><td class="ind-bold">Dias de Produção</td>${cD}</tr></table>`;
             } else {
-                const gt = i => { const e=document.getElementById(`text-${i}`); return e ? e.innerText : (document.getElementById(i)?.value.replace(' to ', ' até ') || 'Histórico'); };
-                const fP=gt('startMonth'+t), fC=gt('cropType'+t), fV=gt('varietySearch'+t), fB=gt('blockSearch'+t), fCy=gt('cycleSearch'+t);
+                const smp = document.getElementById('startMonth'+t);
+                const fP = (smp && smp.value) ? smp.value.replace(' to ', ' até ') : 'Histórico';
+                
+                const gt = i => { const e=document.getElementById(`text-${i}`); return e ? e.innerText : ''; };
+                const fC=gt('cropType'+t), fV=gt('varietySearch'+t), fB=gt('blockSearch'+t), fCy=gt('cycleSearch'+t);
 
                 if (t === 'Prev') {
                     const r = lastProcessedData.prev;
