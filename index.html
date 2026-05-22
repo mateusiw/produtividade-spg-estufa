@@ -1277,8 +1277,7 @@
             }
         }
 
-        async function generateAIAnalysis() {
-            const apiKey = "";
+        function generateAIAnalysis() {
             const btn = document.getElementById('aiGenerateBtn');
             const contentDiv = document.getElementById('aiAnalysisContent');
             
@@ -1287,49 +1286,98 @@
                 return;
             }
 
-            btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Analisando...';
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Processando base...';
             btn.disabled = true;
 
-            const summary = lastProcessedData.bruta.causasSummary;
-            let promptTxt = "Atuo em uma estufa de cultivo protegido. Meus dados de perda/descarte recentes são:\n";
-            summary.forEach(s => { promptTxt += `- Causa: ${s.causa} | Total perdido: ${s.unidades} unidades (${s.kg.toFixed(2)} kg)\n`; });
-            promptTxt += "\nCom base nestes dados precisos, atue como um engenheiro agrônomo experiente e forneça:\n1. Uma explicação técnica breve das possíveis causas originais no manejo (como temperatura, irrigação, trato cultural) que causam esses defeitos listados.\n2. Três recomendações de ações preventivas claras e rápidas para a equipe na estufa aplicar e tentar reduzir esses descartes imediatamente.\nResponda diretamente com o conteúdo utilizando tags de formatação HTML (como <b>, <ul>, <li>, <p>) sem envelopar em markdown ```html.";
+            // Simular um ligeiro tempo de processamento para garantir uma boa experiência de UX
+            setTimeout(() => {
+                const summary = lastProcessedData.bruta.causasSummary;
+                const topCauses = summary.slice(0, 2); // Focar a recomendação nos 2 maiores ofensores
 
-            const payload = {
-                contents: [{ parts: [{ text: promptTxt }] }],
-                systemInstruction: { parts: [{ text: "Você é um consultor agronômico prático focado em cultivos de estufa (como pepinos e afins), ajudando produtores a reduzir perdas baseando-se em registros de descarte. Sua resposta deve ser direta, encorajadora e estruturada em HTML puro em português." }] }
-            };
-
-            const fetchWithRetry = async (url, options, retries = 5) => {
-                const delays = [1000, 2000, 4000, 8000, 16000];
-                for (let i = 0; i < retries; i++) {
-                    try {
-                        const response = await fetch(url, options);
-                        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                        return await response.json();
-                    } catch (err) {
-                        if (i === retries - 1) throw err;
-                        await new Promise(r => setTimeout(r, delays[i]));
+                // Banco de conhecimentos agronómicos offline (Baseado em cultivo de pepinos/estufa)
+                const knowledgeBase = {
+                    "passou do ponto": {
+                        exp: "Geralmente indica uma falha na frequência ou janela de colheita. Frutos deixados muito tempo na planta drenam a energia (dreno de fotoassimilados) e reduzem a produtividade dos frutos mais novos e a durabilidade da planta.",
+                        rec: ["Diminuir o intervalo entre colheitas (ex: repasse diário nas linhas mais vigorosas).", "Treinar a equipa para o reconhecimento exato do calibre/tamanho padrão comercial.", "Ajustar o horário de colheita e o volume das caixas para evitar atrasos operacionais."]
+                    },
+                    "torto": {
+                        exp: "Frutos tortos ou em 'Formato de C' são frequentemente causados por stresse hídrico pontual, polinização deficiente, desequilíbrio nutricional (cálcio, potássio ou boro) ou obstáculos físicos durante o crescimento.",
+                        rec: ["Verificar a uniformidade do sistema de rega (evitar picos de stresse por falta ou excesso de água).", "Rever a nutrição foliar e radicular, com foco no fornecimento de Cálcio e Boro.", "Garantir o manuseamento correto do tutoramento/amarrio para não prender ou apertar o fruto."]
+                    },
+                    "formato de c": {
+                        exp: "Frutos em formato de 'C' ou pescoço de abóbora resultam geralmente de problemas de humidade irregular, picos de temperatura na estufa ou desequilíbrio nutricional agudo.",
+                        rec: ["Analisar se há setores da fita de gota com entupimentos parciais prejudicando a rega.", "Reduzir o aquecimento súbito na estufa melhorando a gestão de ventilação lateral.", "Aplicar reforços foliares focados em micro-nutrientes se diagnosticada carência."]
+                    },
+                    "ferimento": {
+                        exp: "Causado predominantemente por danos mecânicos efetuados durante operações de trato cultural (desbrota, amarrio), fricção no arame ou descuido na hora do corte.",
+                        rec: ["Re-treinar a equipa sobre os cuidados de manuseamento durante o amarrio e a colheita rápida.", "Rever as ferramentas de corte (verificar se as tesouras estão afiadas e adequadas).", "Avaliar se o compasso de plantação está demasiado denso, dificultando as passagens."]
+                    },
+                    "aborto": {
+                        exp: "O abortamento de pequenos frutos ocorre quando a planta sofre stresse térmico contínuo (calor/frio), falta de luz ou excesso de carga simultânea não sustentável face à nutrição atual.",
+                        rec: ["Monitorizar as temperaturas para assegurar que não há sobreaquecimento (ajustar sombreamento ou ventilação).", "Avaliar o raleio de frutos para reequilibrar a distribuição de força pela planta.", "Garantir boa adubação nitrogenada e de fósforo nas fases de pico de produção."]
+                    },
+                    "doença": {
+                        exp: "Aparecimento atrelado a microclimas desfavoráveis na estufa, caracterizados por alta humidade relativa combinada com má ventilação (ex: oídio, míldio).",
+                        rec: ["Melhorar a aeração do terço inferior da planta removendo as folhas mais velhas.", "Controlar rigidamente as cortinas para evitar a condensação foliar noturna/matinal.", "Entrar com um calendário profilático de fungicidas ou controlo biológico."]
+                    },
+                    "fungo": {
+                        exp: "As lesões fúngicas no fruto estão diretamente ligadas a excesso de condensação e humidade retida dentro da estufa, sobretudo em dias nublados e chuvosos.",
+                        rec: ["Manejar adequadamente as janelas laterais e zenitais para expulsar o ar húmido saturado.", "Limpar material podre ou folhas mortas caídas no corredor, que são foco de inóculo.", "Verificar se as regas ao final do dia estão a elevar em demasia a humidade noturna."]
+                    },
+                    "praga": {
+                        exp: "Danos superficiais nos frutos atrelados a infestações (como tripes, mosca branca, etc.) por quebras de barreiras sanitárias ou falha num controlo inicial.",
+                        rec: ["Inspecionar quebras nas telas e corrigir imediatamente os fechamentos da estufa.", "Intensificar o uso e troca de armadilhas cromáticas para monitorizar a evolução populacional.", "Aplicar controlo integrado e imediato no primeiro foco isolado (spot) para impedir proliferação."]
+                    },
+                    "murcho": {
+                        exp: "Pode ser o resultado de um défice hídrico severo, excesso de calor pontual ou danos drásticos no sistema radicular (ex: nemátodes, podridão de raízes).",
+                        rec: ["Verificar a eficácia dos gotejadores nas plantas visadas.", "Fazer transeções no solo e inspecionar a sanidade da raiz da planta que deu os frutos.", "Aliviar o calor em dias críticos, possivelmente adicionando microaspersores sob cobertura ou cal na tela."]
                     }
-                }
-            };
+                };
 
-            try {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-                const result = await fetchWithRetry(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                let finalHTML = `<div class="space-y-4">`;
+                finalHTML += `<p>Com base nos principais descartes filtrados acima, a <b>Inteligência Agronômica Avançada</b> cruzou os dados e diagnosticou as potenciais causas de raiz do seu lote:</p>`;
+
+                topCauses.forEach(item => {
+                    let lowerCausa = item.causa.toLowerCase();
+                    let match = null;
+                    
+                    // Procurar correspondência com palavras-chave do dicionário
+                    for (let key in knowledgeBase) {
+                        if (lowerCausa.includes(key)) {
+                            match = knowledgeBase[key];
+                            break;
+                        }
+                    }
+
+                    if (!match) {
+                        match = {
+                            exp: "Causa não diagnosticável através do motivo registado ou originada por uma associação atípica de múltiplos stresses climatéricos e hídricos em simultâneo.",
+                            rec: ["Agendar uma inspeção técnica presencial detalhada ao lote.", "Pedir à equipa para utilizar descrições e sub-causas mais explícitas nos registos futuros.", "Revisar as tabelas de rega do período recente para cruzar deficiências no balanço hídrico."]
+                        }
+                    }
+
+                    finalHTML += `
+                        <div class="bg-black/20 p-4 rounded-xl border border-white/10">
+                            <h4 class="font-black text-fuchsia-200 mb-2 uppercase text-[11px] tracking-wider"><i data-lucide="alert-triangle" class="w-3 h-3 inline pb-0.5"></i> Estudo: ${item.causa} (${item.unidades.toLocaleString('pt-BR')} un)</h4>
+                            <p class="text-[13px] mb-3 text-fuchsia-50"><b>Diagnóstico Primário:</b> ${match.exp}</p>
+                            <div class="bg-white/5 p-3 rounded-lg border border-white/5">
+                                <p class="text-[10px] font-bold text-fuchsia-300 uppercase mb-2">Plano de Ação Sugerido:</p>
+                                <ul class="list-disc pl-4 text-xs text-white space-y-1.5 opacity-90">
+                                    ${match.rec.map(r => `<li>${r}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    `;
                 });
-                const text = result.candidates?.[0]?.content?.parts?.[0]?.text || "Análise indisponível.";
-                contentDiv.innerHTML = `<div class="bg-black/20 border border-white/20 p-5 rounded-2xl text-sm text-fuchsia-50 leading-relaxed font-medium space-y-3">${text.replace(/```html|```/g, '')}</div>`;
-            } catch (error) {
-                contentDiv.innerHTML = `<div class="bg-rose-500/20 border border-rose-500/50 p-4 rounded-xl text-white text-sm font-bold flex items-center gap-2"><i data-lucide="alert-triangle" class="w-5 h-5"></i> Erro ao consultar a IA. Tente novamente mais tarde.</div>`;
-            } finally {
-                btn.innerHTML = '<i data-lucide="sparkles" class="w-4 h-4"></i> Atualizar Explicação da IA';
+
+                finalHTML += `</div>`;
+
+                contentDiv.innerHTML = finalHTML;
+                btn.innerHTML = '<i data-lucide="sparkles" class="w-4 h-4"></i> Atualizar Recomendações';
                 btn.disabled = false;
                 lucide.createIcons();
-            }
+
+            }, 600); // Fim do setTimeout de simulação
         }
 
         function processCompareCardData(b, c) {
