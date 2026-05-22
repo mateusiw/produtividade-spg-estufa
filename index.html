@@ -132,6 +132,7 @@
             <div class="print-hide flex gap-6 sm:gap-8 border-b border-slate-200/80 px-2 overflow-x-auto hide-scrollbar pb-1">
                 <button onclick="switchTab('previsao')" id="tab-previsao" class="tab-btn active pb-3 text-sm uppercase tracking-wider flex items-center gap-2"><i data-lucide="calendar-days" class="w-4 h-4"></i> Previsões</button>
                 <button onclick="switchTab('produtividade')" id="tab-produtividade" class="tab-btn inactive pb-3 text-sm uppercase tracking-wider flex items-center gap-2"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Produtividade</button>
+                <button onclick="switchTab('bruta')" id="tab-bruta" class="tab-btn inactive pb-3 text-sm uppercase tracking-wider flex items-center gap-2 text-rose-600"><i data-lucide="trash-2" class="w-4 h-4"></i> Prod. Bruta</button>
                 <button onclick="switchTab('calendario')" id="tab-calendario" class="tab-btn inactive pb-3 text-sm uppercase tracking-wider flex items-center gap-2"><i data-lucide="list-todo" class="w-4 h-4"></i> Calendário</button>
                 <button onclick="switchTab('ranking')" id="tab-ranking" class="tab-btn inactive pb-3 text-sm uppercase tracking-wider flex items-center gap-2"><i data-lucide="trophy" class="w-4 h-4"></i> Ranking</button>
                 <button onclick="switchTab('analise')" id="tab-analise" class="tab-btn inactive pb-3 text-sm uppercase tracking-wider flex items-center gap-2 text-indigo-600"><i data-lucide="microscope" class="w-4 h-4"></i> Análise</button>
@@ -186,7 +187,7 @@
 
                     <!-- CARDS RESUMO -->
                     <div class="print-hide grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
-                        <div class="bg-white p-5 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 flex flex-col justify-between"><span id="historicalAvgLabel" class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Média (gr) do anterior</span><div class="flex items-end gap-2"><span id="historicalAvg" class="text-4xl font-black text-slate-800">0</span><span class="text-sm text-slate-400">g/cab.</span></div><div class="text-xs font-bold text-brand-600 bg-brand-50 px-3 py-1.5 rounded-lg inline-block w-fit mt-2">Ritmo: <span id="historicalPace">0</span> un/dia</div></div>
+                        <div class="bg-white p-5 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 flex flex-col justify-between"><span id="historicalAvgLabel" class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Média (gr) do anterior</span><div class="flex items-end gap-2"><span id="historicalAvg" class="text-4xl font-black text-slate-800">0</span><span class="text-sm text-slate-400">g/fruto</span></div><div class="text-xs font-bold text-brand-600 bg-brand-50 px-3 py-1.5 rounded-lg inline-block w-fit mt-2">Ritmo: <span id="historicalPace">0</span> un/dia</div></div>
                         <div class="bg-white p-5 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 flex flex-col justify-center"><span class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Realizado</span><div class="flex items-center gap-2"><span id="deliveredUnits" class="text-4xl font-black text-slate-800">0</span><span class="text-sm text-slate-400">un</span></div><div class="mt-2 text-[11px] font-medium text-slate-500 border-t pt-2"><span id="deliveredKg" class="font-bold">0</span> kg | Média: <span id="deliveredAvg" class="font-bold">0</span> g</div></div>
                         <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-5 sm:p-6 rounded-[24px] text-white flex flex-col justify-between relative overflow-hidden"><span id="forecastTotalLabel" class="text-[11px] font-bold text-slate-300 uppercase tracking-widest relative z-10">Saldo Projetado (Kg)</span><div class="flex items-end gap-2 relative z-10"><span id="forecastTotal" class="text-4xl font-black">0</span><span class="text-sm text-slate-300">kg</span></div><div class="mt-2 text-[10px] text-slate-400 border-t border-slate-700 pt-2 relative z-10">Realizado: <span class="text-white" id="subForecastDeliveredKg">0</span> kg</div></div>
                         <div class="bg-white p-5 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 flex flex-col justify-between"><span class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Saldo Projetado (Un)</span><div class="flex items-center gap-2"><span id="pendingPlants" class="text-4xl font-black text-slate-800">0</span><span class="text-sm text-slate-400">un</span></div><div class="mt-2 text-[10px] text-slate-400 border-t pt-2 flex justify-between"><span>Realizado: <span id="subForecastDeliveredUn" class="font-bold text-slate-700">0</span> un</span><span>Campo: <span id="fieldPlantsTotal" class="font-bold text-slate-700">0</span> un</span></div></div>
@@ -270,6 +271,81 @@
                     <div class="print-hide bg-white p-4 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 flex flex-col"><div class="flex justify-between items-center mb-6 border-b border-slate-50 pb-4"><h3 class="text-sm font-black text-slate-800 uppercase tracking-wide">Caixas</h3><span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 px-2 py-1 rounded">Por Variedade</span></div><div class="flex flex-col lg:flex-row gap-8"><div class="w-full lg:w-2/3 h-[280px] lg:h-[320px] relative"><canvas id="chartProdCaixasBar"></canvas></div><div class="w-full lg:w-1/3 h-[250px] lg:h-[320px] flex justify-center relative"><canvas id="chartProdCaixasPie"></canvas></div></div></div>
                 </div>
 
+                <!-- VIEW NOVA: PRODUÇÃO BRUTA E DESCARTES -->
+                <div id="viewBruta" class="hidden flex-col gap-6 animate-fade-in-down">
+                    <div class="print-hide bg-white p-4 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 relative z-30">
+                        <div class="flex flex-wrap gap-3 sm:gap-4 items-end">
+                            <div class="flex-auto w-full sm:w-auto min-w-[200px] lg:max-w-[260px] transition-all duration-300">
+                                <label class="text-[11px] font-bold text-slate-400 uppercase mb-2 block tracking-wider">Período de Colheita / Descarte</label>
+                                <input type="text" id="startMonthBruta" class="date-range-picker w-full p-2 border border-slate-200 rounded-xl text-sm font-semibold outline-none transition-colors focus:ring-2 focus:ring-brand-500/50 bg-white" placeholder="Período automático">
+                            </div>
+                            <div class="flex-auto w-full sm:w-auto min-w-[120px] transition-all duration-300">
+                                <label class="text-[11px] font-bold text-slate-400 uppercase mb-2 block tracking-wider">Setor</label>
+                                <div class="relative" id="container-blockSearchBruta"><div class="w-full p-2 border border-slate-200 rounded-xl text-sm font-semibold outline-none cursor-pointer flex justify-between items-center h-[38px] bg-white gap-2" onclick="toggleDropdown('blockSearchBruta')"><span id="text-blockSearchBruta" class="whitespace-nowrap truncate max-w-[250px]">Todos</span><i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0"></i></div><div id="menu-blockSearchBruta" class="dropdown-menu hidden absolute z-50 w-full min-w-[200px] mt-2 bg-white border border-slate-100 rounded-2xl shadow-float p-2 overflow-hidden"><div class="max-h-60 overflow-y-auto" id="list-blockSearchBruta"></div></div></div>
+                            </div>
+                            <div class="flex-auto w-full sm:w-auto min-w-[100px] transition-all duration-300">
+                                <label class="text-[11px] font-bold text-slate-400 uppercase mb-2 block tracking-wider">Ciclo</label>
+                                <div class="relative" id="container-cycleSearchBruta"><div class="w-full p-2 border border-slate-200 rounded-xl text-sm font-semibold outline-none cursor-pointer flex justify-between items-center h-[38px] bg-white gap-2" onclick="toggleDropdown('cycleSearchBruta')"><span id="text-cycleSearchBruta" class="whitespace-nowrap truncate max-w-[250px]">Todos</span><i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0"></i></div><div id="menu-cycleSearchBruta" class="dropdown-menu hidden absolute z-50 w-full min-w-[200px] mt-2 bg-white border border-slate-100 rounded-2xl shadow-float p-2 overflow-hidden"><div class="max-h-60 overflow-y-auto" id="list-cycleSearchBruta"></div></div></div>
+                            </div>
+                            <div class="flex-auto w-full sm:w-auto min-w-[120px] transition-all duration-300">
+                                <label class="text-[11px] font-bold text-slate-400 uppercase mb-2 block tracking-wider">Cultura</label>
+                                <div class="relative" id="container-cropTypeBruta"><div class="w-full p-2 border border-slate-200 rounded-xl text-sm font-semibold outline-none cursor-pointer flex justify-between items-center h-[38px] bg-white gap-2" onclick="toggleDropdown('cropTypeBruta')"><span id="text-cropTypeBruta" class="whitespace-nowrap truncate max-w-[250px]">Todas</span><i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0"></i></div><div id="menu-cropTypeBruta" class="dropdown-menu hidden absolute z-50 w-full min-w-[200px] mt-2 bg-white border border-slate-100 rounded-2xl shadow-float p-2 overflow-hidden"><div class="max-h-60 overflow-y-auto" id="list-cropTypeBruta"></div></div></div>
+                            </div>
+                            <div class="flex-auto w-full sm:w-auto min-w-[140px] transition-all duration-300">
+                                <label class="text-[11px] font-bold text-slate-400 uppercase mb-2 block tracking-wider">Variedade</label>
+                                <div class="relative" id="container-varietySearchBruta"><div class="w-full p-2 border border-slate-200 rounded-xl text-sm font-semibold outline-none cursor-pointer flex justify-between items-center h-[38px] bg-white gap-2" onclick="toggleDropdown('varietySearchBruta')"><span id="text-varietySearchBruta" class="whitespace-nowrap truncate max-w-[250px]">Todas</span><i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0"></i></div><div id="menu-varietySearchBruta" class="dropdown-menu hidden absolute z-50 w-full min-w-[200px] mt-2 bg-white border border-slate-100 rounded-2xl shadow-float p-2 overflow-hidden"><div class="max-h-60 overflow-y-auto" id="list-varietySearchBruta"></div></div></div>
+                            </div>
+                            <div class="flex-auto w-full sm:w-auto min-w-[160px] transition-all duration-300 relative" id="container-statusBruta">
+                                <label class="text-[11px] font-bold text-slate-400 uppercase mb-2 block tracking-wider">Status</label>
+                                <div class="w-full p-2 border border-slate-200 rounded-xl text-sm font-semibold cursor-pointer flex justify-between items-center h-[38px] bg-white gap-2" onclick="toggleDropdown('statusBruta')"><span id="text-statusBruta" class="whitespace-nowrap truncate max-w-[250px]">Todos</span><i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0"></i></div>
+                                <div id="menu-statusBruta" class="dropdown-menu hidden absolute z-50 w-full sm:w-[240px] mt-2 bg-white border rounded-2xl shadow-float top-full right-0 sm:left-0 overflow-hidden"><div class="max-h-60 overflow-y-auto p-2" id="list-statusBruta">
+                                    <div class="flex items-center justify-between p-1 hover:bg-slate-50 rounded-xl group"><label class="flex items-center gap-3 cursor-pointer flex-1 p-1"><input type="checkbox" value="Concluído" class="checkbox-statusBruta accent-brand-600 w-4 h-4 shrink-0" checked onchange="updateStatusText('Bruta')"> <span class="text-sm font-semibold text-slate-600">Concluído</span></label><button type="button" onclick="selectOnlyStatus('Bruta', 'Concluído')" class="text-[10px] font-bold text-brand-600 opacity-0 group-hover:opacity-100 px-2 hover:bg-brand-50 rounded">Somente</button></div>
+                                    <div class="flex items-center justify-between p-1 hover:bg-slate-50 rounded-xl group"><label class="flex items-center gap-3 cursor-pointer flex-1 p-1"><input type="checkbox" value="Perda total" class="checkbox-statusBruta accent-brand-600 w-4 h-4 shrink-0" checked onchange="updateStatusText('Bruta')"> <span class="text-sm font-semibold text-slate-600">Perda total</span></label><button type="button" onclick="selectOnlyStatus('Bruta', 'Perda total')" class="text-[10px] font-bold text-brand-600 opacity-0 group-hover:opacity-100 px-2 hover:bg-brand-50 rounded">Somente</button></div>
+                                    <div class="flex items-center justify-between p-1 hover:bg-slate-50 rounded-xl group"><label class="flex items-center gap-3 cursor-pointer flex-1 p-1"><input type="checkbox" value="Pendente" class="checkbox-statusBruta accent-brand-600 w-4 h-4 shrink-0" checked onchange="updateStatusText('Bruta')"> <span class="text-sm font-semibold text-slate-600">Pendente</span></label><button type="button" onclick="selectOnlyStatus('Bruta', 'Pendente')" class="text-[10px] font-bold text-brand-600 opacity-0 group-hover:opacity-100 px-2 hover:bg-brand-50 rounded">Somente</button></div>
+                                    <div class="flex items-center justify-between p-1 hover:bg-slate-50 rounded-xl group"><label class="flex items-center gap-3 cursor-pointer flex-1 p-1"><input type="checkbox" value="Em andamento" class="checkbox-statusBruta accent-brand-600 w-4 h-4 shrink-0" checked onchange="updateStatusText('Bruta')"> <span class="text-sm font-semibold text-slate-600">Em andamento</span></label><button type="button" onclick="selectOnlyStatus('Bruta', 'Em andamento')" class="text-[10px] font-bold text-brand-600 opacity-0 group-hover:opacity-100 px-2 hover:bg-brand-50 rounded">Somente</button></div>
+                                </div></div>
+                            </div>
+                            <button type="button" onclick="clearFilters('Bruta')" class="flex-auto sm:flex-none shrink-0 min-w-[100px] w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition-all h-[38px]"><i data-lucide="eraser" class="w-4 h-4"></i> Limpar</button>
+                            <button type="button" onclick="fetchData()" class="flex-auto sm:flex-none shrink-0 min-w-[120px] w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold shadow-lg h-[38px] transition-all"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Atualizar</button>
+                        </div>
+                    </div>
+
+                    <!-- CAIXA DE INTELIGÊNCIA ARTIFICIAL -->
+                    <div class="print-hide bg-gradient-to-br from-violet-600 to-fuchsia-700 p-5 sm:p-6 rounded-[24px] text-white flex flex-col relative overflow-hidden shadow-soft">
+                        <i data-lucide="bot" class="absolute -right-4 -bottom-4 w-32 h-32 text-white opacity-10"></i>
+                        <div class="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+                            <div>
+                                <h3 class="text-lg font-black uppercase tracking-wide flex items-center gap-2"><i data-lucide="sparkles" class="w-5 h-5 text-fuchsia-200"></i> Inteligência Agronômica</h3>
+                                <p class="text-[11px] text-fuchsia-100 font-medium uppercase tracking-widest mt-1">Análise de Descartes e Recomendações (IA)</p>
+                            </div>
+                            <button id="aiGenerateBtn" onclick="generateAIAnalysis()" class="flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-fuchsia-700 hover:bg-fuchsia-50 rounded-xl text-xs font-bold transition-all shadow-md shrink-0 w-full sm:w-auto">
+                                <i data-lucide="sparkles" class="w-4 h-4"></i> Gerar Explicação com IA
+                            </button>
+                        </div>
+                        <div id="aiAnalysisContent" class="relative z-10 mt-2">
+                            <div class="bg-black/10 border border-white/20 p-5 rounded-2xl text-sm text-fuchsia-50 leading-relaxed font-medium">
+                                Baseado nos dados de descarte e quebras filtrados abaixo, clique em "Gerar Explicação" para a IA processar suas causas e propor melhorias de colheita/manejo.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="print-hide grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
+                        <div class="bg-emerald-50 p-5 rounded-[24px] shadow-soft border border-emerald-100 flex flex-col justify-center relative overflow-hidden"><i data-lucide="package-check" class="absolute -right-4 -bottom-4 w-20 h-20 text-emerald-600 opacity-10"></i><div class="flex justify-between items-start relative z-10"><span class="text-[11px] font-bold text-emerald-600 uppercase tracking-widest">Colheita Entregue</span><span id="brutaPercAprov" class="bg-emerald-200 text-emerald-800 text-[10px] font-black px-2 py-0.5 rounded-lg">0% Aprov.</span></div><div class="flex items-baseline gap-2 mt-2 relative z-10"><p id="brutaColheitaUn" class="text-3xl font-black text-emerald-800">0</p><span class="text-xs font-bold text-emerald-600 uppercase">un</span></div><div class="text-[11px] text-emerald-700 font-bold mt-2 pt-2 border-t border-emerald-200/50 relative z-10 flex justify-between"><span><span id="brutaColheitaKg">0</span> kg</span><span>Média: <span id="brutaColheitaMed">0</span> g</span></div></div>
+                        <div class="bg-rose-50 p-5 rounded-[24px] shadow-soft border border-rose-100 flex flex-col justify-center relative overflow-hidden"><i data-lucide="trash-2" class="absolute -right-4 -bottom-4 w-20 h-20 text-rose-600 opacity-10"></i><div class="flex justify-between items-start relative z-10"><span class="text-[11px] font-bold text-rose-600 uppercase tracking-widest">Descartes / Perdas</span><span id="brutaPercPerda" class="bg-rose-200 text-rose-800 text-[10px] font-black px-2 py-0.5 rounded-lg">0% Perda</span></div><div class="flex items-baseline gap-2 mt-2 relative z-10"><p id="brutaDescarteUn" class="text-3xl font-black text-rose-800">0</p><span class="text-xs font-bold text-rose-600 uppercase">un</span></div><div class="text-[11px] text-rose-700 font-bold mt-2 pt-2 border-t border-rose-200/50 relative z-10 flex justify-between"><span><span id="brutaDescarteKg">0</span> kg</span><span>Média: <span id="brutaDescarteMed">0</span> g</span></div></div>
+                        <div class="bg-slate-800 p-5 rounded-[24px] shadow-soft border border-slate-700 flex flex-col justify-center relative overflow-hidden"><i data-lucide="leaf" class="absolute -right-4 -bottom-4 w-20 h-20 text-white opacity-5"></i><div class="flex justify-between items-start relative z-10"><span class="text-[11px] font-bold text-slate-300 uppercase tracking-widest">Prod. Final Estimada</span><span class="bg-slate-700 text-slate-300 text-[10px] font-black px-2 py-0.5 rounded-lg"><span id="brutaTotalPlantas">0</span> plantas</span></div><div class="flex items-baseline gap-2 mt-2 relative z-10"><p id="brutaRealUn" class="text-3xl font-black text-white">0</p><span class="text-xs font-bold text-slate-300 uppercase">un</span></div><div class="text-[11px] text-slate-200 font-medium mt-2 pt-2 border-t border-slate-600 relative z-10 flex justify-between"><span><span id="brutaRealKg" class="font-bold">0</span> kg</span><span>Média: <span id="brutaRealMed" class="font-bold">0</span> g</span></div><div class="text-[10px] text-sky-300 font-bold mt-1.5 pt-1.5 border-t border-slate-600/50 relative z-10 flex justify-between"><span><span id="brutaUnPlanta">0</span> un/planta</span><span><span id="brutaKgPlanta">0</span> kg/planta</span></div></div>
+                    </div>
+
+                    <div class="print-hide grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5">
+                        <div class="bg-white p-5 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 flex flex-col h-[380px]"><h3 class="text-sm font-black text-slate-800 mb-4 uppercase">Causas Principais de Descarte</h3><div class="flex-1 relative w-full flex justify-center"><canvas id="chartBrutaCausas"></canvas></div></div>
+                        <div class="bg-white p-5 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 flex flex-col h-[380px]"><h3 class="text-sm font-black text-slate-800 mb-4 uppercase">Evolução do Descarte</h3><div class="flex-1 relative w-full"><canvas id="chartBrutaEvolucao"></canvas></div></div>
+                    </div>
+
+                    <div class="print-hide bg-white rounded-[24px] shadow-soft border border-slate-100 overflow-hidden">
+                        <div class="p-4 sm:p-5 border-b bg-rose-50/30"><h3 class="text-sm font-black uppercase text-slate-800">LISTA DETALHADA DE PERDAS E DESCARTES</h3></div>
+                        <div class="overflow-x-auto"><table class="w-full text-left min-w-[700px]"><thead class="bg-slate-50 text-[10px] text-slate-400 uppercase border-b"><tr><th class="p-4 whitespace-nowrap">Data</th><th class="p-4">Setor / Variedade</th><th class="p-4">Motivo / Causa</th><th class="p-4 text-center">Unidades</th><th class="p-4 text-right">Peso Total</th></tr></thead><tbody id="brutaTableBody" class="text-sm divide-y divide-slate-100"></tbody></table></div>
+                    </div>
+                </div>
+
                 <!-- VIEW 3: CALENDÁRIO -->
                 <div id="viewCalendario" class="hidden flex-col gap-6 animate-fade-in-down">
                     <div class="print-hide bg-white p-4 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 relative z-30">
@@ -284,7 +360,7 @@
                             </div>
                             <div class="flex-auto w-full sm:w-auto min-w-[100px] transition-all duration-300">
                                 <label class="text-[11px] font-bold text-slate-400 uppercase mb-2 block tracking-wider">Ciclo</label>
-                                <div class="relative" id="container-cycleSearchCal"><div class="w-full p-2 border border-slate-200 rounded-xl text-sm font-semibold outline-none cursor-pointer flex justify-between items-center h-[38px] bg-white gap-2" onclick="toggleDropdown('cycleSearchCal')"><span id="text-cycleSearchCal" class="whitespace-nowrap truncate max-w-[250px]">Todos</span><i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0"></i></div><div id="menu-cycleSearchCal" class="dropdown-menu hidden absolute z-50 w-full min-w-[200px] mt-2 bg-white border border-slate-100 rounded-2xl shadow-float p-2 overflow-hidden"><div class="max-h-60 overflow-y-auto" id="list-cycleSearchCal"></div></div></div>
+                                <div class="relative" id="container-cycleSearchCal"><div class="w-full p-2 border border-slate-200 rounded-xl text-sm font-semibold outline-none cursor-pointer flex justify-between items-center h-[38px] bg-white gap-2" onclick="toggleDropdown('cycleSearchCal')"><span id="text-cycleSearchRank" class="whitespace-nowrap truncate max-w-[250px]">Todos</span><i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0"></i></div><div id="menu-cycleSearchCal" class="dropdown-menu hidden absolute z-50 w-full min-w-[200px] mt-2 bg-white border border-slate-100 rounded-2xl shadow-float p-2 overflow-hidden"><div class="max-h-60 overflow-y-auto" id="list-cycleSearchCal"></div></div></div>
                             </div>
                             <div class="flex-auto w-full sm:w-auto min-w-[120px] transition-all duration-300">
                                 <label class="text-[11px] font-bold text-slate-400 uppercase mb-2 block tracking-wider">Cultura</label>
@@ -555,7 +631,7 @@
         let allVarieties = new Set();
         let allBlocks = new Set();
         let allCycles = new Set();
-        let lastProcessedData = { prev: null, prod: null, cal: null, rank: null, analise: null }; 
+        let lastProcessedData = { prev: null, prod: null, cal: null, rank: null, analise: null, bruta: null }; 
         const nomesDosMeses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
         let compareCardIdCounter = 3;
         let compareCardsState = [{ id: 1, bloco: '', ciclo: '' }, { id: 2, bloco: '', ciclo: '' }];
@@ -664,7 +740,7 @@
                         calendarMain.appendChild(headerLabels); calendarMain.appendChild(monthsNav); calendarMain.appendChild(innerContainer);
                         const footer = document.createElement('div'); footer.className = 'calendar-footer'; footer.innerHTML = `<button class="footer-btn btn-cancel">Cancelar</button><button class="footer-btn btn-apply">Aplicar</button>`;
                         footer.querySelector('.btn-cancel').onclick = () => instance.close();
-                        footer.querySelector('.btn-apply').onclick = () => { if (instance.selectedDates.length === 2) { const id = instance.element.id; if (id === 'startMonthPrev') applyFiltersPrev(); else if (id === 'startMonthProd') applyFiltersProd(); else if (id === 'startMonthCal') applyFiltersCal(); else if (id === 'startMonthRank') applyFiltersRank(); else if (id === 'startMonthAnalise') applyFiltersAnalise(); instance.close(); } };
+                        footer.querySelector('.btn-apply').onclick = () => { if (instance.selectedDates.length === 2) { const id = instance.element.id; if (id === 'startMonthPrev') applyFiltersPrev(); else if (id === 'startMonthProd') applyFiltersProd(); else if (id === 'startMonthCal') applyFiltersCal(); else if (id === 'startMonthRank') applyFiltersRank(); else if (id === 'startMonthAnalise') applyFiltersAnalise(); else if (id === 'startMonthBruta') applyFiltersBruta(); instance.close(); } };
                         calendarMain.appendChild(footer); container.appendChild(calendarMain);
                     }
                     lucide.createIcons();
@@ -701,14 +777,16 @@
                 if (!cachedApiData) cachedApiData = {};
                 if (!cachedApiData.historico) cachedApiData.historico = [];
                 if (!cachedApiData.pendentes) cachedApiData.pendentes = [];
+                if (!cachedApiData.descartes) cachedApiData.descartes = [];
 
                 buildFilterMaps(cachedApiData); populateFilterDropdowns();
-                ['Prev', 'Prod', 'Cal', 'Rank', 'Analise'].forEach(tab => {
+                ['Prev', 'Prod', 'Cal', 'Rank', 'Analise', 'Bruta'].forEach(tab => {
                     const brocolisOpt = Array.from(allCrops).find(c => c.toUpperCase().includes('BRÓCOLIS') || c.toUpperCase() === 'BROCOLIS');
                     if (brocolisOpt && getSelected(`cropType${tab}`).length === 0) populateMultiSelect(`cropType${tab}`, Array.from(allCrops).sort(), [brocolisOpt]);
                 });
-                ['Prev', 'Prod', 'Cal', 'Rank', 'Analise'].forEach(t => { updateVarietyDropdownForTab(t); updateCycleDropdownForTab(t); });
-                applyFiltersPrev(); applyFiltersProd(); applyFiltersCal(); applyFiltersRank(); applyFiltersAnalise();
+                ['Prev', 'Prod', 'Cal', 'Rank', 'Analise', 'Bruta'].forEach(t => { updateVarietyDropdownForTab(t); updateCycleDropdownForTab(t); });
+                
+                applyFiltersPrev(); applyFiltersProd(); applyFiltersCal(); applyFiltersRank(); applyFiltersAnalise(); applyFiltersBruta();
                 renderCompareCards(); initSimulatorDefaults();
                 
                 loadingModal.classList.add('hidden');
@@ -734,10 +812,20 @@
         }
 
         function switchTab(tabName) {
-            ['previsao', 'produtividade', 'calendario', 'ranking', 'analise', 'comparacao', 'simulador'].forEach(t => {
+            ['previsao', 'produtividade', 'bruta', 'calendario', 'ranking', 'analise', 'comparacao', 'simulador'].forEach(t => {
                 const btn = document.getElementById('tab-' + t); const view = document.getElementById('view' + t.charAt(0).toUpperCase() + t.slice(1));
-                if (t === tabName) { btn.classList.add('active'); btn.classList.remove('inactive'); if (t === 'ranking') btn.classList.add('text-brand-600'); if (t === 'analise') btn.classList.add('text-indigo-600'); if (t === 'comparacao') btn.classList.add('text-brand-600'); if (t === 'simulador') btn.classList.add('text-sky-600'); view.classList.remove('hidden'); view.classList.add('flex'); } 
-                else { btn.classList.remove('active', 'text-brand-600', 'text-indigo-600', 'text-sky-600'); btn.classList.add('inactive'); view.classList.add('hidden'); view.classList.remove('flex'); }
+                if (t === tabName) { 
+                    btn.classList.add('active'); btn.classList.remove('inactive'); 
+                    if (t === 'ranking') btn.classList.add('text-brand-600'); 
+                    if (t === 'analise') btn.classList.add('text-indigo-600'); 
+                    if (t === 'comparacao') btn.classList.add('text-brand-600'); 
+                    if (t === 'simulador') btn.classList.add('text-sky-600'); 
+                    if (t === 'bruta') btn.classList.add('text-rose-600');
+                    view.classList.remove('hidden'); view.classList.add('flex'); 
+                } else { 
+                    btn.classList.remove('active', 'text-brand-600', 'text-indigo-600', 'text-sky-600', 'text-rose-600'); 
+                    btn.classList.add('inactive'); view.classList.add('hidden'); view.classList.remove('flex'); 
+                }
             });
         }
 
@@ -750,7 +838,7 @@
         }
         function getWeekNumber(d) { const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); t.setUTCDate(t.getUTCDate() + 4 - (t.getUTCDay() || 7)); return Math.ceil((((t - new Date(Date.UTC(t.getUTCFullYear(), 0, 1))) / 86400000) + 1) / 7); }
 
-        function getTabFromId(id) { return id.endsWith('Prev')?'Prev':id.endsWith('Prod')?'Prod':id.endsWith('Cal')?'Cal':id.endsWith('Rank')?'Rank':id.endsWith('Analise')?'Analise':''; }
+        function getTabFromId(id) { return id.endsWith('Prev')?'Prev':id.endsWith('Prod')?'Prod':id.endsWith('Cal')?'Cal':id.endsWith('Rank')?'Rank':id.endsWith('Analise')?'Analise':id.endsWith('Bruta')?'Bruta':''; }
         function fireActionForId(id) { const t = getTabFromId(id); if(id.startsWith('blockSearch')) handleBlockChange(t); else if(id.startsWith('cycleSearch')) window[`applyFilters${t}`](); else if(id.startsWith('cropType')) handleCropChange(t); else if(id.startsWith('varietySearch')) window[`applyFilters${t}`](); }
         function getSelected(id) { const a = document.querySelector(`.checkbox-${id}-all`); if (a && a.checked) return []; return Array.from(document.querySelectorAll(`.checkbox-${id}`)).filter(c => c.checked).map(c => c.value); }
         function getSelectedNormalized(id) { return getSelected(id).map(normalizeStr); }
@@ -777,11 +865,12 @@
             };
             if (data.historico) data.historico.forEach(i => p(i.cultura, i.variedade_comercial, i.bloco, i.ciclo));
             if (data.pendentes) data.pendentes.forEach(i => p(i.cultura, i.variedade, i.nome, i.ciclo));
+            if (data.descartes) data.descartes.forEach(i => p(i.cultura, i.variedade, i.setor, i.ciclo));
         }
 
         function populateFilterDropdowns() {
             const sc = Array.from(allCrops).sort(), sb = Array.from(allBlocks).sort((a, b) => a.localeCompare(b, undefined, {numeric: true, sensitivity: 'base'}));
-            ['Prev','Prod','Cal','Rank','Analise'].forEach(t => { populateMultiSelect(`cropType${t}`,sc,[]); populateMultiSelect(`blockSearch${t}`,sb,[]); });
+            ['Prev','Prod','Cal','Rank','Analise','Bruta'].forEach(t => { populateMultiSelect(`cropType${t}`,sc,[]); populateMultiSelect(`blockSearch${t}`,sb,[]); });
         }
 
         function updateCycleDropdownForTab(t) {
@@ -844,6 +933,12 @@
             if (!cachedApiData) return;
             const res = processAnalise(cachedApiData.historico, cachedApiData.pendentes, getDates('startMonthAnalise'), getSelectedNormalized('blockSearchAnalise'), getSelectedNormalized('cycleSearchAnalise'), getSelectedNormalized('cropTypeAnalise'), getSelectedNormalized('varietySearchAnalise'), Array.from(document.querySelectorAll('.checkbox-statusAnalise')).filter(c=>c.checked).map(c=>normalizeStr(c.value)));
             lastProcessedData.analise = res; updateAnaliseView(res);
+        }
+
+        function applyFiltersBruta() {
+            if (!cachedApiData) return;
+            const res = processBruta(cachedApiData.historico, cachedApiData.pendentes, cachedApiData.descartes || [], getDates('startMonthBruta'), getSelectedNormalized('blockSearchBruta'), getSelectedNormalized('cycleSearchBruta'), getSelectedNormalized('cropTypeBruta'), getSelectedNormalized('varietySearchBruta'), Array.from(document.querySelectorAll('.checkbox-statusBruta')).filter(c=>c.checked).map(c=>normalizeStr(c.value)));
+            lastProcessedData.bruta = res; updateBrutaView(res);
         }
 
         function processPrevisao(hist, pend, dates, bF, cyF, crF, vF, stats, rate) {
@@ -1023,6 +1118,220 @@
             return { globalAprov: tPl>0?Math.min(100,Math.round((tCol/tPl)*100)):0, avgAtraso: cAtr>0?Math.round(sAtr/cAtr):0, avgJanela: cJan>0?Math.round(sJan/cJan):0, prod1000: tPl>0?Math.round((tKg/(tPl/1000))):0, sazChartData: saz.map(s => s.un>0?Math.round((s.kg/s.un)*1000):null), evolucaoLabels: Array.from({length: mCy}, (_, i) => `Ciclo ${i+1}`), evolucaoMap: evM, topBlocosEvolucao: tBlEv, perdasLabels: pL, perdasData: pL.map(l => prd[l]), topJanelas: jRn.sort((a,b) => b.days - a.days).slice(0, 5) };
         }
 
+        function processBruta(hist, pend, desc, dates, bF, cyF, crF, vF, stats) {
+            let tColUn = 0, tColKg = 0;
+            let tDescUn = 0, tDescKg = 0;
+            const causasMap = {};
+            const diariosMap = {};
+            const activeKeys = new Set();
+
+            hist.forEach(r => {
+                const d = parseGoogleDate(r.data_entrega); if(!d) return;
+                if((bF.length>0&&!bF.includes(normalizeStr(r.bloco))) || (cyF.length>0&&!cyF.includes(normalizeStr(r.ciclo))) || (crF.length>0&&!crF.includes(normalizeStr(r.cultura))) || (vF.length>0&&!vF.includes(normalizeStr(r.variedade_comercial)))) return;
+                if(!stats.some(s => normalizeStr(pend.find(p => normalizeStr(p.nome) === normalizeStr(r.bloco) && normalizeStr(p.ciclo) === normalizeStr(r.ciclo))?.status || "Em andamento").includes(s))) return;
+                if(dates.s && (d < dates.s || d > dates.e)) return;
+                tColUn += r.qtd_cabecas || 0;
+                tColKg += r.peso_total_kg || 0;
+                activeKeys.add(`${normalizeStr(r.bloco)}|${normalizeStr(r.ciclo)}|${normalizeStr(r.cultura)}`);
+            });
+
+            desc.forEach(r => {
+                const d = parseGoogleDate(r.data_descarte || r.data); if(!d) return; 
+                if((bF.length>0&&!bF.includes(normalizeStr(r.setor))) || (cyF.length>0&&!cyF.includes(normalizeStr(r.ciclo))) || (crF.length>0&&!crF.includes(normalizeStr(r.cultura || ''))) || (vF.length>0&&!vF.includes(normalizeStr(r.variedade)))) return;
+                if(!stats.some(s => normalizeStr(r.status || "Em andamento").includes(s))) return;
+                if(dates.s && (d < dates.s || d > dates.e)) return;
+                
+                const q = r.qtd_perda || r.quantidade || 0;
+                const p = r.peso_perda || r.peso || 0;
+                const c = r.causa_perda || r.causa || "Não informada";
+                
+                tDescUn += q;
+                tDescKg += p;
+
+                if (!causasMap[c]) causasMap[c] = { causa: c, unidades: 0, kg: 0 };
+                causasMap[c].unidades += q;
+                causasMap[c].kg += p;
+
+                const dk = d.toISOString().split('T')[0];
+                if (!diariosMap[dk]) diariosMap[dk] = { un: 0, kg: 0 };
+                diariosMap[dk].un += q;
+                diariosMap[dk].kg += p;
+
+                activeKeys.add(`${normalizeStr(r.setor)}|${normalizeStr(r.ciclo)}|${normalizeStr(r.cultura || 'Pepino')}`);
+            });
+
+            let tPlantas = 0;
+            pend.forEach(bl => {
+                const k = `${normalizeStr(bl.nome)}|${normalizeStr(bl.ciclo)}|${normalizeStr(bl.cultura)}`;
+                if (activeKeys.has(k)) {
+                    tPlantas += bl.qtd_plantas || 0;
+                }
+            });
+
+            const tBrutaUn = Math.max(0, tColUn - tDescUn);
+            const tBrutaKg = Math.max(0, tColKg - tDescKg);
+            const mCol = tColUn > 0 ? (tColKg / tColUn) * 1000 : 0;
+            const mDesc = tDescUn > 0 ? (tDescKg / tDescUn) * 1000 : 0;
+            const mBruta = tBrutaUn > 0 ? (tBrutaKg / tBrutaUn) * 1000 : 0;
+
+            const percAprov = tColUn > 0 ? (tBrutaUn / tColUn) * 100 : 0;
+            const percPerda = tColUn > 0 ? (tDescUn / tColUn) * 100 : 0;
+
+            const unPorPlanta = tPlantas > 0 ? (tBrutaUn / tPlantas) : 0;
+            const kgPorPlanta = tPlantas > 0 ? (tBrutaKg / tPlantas) : 0;
+
+            const causasSummary = Object.values(causasMap).sort((a,b) => b.unidades - a.unidades);
+            const diariosKeys = Object.keys(diariosMap).sort();
+            
+            return {
+                tColUn, tColKg, mCol, tDescUn, tDescKg, mDesc, tBrutaUn, tBrutaKg, mBruta, causasSummary,
+                percAprov, percPerda, unPorPlanta, kgPorPlanta, tPlantas,
+                evolucaoLabels: diariosKeys.map(k => { const x=k.split('-'); return `${x[2]}/${x[1]}`; }),
+                evolucaoUnidades: diariosKeys.map(k => diariosMap[k].un),
+                evolucaoKg: diariosKeys.map(k => diariosMap[k].kg),
+                rawDescartes: desc.filter(r => {
+                    const d = parseGoogleDate(r.data_descarte || r.data); if(!d) return false;
+                    if((bF.length>0&&!bF.includes(normalizeStr(r.setor))) || (cyF.length>0&&!cyF.includes(normalizeStr(r.ciclo))) || (crF.length>0&&!crF.includes(normalizeStr(r.cultura || ''))) || (vF.length>0&&!vF.includes(normalizeStr(r.variedade)))) return false;
+                    if(!stats.some(s => normalizeStr(r.status || "Em andamento").includes(s))) return false;
+                    if(dates.s && (d < dates.s || d > dates.e)) return false;
+                    return true;
+                }).sort((a,b) => parseGoogleDate(b.data_descarte || b.data) - parseGoogleDate(a.data_descarte || a.data))
+            };
+        }
+
+        function updatePrevisaoView(res) {
+            safeSetText('historicalAvgLabel', res.nomeMesBase==="Geral"?`Média (gr) (Geral)`:`Média (gr) do anterior (${res.nomeMesBase})`); safeSetText('forecastTotalLabel', `Saldo Projetado (${res.labelAlvo})`); safeSetText('historicalAvg', res.pesoAvg.toLocaleString('pt-BR')); safeSetText('historicalPace', res.ritmo.toLocaleString('pt-BR')); safeSetText('forecastTotal', Math.round(res.totalKg).toLocaleString('pt-BR')); safeSetText('pendingPlants', Math.round(res.totalUn).toLocaleString('pt-BR')); safeSetText('fieldPlantsTotal', Math.round(res.totalCampo).toLocaleString('pt-BR')); safeSetText('deliveredUnits', res.dUn.toLocaleString('pt-BR')); safeSetText('deliveredKg', Math.round(res.dKg).toLocaleString('pt-BR')); safeSetText('deliveredAvg', res.dAvg.toLocaleString('pt-BR')); safeSetText('subForecastDeliveredKg', Math.round(res.dKg).toLocaleString('pt-BR')+' kg'); safeSetText('subForecastDeliveredUn', res.dUn.toLocaleString('pt-BR')+' un');
+            const tb = document.getElementById('forecastTableBody'); if (tb) { tb.innerHTML = res.tabela.length===0?'<tr><td colspan="5" class="p-4 sm:p-6 text-center text-slate-400">Nenhum setor futuro encontrado.</td></tr>':''; res.tabela.forEach(b=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td class="p-4 sm:p-5 font-semibold text-slate-700 whitespace-nowrap">${b.dObj.toLocaleDateString('pt-BR')}</td><td class="p-4 sm:p-5"><div class="font-black text-slate-800">${b.bloco}</div><div class="text-[10px] text-slate-500">CICLO ${b.ciclo} • ${b.cultura} • <span class="text-brand-600 font-semibold">${b.variedade}</span></div></td><td class="p-4 sm:p-5 text-center"><span class="px-3 py-1 rounded-lg text-[10px] font-black ${b.status.toUpperCase().includes('ANDAMENTO')?'bg-amber-100 text-amber-700':'bg-slate-100 text-slate-600'}">${b.status}</span></td><td class="p-4 sm:p-5 text-center"><div class="bg-slate-50 rounded-xl p-2 inline-block border"><span class="font-black text-slate-800">${Math.round(b.pEfet).toLocaleString('pt-BR')}</span> un<div class="text-[9px] text-slate-400 mt-1">C: ${Math.round(b.pRest).toLocaleString('pt-BR')} | E: ${Math.round(b.jaEnt).toLocaleString('pt-BR')}</div><div class="text-[8px] text-slate-400 font-bold mt-1">${b.plantas.toLocaleString('pt-BR')} plantas</div></div></td><td class="p-4 sm:p-5 text-right font-black text-brand-700 text-lg">${Math.round(b.vKg).toLocaleString('pt-BR')}</td>`; tb.appendChild(tr); }); }
+            const dt = document.getElementById('forecastDailyTableBody'); if (dt) { dt.innerHTML = res.chartData.length===0?'<tr><td colspan="3" class="p-4 text-center text-slate-400">Sem dados.</td></tr>':''; res.chartData.forEach(d=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td class="p-4 font-bold text-xs text-slate-700 whitespace-nowrap">${d.label}</td><td class="p-4 text-center"><span class="bg-slate-100 px-2 py-1 rounded font-black text-slate-800">${Math.round(d.unidades).toLocaleString('pt-BR')}</span></td><td class="p-4 text-right"><span class="bg-brand-50 text-brand-600 px-2 py-1 rounded font-black text-sm">${Math.round(d.peso).toLocaleString('pt-BR')}</span></td>`; dt.appendChild(tr); }); }
+            createGroupedBarChart('forecastChart', res.chartData); createGroupedBarChart('weeklyForecastChart', res.weeklyData);
+        }
+
+        function updateProdutividadeView(p) {
+            safeSetText('prodTotalPlantas', p.dispTotalP.toLocaleString('pt-BR')); safeSetText('prodUnidades', p.totalU.toLocaleString('pt-BR')); safeSetText('prodPeso', Math.round(p.totalKg).toLocaleString('pt-BR')); safeSetText('prodMedia', p.prodMedia?p.prodMedia.toLocaleString('pt-BR'):p.pMedG.toLocaleString('pt-BR')); safeSetText('prodCaixas', p.totalCx.toLocaleString('pt-BR')); safeSetText('prodFrutosPlanta', p.frutosPlanta.toLocaleString('pt-BR',{maximumFractionDigits:1})); safeSetText('prodKgPlanta', p.kgPlanta.toLocaleString('pt-BR',{minimumFractionDigits:2, maximumFractionDigits:2})); safeSetText('prodDiasProducao', p.diasProducao.toLocaleString('pt-BR')); safeSetText('prodCicloMedio', p.cicloRealMedio !== null ? p.cicloRealMedio : '--');
+            const di = Object.keys(p.diario).sort(), lb = di.map(d=>{const x=d.split('-'); return `${x[2]}/${x[1]}`}), un = di.map(d=>p.diario[d].un), kg = di.map(d=>Math.round(p.diario[d].kg)), md = di.map(d=>p.diario[d].un>0?(p.diario[d].kg/p.diario[d].un):0), cx = di.map(d=>p.diario[d].cx);
+            createSimpleBarChart('chartProdUnidadesBar',lb,un,'#749d83','Unidades',false,' un'); createSimpleBarChart('chartProdPesoBar',lb,kg,'#e3d39e','Peso (kg)',false,' kg'); createSimpleBarChart('chartProdMediaBar',lb,md,'#9ca3af','Peso Médio',true,' kg'); createSimpleBarChart('chartProdCaixasBar',lb,cx,'#86b693','Caixas',false,' cx');
+            const vn=Object.keys(p.vars), vu=vn.map(v=>p.vars[v].un), vkg=vn.map(v=>Math.round(p.vars[v].kg)), vmd=vn.map(v=>p.vars[v].un>0?(p.vars[v].kg/p.vars[v].un):0), vcx=vn.map(v=>p.vars[v].cx), pC=['#10b981','#f59e0b','#8b5cf6','#f43f5e','#14b8a6','#f97316','#84cc16','#d946ef'];
+            createPieChart('chartProdUnidadesPie',vn,vu,pC); createPieChart('chartProdPesoPie',vn,vkg,pC); createPieChart('chartProdMediaPie',vn,vmd,pC,true); createPieChart('chartProdCaixasPie',vn,vcx,pC);
+            
+            const smp = document.getElementById('startMonthProd');
+            const labelData = (smp && smp.value) ? `no período de ${smp.value.replace(' to ', ' até ')}` : "em todo o histórico";
+            safeSetText('prodResumoPeriodoData', labelData);
+            
+            safeSetText('prodResumoPeriodoKg', Math.round(p.totalKg).toLocaleString('pt-BR')); safeSetText('prodResumoPeriodoUn', p.totalU.toLocaleString('pt-BR')); safeSetText('prodResumoPeriodoMed', p.totalU>0?Math.round((p.totalKg/p.totalU)*1000).toLocaleString('pt-BR'):'0');
+            const tb = document.getElementById('prodBlocosPeriodoBody'); if (tb) { tb.innerHTML=''; const ba=Object.values(p.blocos).sort((a,b)=>b.kg-a.kg); if(ba.length===0) tb.innerHTML='<tr><td colspan="8" class="p-4 text-center text-indigo-200">Nenhuma colheita neste período.</td></tr>'; else ba.forEach(b=>{ const dP = b.plantio ? b.plantio.toLocaleDateString('pt-BR') : '--'; const dI = b.inicio ? b.inicio.toLocaleDateString('pt-BR') : '--'; const dF = b.fim ? b.fim.toLocaleDateString('pt-BR') : '--'; const cic = (b.inicio && b.plantio) ? Math.ceil((b.inicio - b.plantio)/86400000) : '--'; const prd = (b.fim && b.inicio) ? Math.ceil((b.fim - b.inicio)/86400000)+1 : '--'; tb.innerHTML+=`<tr><td class="p-3 pl-4 font-black text-white">${b.nome} <span class="text-[10px] text-indigo-200 font-semibold ml-1">C${b.ciclo}</span></td><td class="p-3 text-center text-[11px] font-semibold text-indigo-100">${dP}</td><td class="p-3 text-center text-[11px] font-semibold text-sky-200">${dI}</td><td class="p-3 text-center text-[11px] font-semibold text-indigo-100">${dF}</td><td class="p-3 text-center text-[11px] font-bold"><span class="bg-indigo-900/40 px-1.5 py-0.5 rounded text-indigo-200">${cic}d</span> <span class="text-indigo-400">/</span> <span class="bg-brand-900/40 px-1.5 py-0.5 rounded text-sky-200">${prd}d</span></td><td class="p-3 text-right font-semibold text-indigo-50">${b.un.toLocaleString('pt-BR')} un</td><td class="p-3 text-right font-black text-white">${Math.round(b.kg).toLocaleString('pt-BR')} kg</td><td class="p-3 text-right pr-4 font-bold text-indigo-200">${b.un>0?Math.round((b.kg/b.un)*1000):0} g</td></tr>`; }); }
+        }
+
+        function updateCalendarioView(cal) {
+            safeSetText('calTotalPlants', cal.totalP.toLocaleString('pt-BR')); safeSetText('calTotalBlocks', cal.totalLotes.toLocaleString('pt-BR')); safeSetText('calAvgCycle', cal.avgCiclo!==null?cal.avgCiclo:"--");
+            const tb = document.getElementById('calTableBody'); if (tb) { tb.innerHTML = cal.lista.length===0?'<tr><td colspan="6" class="p-4 sm:p-6 text-center text-slate-400">Nenhum plantio encontrado.</td></tr>':''; cal.lista.forEach(b=>{ const tr=document.createElement('tr'); const sColor=b.status.toUpperCase().includes('ANDAMENTO')?'bg-amber-100 text-amber-700':b.status.toUpperCase().includes('CONCLUÍDO')?'bg-emerald-100 text-emerald-700':'bg-slate-100 text-slate-600'; tr.innerHTML=`<td class="p-4 sm:p-5 font-semibold text-slate-700 whitespace-nowrap">${b.dataPlantio?b.dataPlantio.toLocaleDateString('pt-BR'):'-'}</td><td class="p-4 sm:p-5 font-semibold text-slate-700 whitespace-nowrap">${b.dataEst.toLocaleDateString('pt-BR')}</td><td class="p-4 sm:p-5 whitespace-nowrap"><div>${b.dataReal?b.dataReal.toLocaleDateString('pt-BR'):'-'}</div><div class="text-[10px] mt-0.5">${b.cicloRealDias!==null?`<span class="text-brand-600 font-bold">Ciclo de ${b.cicloRealDias} dias</span>`:`<span class="text-slate-400 font-medium italic">Pendente...</span>`}</div></td><td class="p-4 sm:p-5"><div class="font-black text-slate-800">${b.bloco}</div><div class="text-[10px] text-slate-500">CICLO ${b.ciclo} • ${b.cultura} • <span class="text-brand-600 font-semibold">${Array.from(b.variedades).join(", ") || "Não inf."}</span></div></td><td class="p-4 sm:p-5 text-center"><span class="px-3 py-1 rounded-lg text-[10px] font-black ${sColor}">${b.status}</span></td><td class="p-4 sm:p-5 text-right font-black text-lg text-slate-800 whitespace-nowrap">${b.total.toLocaleString('pt-BR')} <span class="text-xs text-slate-400">un</span></td>`; tb.appendChild(tr); }); }
+        }
+
+        function updateRankingView(l) {
+            const tA=[...l].sort((a,b)=>b.aprov-a.aprov||b.pMed-a.pMed), wA=[...l].sort((a,b)=>a.aprov-b.aprov||a.pMed-b.pMed), tP=[...l].sort((a,b)=>b.pMed-a.pMed||b.aprov-a.aprov), tK=[...l].sort((a,b)=>b.kg-a.kg);
+            if(tA.length>0){safeSetText('rankBestAprovName',tA[0].bloco); safeSetText('rankBestAprovInfo',`Ciclo ${tA[0].ciclo} • ${tA[0].cultura}`); safeSetText('rankBestAprovVal',tA[0].aprov+'%');} else {safeSetText('rankBestAprovName','--'); safeSetText('rankBestAprovInfo','--'); safeSetText('rankBestAprovVal','0%');}
+            if(tP.length>0){safeSetText('rankBestPesoName',tP[0].bloco); safeSetText('rankBestPesoInfo',`Ciclo ${tP[0].ciclo} • ${tP[0].cultura}`); safeSetText('rankBestPesoVal',tP[0].pMed);} else {safeSetText('rankBestPesoName','--'); safeSetText('rankBestPesoInfo','--'); safeSetText('rankBestPesoVal','0');}
+            if(tK.length>0){safeSetText('rankBestVolName',tK[0].bloco); safeSetText('rankBestVolInfo',`Ciclo ${tK[0].ciclo} • ${tK[0].cultura}`); safeSetText('rankBestVolVal',Math.round(tK[0].kg).toLocaleString('pt-BR'));} else {safeSetText('rankBestVolName','--'); safeSetText('rankBestVolInfo','--'); safeSetText('rankBestVolVal','0');}
+            const rT=(d,tbId,vK,suf)=>{ const tb=document.getElementById(tbId); if(!tb)return; tb.innerHTML=d.length===0?'<tr><td colspan="3" class="p-4 text-center text-slate-400">Nenhum dado</td></tr>':''; d.slice(0,10).forEach((i,x)=>{ tb.innerHTML+=`<tr><td class="p-3 w-10 text-center">${x===0?`<i data-lucide="medal" class="w-5 h-5 text-yellow-500"></i>`:x===1?`<i data-lucide="medal" class="w-5 h-5 text-slate-400"></i>`:x===2?`<i data-lucide="medal" class="w-5 h-5 text-amber-600"></i>`:`<span class="text-slate-400 font-bold">${x+1}º</span>`}</td><td class="p-3"><div class="font-black text-slate-800 text-xs">${i.bloco}</div><div class="text-[9px] text-slate-500">C${i.ciclo} • ${i.cultura}</div></td><td class="p-3 text-right font-black text-slate-700 text-sm">${i[vK].toLocaleString('pt-BR')}${suf}</td></tr>`; }); };
+            rT(tA,'rankTopAprovBody','aprov','%'); rT(wA,'rankWorstAprovBody','aprov','%'); rT(tP,'rankTopPesoBody','pMed','g'); lucide.createIcons();
+            createHorizontalBarChart('rankAprovChart', tA.slice(0,5).map(i=>`${i.bloco} (C${i.ciclo})`), tA.slice(0,5).map(i=>i.aprov), '#10b981', 'Aproveitamento (%)', '%'); createHorizontalBarChart('rankPesoChart', tP.slice(0,5).map(i=>`${i.bloco} (C${i.ciclo})`), tP.slice(0,5).map(i=>i.pMed), '#0ea5e9', 'Peso Médio (g)', 'g');
+        }
+
+        function updateAnaliseView(r) {
+            safeSetText('anaAcuraciaVol', r.globalAprov+'%'); safeSetText('anaAcuraciaData', r.avgAtraso>0?'+'+r.avgAtraso:r.avgAtraso); safeSetText('anaJanelaMédia', r.avgJanela); safeSetText('anaProdRelativa', r.prod1000.toLocaleString('pt-BR'));
+            createSimpleBarChart('analiseSazonalChart', nomesDosMeses, r.sazChartData, '#0284c7', 'Peso Médio (g)', false, 'g'); createLineChart('analiseEvolucaoChart', r.evolucaoLabels, r.evolucaoMap, r.topBlocosEvolucao); createHorizontalBarChart('analiseJanelaChart', r.topJanelas.map(i=>i.name), r.topJanelas.map(i=>i.days), '#f59e0b', 'Dias de Colheita', ' dias'); createPieChart('analisePerdasChart', r.perdasLabels, r.perdasData, ['#f43f5e','#f97316','#8b5cf6','#10b981','#14b8a6','#d946ef','#eab308','#64748b'], false);
+        }
+
+        function updateBrutaView(r) {
+            safeSetText('brutaColheitaUn', Math.round(r.tColUn).toLocaleString('pt-BR'));
+            safeSetText('brutaColheitaKg', Math.round(r.tColKg).toLocaleString('pt-BR'));
+            safeSetText('brutaColheitaMed', Math.round(r.mCol).toLocaleString('pt-BR'));
+            
+            safeSetText('brutaPercAprov', r.percAprov.toFixed(1) + '% Aprov.');
+            
+            safeSetText('brutaDescarteUn', Math.round(r.tDescUn).toLocaleString('pt-BR'));
+            safeSetText('brutaDescarteKg', Math.round(r.tDescKg).toLocaleString('pt-BR'));
+            safeSetText('brutaDescarteMed', Math.round(r.mDesc).toLocaleString('pt-BR'));
+            
+            safeSetText('brutaPercPerda', r.percPerda.toFixed(1) + '% Perda');
+
+            safeSetText('brutaTotalPlantas', r.tPlantas.toLocaleString('pt-BR'));
+            safeSetText('brutaRealUn', Math.round(r.tBrutaUn).toLocaleString('pt-BR'));
+            safeSetText('brutaRealKg', Math.round(r.tBrutaKg).toLocaleString('pt-BR'));
+            safeSetText('brutaRealMed', Math.round(r.mBruta).toLocaleString('pt-BR'));
+
+            safeSetText('brutaUnPlanta', r.unPorPlanta.toFixed(1));
+            safeSetText('brutaKgPlanta', r.kgPorPlanta.toFixed(2));
+
+            createPieChart('chartBrutaCausas', r.causasSummary.map(c=>c.causa), r.causasSummary.map(c=>c.unidades), ['#f43f5e','#f97316','#eab308','#8b5cf6','#14b8a6','#10b981','#64748b'], false);
+            createSimpleBarChart('chartBrutaEvolucao', r.evolucaoLabels, r.evolucaoUnidades, '#f43f5e', 'Descarte (un)', false, ' un');
+
+            const tb = document.getElementById('brutaTableBody');
+            if (tb) {
+                tb.innerHTML = r.rawDescartes.length === 0 ? '<tr><td colspan="5" class="p-4 text-center text-slate-400">Nenhum descarte no período.</td></tr>' : '';
+                r.rawDescartes.forEach(d => {
+                    const tr = document.createElement('tr');
+                    const dp = parseGoogleDate(d.data_descarte || d.data);
+                    tr.innerHTML = `<td class="p-4 font-semibold text-slate-700 whitespace-nowrap">${dp?dp.toLocaleDateString('pt-BR'):'--'}</td><td class="p-4"><div class="font-black text-slate-800">${d.setor}</div><div class="text-[10px] text-slate-500">C${d.ciclo} • ${d.variedade||''}</div></td><td class="p-4"><span class="px-3 py-1 rounded-lg text-[10px] font-black bg-rose-100 text-rose-700">${d.causa_perda || d.causa || 'N/A'}</span></td><td class="p-4 text-center font-bold">${(d.qtd_perda || d.quantidade || 0).toLocaleString('pt-BR')}</td><td class="p-4 text-right font-black text-slate-700">${(d.peso_perda || d.peso || 0).toLocaleString('pt-BR')} kg</td>`;
+                    tb.appendChild(tr);
+                });
+            }
+        }
+
+        async function generateAIAnalysis() {
+            const apiKey = "";
+            const btn = document.getElementById('aiGenerateBtn');
+            const contentDiv = document.getElementById('aiAnalysisContent');
+            
+            if (!lastProcessedData.bruta || lastProcessedData.bruta.causasSummary.length === 0) {
+                contentDiv.innerHTML = `<div class="bg-black/10 border border-white/20 p-5 rounded-2xl text-sm font-bold text-fuchsia-50">Não há dados de descarte suficientes no período selecionado para analisar.</div>`;
+                return;
+            }
+
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Analisando...';
+            btn.disabled = true;
+
+            const summary = lastProcessedData.bruta.causasSummary;
+            let promptTxt = "Atuo em uma estufa de cultivo protegido. Meus dados de perda/descarte recentes são:\n";
+            summary.forEach(s => { promptTxt += `- Causa: ${s.causa} | Total perdido: ${s.unidades} unidades (${s.kg.toFixed(2)} kg)\n`; });
+            promptTxt += "\nCom base nestes dados precisos, atue como um engenheiro agrônomo experiente e forneça:\n1. Uma explicação técnica breve das possíveis causas originais no manejo (como temperatura, irrigação, trato cultural) que causam esses defeitos listados.\n2. Três recomendações de ações preventivas claras e rápidas para a equipe na estufa aplicar e tentar reduzir esses descartes imediatamente.\nResponda diretamente com o conteúdo utilizando tags de formatação HTML (como <b>, <ul>, <li>, <p>) sem envelopar em markdown ```html.";
+
+            const payload = {
+                contents: [{ parts: [{ text: promptTxt }] }],
+                systemInstruction: { parts: [{ text: "Você é um consultor agronômico prático focado em cultivos de estufa (como pepinos e afins), ajudando produtores a reduzir perdas baseando-se em registros de descarte. Sua resposta deve ser direta, encorajadora e estruturada em HTML puro em português." }] }
+            };
+
+            const fetchWithRetry = async (url, options, retries = 5) => {
+                const delays = [1000, 2000, 4000, 8000, 16000];
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        const response = await fetch(url, options);
+                        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                        return await response.json();
+                    } catch (err) {
+                        if (i === retries - 1) throw err;
+                        await new Promise(r => setTimeout(r, delays[i]));
+                    }
+                }
+            };
+
+            try {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const result = await fetchWithRetry(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text || "Análise indisponível.";
+                contentDiv.innerHTML = `<div class="bg-black/20 border border-white/20 p-5 rounded-2xl text-sm text-fuchsia-50 leading-relaxed font-medium space-y-3">${text.replace(/```html|```/g, '')}</div>`;
+            } catch (error) {
+                contentDiv.innerHTML = `<div class="bg-rose-500/20 border border-rose-500/50 p-4 rounded-xl text-white text-sm font-bold flex items-center gap-2"><i data-lucide="alert-triangle" class="w-5 h-5"></i> Erro ao consultar a IA. Tente novamente mais tarde.</div>`;
+            } finally {
+                btn.innerHTML = '<i data-lucide="sparkles" class="w-4 h-4"></i> Atualizar Explicação da IA';
+                btn.disabled = false;
+                lucide.createIcons();
+            }
+        }
+
         function processCompareCardData(b, c) {
             let tU = 0, tKg = 0, tCx = 0, ds = new Set(), dTp = 0; const bn = normalizeStr(b), cn = normalizeStr(c);
             if (!cachedApiData) return { totalU:0, totalKg:0, totalCx:0, diasProducao:0, pMedG:0, percC:0, percPerda:0, dispTotalP:0 };
@@ -1163,50 +1472,6 @@
             tbd.innerHTML = h;
         }
 
-        // --- ATUALIZAÇÕES VISUAIS DA TELA ---
-        function updatePrevisaoView(res) {
-            safeSetText('historicalAvgLabel', res.nomeMesBase==="Geral"?`Média (gr) (Geral)`:`Média (gr) do anterior (${res.nomeMesBase})`); safeSetText('forecastTotalLabel', `Saldo Projetado (${res.labelAlvo})`); safeSetText('historicalAvg', res.pesoAvg.toLocaleString('pt-BR')); safeSetText('historicalPace', res.ritmo.toLocaleString('pt-BR')); safeSetText('forecastTotal', Math.round(res.totalKg).toLocaleString('pt-BR')); safeSetText('pendingPlants', Math.round(res.totalUn).toLocaleString('pt-BR')); safeSetText('fieldPlantsTotal', Math.round(res.totalCampo).toLocaleString('pt-BR')); safeSetText('deliveredUnits', res.dUn.toLocaleString('pt-BR')); safeSetText('deliveredKg', Math.round(res.dKg).toLocaleString('pt-BR')); safeSetText('deliveredAvg', res.dAvg.toLocaleString('pt-BR')); safeSetText('subForecastDeliveredKg', Math.round(res.dKg).toLocaleString('pt-BR')+' kg'); safeSetText('subForecastDeliveredUn', res.dUn.toLocaleString('pt-BR')+' un');
-            const tb = document.getElementById('forecastTableBody'); if (tb) { tb.innerHTML = res.tabela.length===0?'<tr><td colspan="5" class="p-4 sm:p-6 text-center text-slate-400">Nenhum setor futuro encontrado.</td></tr>':''; res.tabela.forEach(b=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td class="p-4 sm:p-5 font-semibold text-slate-700 whitespace-nowrap">${b.dObj.toLocaleDateString('pt-BR')}</td><td class="p-4 sm:p-5"><div class="font-black text-slate-800">${b.bloco}</div><div class="text-[10px] text-slate-500">CICLO ${b.ciclo} • ${b.cultura} • <span class="text-brand-600 font-semibold">${b.variedade}</span></div></td><td class="p-4 sm:p-5 text-center"><span class="px-3 py-1 rounded-lg text-[10px] font-black ${b.status.toUpperCase().includes('ANDAMENTO')?'bg-amber-100 text-amber-700':'bg-slate-100 text-slate-600'}">${b.status}</span></td><td class="p-4 sm:p-5 text-center"><div class="bg-slate-50 rounded-xl p-2 inline-block border"><span class="font-black text-slate-800">${Math.round(b.pEfet).toLocaleString('pt-BR')}</span> un<div class="text-[9px] text-slate-400 mt-1">C: ${Math.round(b.pRest).toLocaleString('pt-BR')} | E: ${Math.round(b.jaEnt).toLocaleString('pt-BR')}</div><div class="text-[8px] text-slate-400 font-bold mt-1">${b.plantas.toLocaleString('pt-BR')} plantas</div></div></td><td class="p-4 sm:p-5 text-right font-black text-brand-700 text-lg">${Math.round(b.vKg).toLocaleString('pt-BR')}</td>`; tb.appendChild(tr); }); }
-            const dt = document.getElementById('forecastDailyTableBody'); if (dt) { dt.innerHTML = res.chartData.length===0?'<tr><td colspan="3" class="p-4 text-center text-slate-400">Sem dados.</td></tr>':''; res.chartData.forEach(d=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td class="p-4 font-bold text-xs text-slate-700 whitespace-nowrap">${d.label}</td><td class="p-4 text-center"><span class="bg-slate-100 px-2 py-1 rounded font-black text-slate-800">${Math.round(d.unidades).toLocaleString('pt-BR')}</span></td><td class="p-4 text-right"><span class="bg-brand-50 text-brand-600 px-2 py-1 rounded font-black text-sm">${Math.round(d.peso).toLocaleString('pt-BR')}</span></td>`; dt.appendChild(tr); }); }
-            createGroupedBarChart('forecastChart', res.chartData); createGroupedBarChart('weeklyForecastChart', res.weeklyData);
-        }
-
-        function updateProdutividadeView(p) {
-            safeSetText('prodTotalPlantas', p.dispTotalP.toLocaleString('pt-BR')); safeSetText('prodUnidades', p.totalU.toLocaleString('pt-BR')); safeSetText('prodPeso', Math.round(p.totalKg).toLocaleString('pt-BR')); safeSetText('prodMedia', p.prodMedia?p.prodMedia.toLocaleString('pt-BR'):p.pMedG.toLocaleString('pt-BR')); safeSetText('prodCaixas', p.totalCx.toLocaleString('pt-BR')); safeSetText('prodFrutosPlanta', p.frutosPlanta.toLocaleString('pt-BR',{maximumFractionDigits:1})); safeSetText('prodKgPlanta', p.kgPlanta.toLocaleString('pt-BR',{minimumFractionDigits:2, maximumFractionDigits:2})); safeSetText('prodDiasProducao', p.diasProducao.toLocaleString('pt-BR')); safeSetText('prodCicloMedio', p.cicloRealMedio !== null ? p.cicloRealMedio : '--');
-            const di = Object.keys(p.diario).sort(), lb = di.map(d=>{const x=d.split('-'); return `${x[2]}/${x[1]}`}), un = di.map(d=>p.diario[d].un), kg = di.map(d=>Math.round(p.diario[d].kg)), md = di.map(d=>p.diario[d].un>0?(p.diario[d].kg/p.diario[d].un):0), cx = di.map(d=>p.diario[d].cx);
-            createSimpleBarChart('chartProdUnidadesBar',lb,un,'#749d83','Unidades',false,' un'); createSimpleBarChart('chartProdPesoBar',lb,kg,'#e3d39e','Peso (kg)',false,' kg'); createSimpleBarChart('chartProdMediaBar',lb,md,'#9ca3af','Peso Médio',true,' kg'); createSimpleBarChart('chartProdCaixasBar',lb,cx,'#86b693','Caixas',false,' cx');
-            const vn=Object.keys(p.vars), vu=vn.map(v=>p.vars[v].un), vkg=vn.map(v=>Math.round(p.vars[v].kg)), vmd=vn.map(v=>p.vars[v].un>0?(p.vars[v].kg/p.vars[v].un):0), vcx=vn.map(v=>p.vars[v].cx), pC=['#10b981','#f59e0b','#8b5cf6','#f43f5e','#14b8a6','#f97316','#84cc16','#d946ef'];
-            createPieChart('chartProdUnidadesPie',vn,vu,pC); createPieChart('chartProdPesoPie',vn,vkg,pC); createPieChart('chartProdMediaPie',vn,vmd,pC,true); createPieChart('chartProdCaixasPie',vn,vcx,pC);
-            
-            // Correção de segurança para evitar erro de .value null
-            const smp = document.getElementById('startMonthProd');
-            const labelData = (smp && smp.value) ? `no período de ${smp.value.replace(' to ', ' até ')}` : "em todo o histórico";
-            safeSetText('prodResumoPeriodoData', labelData);
-            
-            safeSetText('prodResumoPeriodoKg', Math.round(p.totalKg).toLocaleString('pt-BR')); safeSetText('prodResumoPeriodoUn', p.totalU.toLocaleString('pt-BR')); safeSetText('prodResumoPeriodoMed', p.totalU>0?Math.round((p.totalKg/p.totalU)*1000).toLocaleString('pt-BR'):'0');
-            const tb = document.getElementById('prodBlocosPeriodoBody'); if (tb) { tb.innerHTML=''; const ba=Object.values(p.blocos).sort((a,b)=>b.kg-a.kg); if(ba.length===0) tb.innerHTML='<tr><td colspan="8" class="p-4 text-center text-indigo-200">Nenhuma colheita neste período.</td></tr>'; else ba.forEach(b=>{ const dP = b.plantio ? b.plantio.toLocaleDateString('pt-BR') : '--'; const dI = b.inicio ? b.inicio.toLocaleDateString('pt-BR') : '--'; const dF = b.fim ? b.fim.toLocaleDateString('pt-BR') : '--'; const cic = (b.inicio && b.plantio) ? Math.ceil((b.inicio - b.plantio)/86400000) : '--'; const prd = (b.fim && b.inicio) ? Math.ceil((b.fim - b.inicio)/86400000)+1 : '--'; tb.innerHTML+=`<tr><td class="p-3 pl-4 font-black text-white">${b.nome} <span class="text-[10px] text-indigo-200 font-semibold ml-1">C${b.ciclo}</span></td><td class="p-3 text-center text-[11px] font-semibold text-indigo-100">${dP}</td><td class="p-3 text-center text-[11px] font-semibold text-sky-200">${dI}</td><td class="p-3 text-center text-[11px] font-semibold text-indigo-100">${dF}</td><td class="p-3 text-center text-[11px] font-bold"><span class="bg-indigo-900/40 px-1.5 py-0.5 rounded text-indigo-200">${cic}d</span> <span class="text-indigo-400">/</span> <span class="bg-brand-900/40 px-1.5 py-0.5 rounded text-sky-200">${prd}d</span></td><td class="p-3 text-right font-semibold text-indigo-50">${b.un.toLocaleString('pt-BR')} un</td><td class="p-3 text-right font-black text-white">${Math.round(b.kg).toLocaleString('pt-BR')} kg</td><td class="p-3 text-right pr-4 font-bold text-indigo-200">${b.un>0?Math.round((b.kg/b.un)*1000):0} g</td></tr>`; }); }
-        }
-
-        function updateCalendarioView(cal) {
-            safeSetText('calTotalPlants', cal.totalP.toLocaleString('pt-BR')); safeSetText('calTotalBlocks', cal.totalLotes.toLocaleString('pt-BR')); safeSetText('calAvgCycle', cal.avgCiclo!==null?cal.avgCiclo:"--");
-            const tb = document.getElementById('calTableBody'); if (tb) { tb.innerHTML = cal.lista.length===0?'<tr><td colspan="6" class="p-4 sm:p-6 text-center text-slate-400">Nenhum plantio encontrado.</td></tr>':''; cal.lista.forEach(b=>{ const tr=document.createElement('tr'); const sColor=b.status.toUpperCase().includes('ANDAMENTO')?'bg-amber-100 text-amber-700':b.status.toUpperCase().includes('CONCLUÍDO')?'bg-emerald-100 text-emerald-700':'bg-slate-100 text-slate-600'; tr.innerHTML=`<td class="p-4 sm:p-5 font-semibold text-slate-700 whitespace-nowrap">${b.dataPlantio?b.dataPlantio.toLocaleDateString('pt-BR'):'-'}</td><td class="p-4 sm:p-5 font-semibold text-slate-700 whitespace-nowrap">${b.dataEst.toLocaleDateString('pt-BR')}</td><td class="p-4 sm:p-5 whitespace-nowrap"><div>${b.dataReal?b.dataReal.toLocaleDateString('pt-BR'):'-'}</div><div class="text-[10px] mt-0.5">${b.cicloRealDias!==null?`<span class="text-brand-600 font-bold">Ciclo de ${b.cicloRealDias} dias</span>`:`<span class="text-slate-400 font-medium italic">Pendente...</span>`}</div></td><td class="p-4 sm:p-5"><div class="font-black text-slate-800">${b.bloco}</div><div class="text-[10px] text-slate-500">CICLO ${b.ciclo} • ${b.cultura} • <span class="text-brand-600 font-semibold">${Array.from(b.variedades).join(", ") || "Não inf."}</span></div></td><td class="p-4 sm:p-5 text-center"><span class="px-3 py-1 rounded-lg text-[10px] font-black ${sColor}">${b.status}</span></td><td class="p-4 sm:p-5 text-right font-black text-lg text-slate-800 whitespace-nowrap">${b.total.toLocaleString('pt-BR')} <span class="text-xs text-slate-400">un</span></td>`; tb.appendChild(tr); }); }
-        }
-
-        function updateRankingView(l) {
-            const tA=[...l].sort((a,b)=>b.aprov-a.aprov||b.pMed-a.pMed), wA=[...l].sort((a,b)=>a.aprov-b.aprov||a.pMed-b.pMed), tP=[...l].sort((a,b)=>b.pMed-a.pMed||b.aprov-a.aprov), tK=[...l].sort((a,b)=>b.kg-a.kg);
-            if(tA.length>0){safeSetText('rankBestAprovName',tA[0].bloco); safeSetText('rankBestAprovInfo',`Ciclo ${tA[0].ciclo} • ${tA[0].cultura}`); safeSetText('rankBestAprovVal',tA[0].aprov+'%');} else {safeSetText('rankBestAprovName','--'); safeSetText('rankBestAprovInfo','--'); safeSetText('rankBestAprovVal','0%');}
-            if(tP.length>0){safeSetText('rankBestPesoName',tP[0].bloco); safeSetText('rankBestPesoInfo',`Ciclo ${tP[0].ciclo} • ${tP[0].cultura}`); safeSetText('rankBestPesoVal',tP[0].pMed);} else {safeSetText('rankBestPesoName','--'); safeSetText('rankBestPesoInfo','--'); safeSetText('rankBestPesoVal','0');}
-            if(tK.length>0){safeSetText('rankBestVolName',tK[0].bloco); safeSetText('rankBestVolInfo',`Ciclo ${tK[0].ciclo} • ${tK[0].cultura}`); safeSetText('rankBestVolVal',Math.round(tK[0].kg).toLocaleString('pt-BR'));} else {safeSetText('rankBestVolName','--'); safeSetText('rankBestVolInfo','--'); safeSetText('rankBestVolVal','0');}
-            const rT=(d,tbId,vK,suf)=>{ const tb=document.getElementById(tbId); if(!tb)return; tb.innerHTML=d.length===0?'<tr><td colspan="3" class="p-4 text-center text-slate-400">Nenhum dado</td></tr>':''; d.slice(0,10).forEach((i,x)=>{ tb.innerHTML+=`<tr><td class="p-3 w-10 text-center">${x===0?`<i data-lucide="medal" class="w-5 h-5 text-yellow-500"></i>`:x===1?`<i data-lucide="medal" class="w-5 h-5 text-slate-400"></i>`:x===2?`<i data-lucide="medal" class="w-5 h-5 text-amber-600"></i>`:`<span class="text-slate-400 font-bold">${x+1}º</span>`}</td><td class="p-3"><div class="font-black text-slate-800 text-xs">${i.bloco}</div><div class="text-[9px] text-slate-500">C${i.ciclo} • ${i.cultura}</div></td><td class="p-3 text-right font-black text-slate-700 text-sm">${i[vK].toLocaleString('pt-BR')}${suf}</td></tr>`; }); };
-            rT(tA,'rankTopAprovBody','aprov','%'); rT(wA,'rankWorstAprovBody','aprov','%'); rT(tP,'rankTopPesoBody','pMed','g'); lucide.createIcons();
-            createHorizontalBarChart('rankAprovChart', tA.slice(0,5).map(i=>`${i.bloco} (C${i.ciclo})`), tA.slice(0,5).map(i=>i.aprov), '#10b981', 'Aproveitamento (%)', '%'); createHorizontalBarChart('rankPesoChart', tP.slice(0,5).map(i=>`${i.bloco} (C${i.ciclo})`), tP.slice(0,5).map(i=>i.pMed), '#0ea5e9', 'Peso Médio (g)', 'g');
-        }
-
-        function updateAnaliseView(r) {
-            safeSetText('anaAcuraciaVol', r.globalAprov+'%'); safeSetText('anaAcuraciaData', r.avgAtraso>0?'+'+r.avgAtraso:r.avgAtraso); safeSetText('anaJanelaMédia', r.avgJanela); safeSetText('anaProdRelativa', r.prod1000.toLocaleString('pt-BR'));
-            createSimpleBarChart('analiseSazonalChart', nomesDosMeses, r.sazChartData, '#0284c7', 'Peso Médio (g)', false, 'g'); createLineChart('analiseEvolucaoChart', r.evolucaoLabels, r.evolucaoMap, r.topBlocosEvolucao); createHorizontalBarChart('analiseJanelaChart', r.topJanelas.map(i=>i.name), r.topJanelas.map(i=>i.days), '#f59e0b', 'Dias de Colheita', ' dias'); createPieChart('analisePerdasChart', r.perdasLabels, r.perdasData, ['#f43f5e','#f97316','#8b5cf6','#10b981','#14b8a6','#d946ef','#eab308','#64748b'], false);
-        }
-
         function createLineChart(id, l, m, tK) {
             const ctx=document.getElementById(id); if(!ctx)return; const c2=ctx.getContext('2d'); if(charts[id])charts[id].destroy(); if(tK.length===0){charts[id]=new Chart(c2,{type:'line',data:{labels:["Sem Dados"],datasets:[{data:[0]}]},options:{plugins:{legend:{display:false}}}}); return;}
             const cs=['#0ea5e9','#10b981','#f59e0b','#f43f5e','#8b5cf6'];
@@ -1234,7 +1499,6 @@
             window[`applyFilters${t}`]();
         }
 
-        // --- PREPARAÇÃO DE IMPRESSÃO ---
         function prepareAndPrint() {
             const now = new Date(), dtF = now.toLocaleDateString('pt-BR'), hrF = now.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
             let t = 'Prev', rt = 'Visão de Previsões e Colheita Futura', sum = '', det = '';
@@ -1245,6 +1509,7 @@
             else if (!document.getElementById('viewAnalise').classList.contains('hidden')) { t='Analise'; rt='Auditoria Estratégica e Análise Avançada'; }
             else if (!document.getElementById('viewComparacao').classList.contains('hidden')) { t='Comparacao'; rt='Relatório de Comparação de Lotes'; }
             else if (!document.getElementById('viewSimulador').classList.contains('hidden')) { t='Simulador'; rt='Simulador de Cenários e Escala'; }
+            else if (!document.getElementById('viewBruta').classList.contains('hidden')) { t='Bruta'; rt='Relatório de Produção Bruta e Descartes'; }
 
             if (t === 'Simulador') {
                 const qE=getSimVal('simQtdEstufas'), pS=getSimVal('simPlantasSetor'), sE=getSimVal('simSetoresEstufa'), tP=qE*sE*pS;
@@ -1312,6 +1577,10 @@
                     const a = lastProcessedData.analise;
                     sum = `<table class="ind-table"><tr class="ind-title-row"><td colspan="4">2. KPIs Globais</td></tr><tr class="ind-header ind-center"><td style="width:25%">Acurácia Volume</td><td style="width:25%">Atraso Data (Dias)</td><td style="width:25%">Janela Média (Dias)</td><td style="width:25%">Prod. (Kg/1000 pl)</td></tr><tr class="ind-center ind-bold"><td>${a.globalAprov}%</td><td>${a.avgAtraso>0?'+'+a.avgAtraso:a.avgAtraso}</td><td>${a.avgJanela}</td><td>${a.prod1000.toLocaleString('pt-BR')} kg</td></tr></table>`;
                     det = `<div style="display:flex;gap:15px;width:100%;"><div style="width:33.3%;"><table class="ind-table"><tr class="ind-title-row"><td colspan="2">3. Sazonalidade</td></tr><tr class="ind-header"><th>Mês</th><th class="ind-right">Peso</th></tr>${a.sazChartData.map((v,i)=>v?`<tr><td class="ind-center ind-bold">${nomesDosMeses[i]}</td><td class="ind-right">${v} g</td></tr>`:'').join('')||'<tr><td colspan="2">Sem dados</td></tr>'}</table></div><div style="width:33.3%;"><table class="ind-table"><tr class="ind-title-row"><td colspan="2">4. Ofensores Perda</td></tr><tr class="ind-header"><th>Var.</th><th class="ind-right">Vol.</th></tr>${a.perdasLabels.map((l,i)=>`<tr><td>${l}</td><td class="ind-right">${a.perdasData[i].toLocaleString('pt-BR')} un</td></tr>`).join('')||'<tr><td colspan="2">Sem dados</td></tr>'}</table></div><div style="width:33.3%;"><table class="ind-table"><tr class="ind-title-row"><td colspan="2">5. Janelas Lentas</td></tr><tr class="ind-header"><th>Setor</th><th class="ind-right">Duração</th></tr>${a.topJanelas.map(j=>`<tr><td>${j.name}</td><td class="ind-right">${j.days} dias</td></tr>`).join('')||'<tr><td colspan="2">Sem dados</td></tr>'}</table></div></div>`;
+                } else if (t === 'Bruta') {
+                    const b = lastProcessedData.bruta;
+                    sum = `<table class="ind-table"><tr class="ind-title-row"><td colspan="6">2. Resumo de Produção Bruta e Descartes</td></tr><tr class="ind-header ind-center"><td style="width:16%">Produção Final (Un)</td><td style="width:16%">Produção Final (Kg)</td><td style="width:16%">Descarte (Un)</td><td style="width:16%">Descarte (Kg)</td><td style="width:16%">Média Final (g)</td><td style="width:16%">Média Descarte (g)</td></tr><tr class="ind-center ind-bold"><td>${Math.round(b.tBrutaUn).toLocaleString('pt-BR')}</td><td>${Math.round(b.tBrutaKg).toLocaleString('pt-BR')}</td><td>${Math.round(b.tDescUn).toLocaleString('pt-BR')}</td><td>${Math.round(b.tDescKg).toLocaleString('pt-BR')}</td><td>${Math.round(b.mBruta).toLocaleString('pt-BR')}</td><td>${Math.round(b.mDesc).toLocaleString('pt-BR')}</td></tr></table>`;
+                    det = `<div style="display:flex;gap:15px;width:100%;"><div style="width:50%;"><table class="ind-table"><tr class="ind-title-row"><td colspan="3">3. Principais Causas de Descarte</td></tr><tr class="ind-header"><th>Causa</th><th class="ind-right">Unidades</th><th class="ind-right">Peso (Kg)</th></tr>${b.causasSummary.slice(0,10).map(c=>`<tr><td>${c.causa}</td><td class="ind-right">${Math.round(c.unidades).toLocaleString('pt-BR')}</td><td class="ind-right">${Math.round(c.kg).toLocaleString('pt-BR')}</td></tr>`).join('') || '<tr><td colspan="3" class="ind-center">Sem dados.</td></tr>'}</table></div><div style="width:50%;"><table class="ind-table"><tr class="ind-title-row"><td colspan="5">4. Últimos Registros de Descarte</td></tr><tr class="ind-header"><th>Data</th><th>Setor</th><th>Causa</th><th class="ind-right">Un.</th><th class="ind-right">Kg</th></tr>${b.rawDescartes.slice(0,10).map(d=>`<tr><td>${parseGoogleDate(d.data_descarte||d.data)?.toLocaleDateString('pt-BR')||'--'}</td><td>${d.setor}</td><td>${d.causa_perda||d.causa||'N/A'}</td><td class="ind-right">${(d.qtd_perda||d.quantidade||0).toLocaleString('pt-BR')}</td><td class="ind-right">${(d.peso_perda||d.peso||0).toLocaleString('pt-BR')}</td></tr>`).join('') || '<tr><td colspan="5" class="ind-center">Sem dados.</td></tr>'}</table></div></div>`;
                 }
 
                 det = `<table class="ind-table"><tr class="ind-title-row"><td colspan="4">1. Filtros</td></tr><tr><th class="ind-header" style="width:20%">Período:</th><td style="width:30%">${fP}</td><th class="ind-header" style="width:20%">Cultura:</th><td style="width:30%">${fC}</td></tr><tr><th class="ind-header">Setor:</th><td>${fB}</td><th class="ind-header">Var:</th><td>${fV}</td></tr><tr><th class="ind-header">Ciclo:</th><td colspan="3">${fCy}</td></tr></table>` + det;
