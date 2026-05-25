@@ -1035,6 +1035,7 @@
             pend.forEach(bl => { 
                 const k = `${normalizeStr(bl.nome)}|${normalizeStr(bl.ciclo)}|${normalizeStr(bl.cultura)}`;
                 if(lT.has(k)) {
+                    if (vF.length > 0 && !vF.includes(normalizeStr(bl.variedade))) return;
                     prod.dispTotalP += bl.qtd_plantas; 
                     const dPlan = parseGoogleDate(bl.data_plantio);
                     if (dPlan && iR[k]) {
@@ -1081,7 +1082,11 @@
                     lM[k].un += r.qtd_cabecas; lM[k].kg += r.peso_total_kg;
                 }
             });
-            pend.forEach(bl => { const k = `${normalizeStr(bl.nome)}|${normalizeStr(bl.ciclo)}|${normalizeStr(bl.cultura)}`; if(lM[k]) lM[k].estimativa += bl.qtd_plantas; });
+            pend.forEach(bl => { 
+                if (vF.length > 0 && !vF.includes(normalizeStr(bl.variedade))) return;
+                const k = `${normalizeStr(bl.nome)}|${normalizeStr(bl.ciclo)}|${normalizeStr(bl.cultura)}`; 
+                if(lM[k]) lM[k].estimativa += bl.qtd_plantas; 
+            });
             let l = Object.values(lM).filter(i => i.un > 0 && i.estimativa > 0);
             l.forEach(i => { i.aprov = Math.min(100, Math.round((i.un / Math.max(i.estimativa, i.un)) * 100)); i.pMed = Math.round((i.kg / i.un) * 1000); });
             return l;
@@ -1164,6 +1169,7 @@
             pend.forEach(bl => {
                 const k = `${normalizeStr(bl.nome)}|${normalizeStr(bl.ciclo)}|${normalizeStr(bl.cultura)}`;
                 if (activeKeys.has(k)) {
+                    if (vF.length > 0 && !vF.includes(normalizeStr(bl.variedade))) return;
                     tPlantas += bl.qtd_plantas || 0;
                 }
             });
