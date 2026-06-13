@@ -1893,28 +1893,14 @@
         }
     </script>
     <script>
-        async function applyBrandAssets() {
+        function applyBrandAssets() {
             const ICON_URL = 'https://i.imgur.com/hzstkNM.png';
             const favicon = document.getElementById('siteFavicon');
             const appleTouchIcon = document.getElementById('siteAppleTouchIcon');
             const manifestLink = document.getElementById('siteManifest');
 
-            // Tenta converter a imagem para base64 para embutir no manifest
-            let logoUri = ICON_URL;
-            try {
-                const res = await fetch(ICON_URL);
-                const blob = await res.blob();
-                logoUri = await new Promise(resolve => {
-                    const reader = new FileReader();
-                    reader.onloadend = () => resolve(reader.result);
-                    reader.readAsDataURL(blob);
-                });
-            } catch(e) {
-                // Fallback: usa a URL direta se CORS bloquear
-            }
-
-            if (favicon) { favicon.href = logoUri; favicon.type = 'image/png'; }
-            if (appleTouchIcon) appleTouchIcon.href = logoUri;
+            if (favicon) { favicon.href = ICON_URL; favicon.type = 'image/png'; }
+            if (appleTouchIcon) appleTouchIcon.href = ICON_URL;
             if (manifestLink) {
                 const manifest = {
                     name: 'SPG Estufa — Gestão de Cultivos',
@@ -1927,8 +1913,8 @@
                     theme_color: '#0f172a',
                     lang: 'pt-BR',
                     icons: [
-                        { src: logoUri, sizes: '192x192', type: 'image/png' },
-                        { src: logoUri, sizes: '512x512', type: 'image/png' }
+                        { src: ICON_URL, sizes: '192x192', type: 'image/png' },
+                        { src: ICON_URL, sizes: '512x512', type: 'image/png' }
                     ]
                 };
                 manifestLink.href = `data:application/manifest+json,${encodeURIComponent(JSON.stringify(manifest))}`;
