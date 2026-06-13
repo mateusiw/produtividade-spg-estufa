@@ -4,8 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SPG Estufa | Gestão de Cultivos</title>
-    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/512/line-chart.png">
+    <link rel="icon" type="image/png" href="https://i.imgur.com/YwliV4K.png">
     <meta name="theme-color" content="#0f172a">
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SPG Estufa">
+    <link rel="apple-touch-icon" href="https://i.imgur.com/YwliV4K.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { theme: { extend: { colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 800: '#075985', 900: '#0c4a6e' }, prod: { green: '#749d83', yellow: '#e3d39e', grey: '#9ca3af', lightgreen: '#86b693' } }, boxShadow: { 'soft': '0 10px 40px -10px rgba(0,0,0,0.04)', 'float': '0 20px 40px -10px rgba(15,23,42,0.1)' } } } }
@@ -16,6 +22,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; background-color: #f8fafc; }
@@ -85,7 +92,7 @@
     <div id="loginScreen" class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative z-50 print-hide">
         <div class="max-w-md w-full space-y-8 animate-fade-in-down">
             <div>
-                <img class="mx-auto h-20 w-auto drop-shadow-md" src="https://i.imgur.com/tSv2eig.png" alt="Logo Estufa">
+                <img class="mx-auto h-20 w-auto drop-shadow-md" src="https://i.imgur.com/YwliV4K.png" alt="Logo Estufa">
                 <h2 class="mt-6 text-center text-3xl font-black text-slate-900 tracking-tight">SPG ESTUFA</h2>
                 <p class="mt-2 text-center text-[11px] font-bold text-slate-500 uppercase tracking-widest">Acesso Restrito ao Sistema</p>
             </div>
@@ -122,22 +129,22 @@
                 <div class="truncate"><h1 class="text-sm sm:text-base font-black text-slate-900 tracking-tight truncate">SPG ESTUFA</h1><p class="text-[9px] sm:text-[11px] text-slate-500 font-bold uppercase tracking-wider truncate">Gestão de Cultivos e Produtividade</p></div>
             </div>
             <div class="flex items-center gap-2">
-                <button onclick="logout()" class="hidden sm:flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 hover:bg-slate-100 text-slate-500 rounded-xl text-xs font-bold transition-all">Sair</button>
+                <button onclick="logout()" class="flex items-center gap-2 px-2 sm:px-4 py-2 hover:bg-slate-100 text-slate-500 rounded-xl text-xs font-bold transition-all"><i data-lucide="log-out" class="w-4 h-4 sm:hidden"></i><span class="hidden sm:inline">Sair</span></button>
                 <button onclick="prepareAndPrint()" class="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all border border-slate-200"><i data-lucide="printer" class="w-4 h-4"></i><span class="hidden sm:inline">Imprimir Relatório</span></button>
             </div>
         </div>
 
         <div class="container mx-auto p-4 md:p-6 flex flex-col gap-6 max-w-[1400px]">
             <!-- TABS -->
-            <div class="print-hide flex gap-6 sm:gap-8 border-b border-slate-200/80 px-2 overflow-x-auto hide-scrollbar pb-1">
-                <button onclick="switchTab('previsao')" id="tab-previsao" class="tab-btn active pb-3 text-sm uppercase tracking-wider flex items-center gap-2"><i data-lucide="calendar-days" class="w-4 h-4"></i> Previsões</button>
-                <button onclick="switchTab('produtividade')" id="tab-produtividade" class="tab-btn inactive pb-3 text-sm uppercase tracking-wider flex items-center gap-2"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Produtividade</button>
-                <button onclick="switchTab('bruta')" id="tab-bruta" class="tab-btn inactive pb-3 text-sm uppercase tracking-wider flex items-center gap-2 text-rose-600"><i data-lucide="trash-2" class="w-4 h-4"></i> Prod. Bruta</button>
-                <button onclick="switchTab('calendario')" id="tab-calendario" class="tab-btn inactive pb-3 text-sm uppercase tracking-wider flex items-center gap-2"><i data-lucide="list-todo" class="w-4 h-4"></i> Calendário</button>
-                <button onclick="switchTab('ranking')" id="tab-ranking" class="tab-btn inactive pb-3 text-sm uppercase tracking-wider flex items-center gap-2"><i data-lucide="trophy" class="w-4 h-4"></i> Ranking</button>
-                <button onclick="switchTab('analise')" id="tab-analise" class="tab-btn inactive pb-3 text-sm uppercase tracking-wider flex items-center gap-2 text-indigo-600"><i data-lucide="microscope" class="w-4 h-4"></i> Análise</button>
-                <button onclick="switchTab('comparacao')" id="tab-comparacao" class="tab-btn inactive pb-3 text-sm uppercase tracking-wider flex items-center gap-2 text-brand-600"><i data-lucide="columns" class="w-4 h-4"></i> Comparação</button>
-                <button onclick="switchTab('simulador')" id="tab-simulador" class="tab-btn inactive pb-3 text-sm uppercase tracking-wider flex items-center gap-2 text-sky-600"><i data-lucide="calculator" class="w-4 h-4"></i> Simulador</button>
+            <div class="print-hide flex gap-2 sm:gap-6 md:gap-8 border-b border-slate-200/80 px-2 overflow-x-auto hide-scrollbar pb-1">
+                <button onclick="switchTab('previsao')" id="tab-previsao" class="tab-btn active pb-3 text-xs sm:text-sm uppercase tracking-tight sm:tracking-wider flex items-center gap-1 sm:gap-2"><i data-lucide="calendar-days" class="w-4 h-4"></i><span class="hidden sm:inline"> Previsões</span></button>
+                <button onclick="switchTab('produtividade')" id="tab-produtividade" class="tab-btn inactive pb-3 text-xs sm:text-sm uppercase tracking-tight sm:tracking-wider flex items-center gap-1 sm:gap-2"><i data-lucide="layout-dashboard" class="w-4 h-4"></i><span class="hidden sm:inline"> Produtividade</span></button>
+                <button onclick="switchTab('bruta')" id="tab-bruta" class="tab-btn inactive pb-3 text-xs sm:text-sm uppercase tracking-tight sm:tracking-wider flex items-center gap-1 sm:gap-2 text-rose-600"><i data-lucide="trash-2" class="w-4 h-4"></i><span class="hidden sm:inline"> Prod. Bruta</span></button>
+                <button onclick="switchTab('calendario')" id="tab-calendario" class="tab-btn inactive pb-3 text-xs sm:text-sm uppercase tracking-tight sm:tracking-wider flex items-center gap-1 sm:gap-2"><i data-lucide="list-todo" class="w-4 h-4"></i><span class="hidden sm:inline"> Calendário</span></button>
+                <button onclick="switchTab('ranking')" id="tab-ranking" class="tab-btn inactive pb-3 text-xs sm:text-sm uppercase tracking-tight sm:tracking-wider flex items-center gap-1 sm:gap-2"><i data-lucide="trophy" class="w-4 h-4"></i><span class="hidden sm:inline"> Ranking</span></button>
+                <button onclick="switchTab('analise')" id="tab-analise" class="tab-btn inactive pb-3 text-xs sm:text-sm uppercase tracking-tight sm:tracking-wider flex items-center gap-1 sm:gap-2 text-indigo-600"><i data-lucide="microscope" class="w-4 h-4"></i><span class="hidden sm:inline"> Análise</span></button>
+                <button onclick="switchTab('comparacao')" id="tab-comparacao" class="tab-btn inactive pb-3 text-xs sm:text-sm uppercase tracking-tight sm:tracking-wider flex items-center gap-1 sm:gap-2 text-brand-600"><i data-lucide="columns" class="w-4 h-4"></i><span class="hidden sm:inline"> Comparação</span></button>
+                <button onclick="switchTab('simulador')" id="tab-simulador" class="tab-btn inactive pb-3 text-xs sm:text-sm uppercase tracking-tight sm:tracking-wider flex items-center gap-1 sm:gap-2 text-sky-600"><i data-lucide="calculator" class="w-4 h-4"></i><span class="hidden sm:inline"> Simulador</span></button>
             </div>
 
             <div id="mainContent">
@@ -145,8 +152,8 @@
                 <!-- VIEW 1: PREVISÕES -->
                 <div id="viewPrevisao" class="flex flex-col gap-6 animate-fade-in-down">
                     <div class="print-hide bg-white p-4 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 relative z-30">
-                        <div class="flex flex-wrap gap-3 sm:gap-4 items-end">
-                            <div class="flex-auto w-full sm:w-auto min-w-[200px] lg:max-w-[260px] transition-all duration-300">
+                        <div class="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:gap-4 items-end">
+                            <div class="col-span-2 flex-auto w-full sm:w-auto min-w-[200px] lg:max-w-[260px] transition-all duration-300">
                                 <label class="text-[11px] font-bold text-slate-400 uppercase mb-2 block tracking-wider">Período</label>
                                 <input type="text" id="startMonthPrev" class="date-range-picker w-full p-2 border border-slate-200 rounded-xl text-sm font-semibold outline-none transition-colors focus:ring-2 focus:ring-brand-500/50 bg-white" placeholder="Período automático">
                             </div>
@@ -207,8 +214,8 @@
                 <!-- VIEW 2: PRODUTIVIDADE -->
                 <div id="viewProdutividade" class="hidden flex-col gap-6 animate-fade-in-down">
                     <div class="print-hide bg-white p-4 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 relative z-30">
-                        <div class="flex flex-wrap gap-3 sm:gap-4 items-end">
-                            <div class="flex-auto w-full sm:w-auto min-w-[200px] lg:max-w-[260px] transition-all duration-300">
+                        <div class="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:gap-4 items-end">
+                            <div class="col-span-2 flex-auto w-full sm:w-auto min-w-[200px] lg:max-w-[260px] transition-all duration-300">
                                 <label class="text-[11px] font-bold text-slate-400 uppercase mb-2 block tracking-wider">Período</label>
                                 <input type="text" id="startMonthProd" class="date-range-picker w-full p-2 border border-slate-200 rounded-xl text-sm font-semibold outline-none transition-colors focus:ring-2 focus:ring-brand-500/50 bg-white truncate" placeholder="Período automático">
                             </div>
@@ -247,9 +254,9 @@
                         <i data-lucide="sun-snow" class="absolute -right-4 -bottom-4 w-32 h-32 text-white opacity-10"></i>
                         <h3 class="text-sm font-black uppercase tracking-wide flex items-center gap-2 mb-2 relative z-10"><i data-lucide="calendar-clock" class="w-4 h-4"></i> Análise de Período e Sazonalidade</h3>
                         <p class="text-sm sm:text-base text-indigo-50 font-medium relative z-10"><span id="prodResumoPeriodoData">Em todo o histórico</span> resultou em <strong class="text-white text-xl" id="prodResumoPeriodoKg">0</strong> kg totais e <strong class="text-white text-xl" id="prodResumoPeriodoUn">0</strong> unidades, alcançando um peso médio de <strong class="text-white text-xl bg-white/20 px-2 py-0.5 rounded"><span id="prodResumoPeriodoMed">0</span>g</strong> por fruto.</p>
-                        <div class="mt-6 bg-white/10 rounded-2xl border border-white/20 overflow-hidden relative z-10">
+                        <div class="mt-6 bg-white/10 rounded-2xl border border-white/20 overflow-x-auto relative z-10">
                             <div class="p-3 border-b border-white/20 bg-black/10"><h4 class="text-xs font-black uppercase tracking-wider text-indigo-100">Setores que produziram nesta época</h4></div>
-                            <div class="max-h-[250px] overflow-y-auto hide-scrollbar"><table class="w-full text-left"><thead class="bg-black/20 text-[10px] uppercase font-bold text-indigo-200 sticky top-0 backdrop-blur-md"><tr><th class="p-3 pl-4">Setor / Ciclo</th><th class="p-3 text-center">Plantio</th><th class="p-3 text-center">Início Colh.</th><th class="p-3 text-center">Fim Colh.</th><th class="p-3 text-center" title="Dias de Ciclo / Dias de Produção (Janela)">Ciclo / Prod.</th><th class="p-3 text-right">Unidades</th><th class="p-3 text-right">Peso (Kg)</th><th class="p-3 text-right pr-4">Média (g)</th></tr></thead><tbody id="prodBlocosPeriodoBody" class="text-sm divide-y divide-white/10"></tbody></table></div>
+                            <div class="max-h-[250px] overflow-y-auto hide-scrollbar"><table class="w-full text-left min-w-[600px]"><thead class="bg-black/20 text-[10px] uppercase font-bold text-indigo-200 sticky top-0 backdrop-blur-md"><tr><th class="p-3 pl-4">Setor / Ciclo</th><th class="p-3 text-center">Plantio</th><th class="p-3 text-center">Início Colh.</th><th class="p-3 text-center">Fim Colh.</th><th class="p-3 text-center" title="Dias de Ciclo / Dias de Produção (Janela)">Ciclo / Prod.</th><th class="p-3 text-right">Unidades</th><th class="p-3 text-right">Peso (Kg)</th><th class="p-3 text-right pr-4">Média (g)</th></tr></thead><tbody id="prodBlocosPeriodoBody" class="text-sm divide-y divide-white/10"></tbody></table></div>
                         </div>
                     </div>
                     
@@ -274,8 +281,8 @@
                 <!-- VIEW NOVA: PRODUÇÃO BRUTA E DESCARTES -->
                 <div id="viewBruta" class="hidden flex-col gap-6 animate-fade-in-down">
                     <div class="print-hide bg-white p-4 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 relative z-30">
-                        <div class="flex flex-wrap gap-3 sm:gap-4 items-end">
-                            <div class="flex-auto w-full sm:w-auto min-w-[200px] lg:max-w-[260px] transition-all duration-300">
+                        <div class="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:gap-4 items-end">
+                            <div class="col-span-2 flex-auto w-full sm:w-auto min-w-[200px] lg:max-w-[260px] transition-all duration-300">
                                 <label class="text-[11px] font-bold text-slate-400 uppercase mb-2 block tracking-wider">Período de Colheita / Descarte</label>
                                 <input type="text" id="startMonthBruta" class="date-range-picker w-full p-2 border border-slate-200 rounded-xl text-sm font-semibold outline-none transition-colors focus:ring-2 focus:ring-brand-500/50 bg-white" placeholder="Período automático">
                             </div>
@@ -349,8 +356,8 @@
                 <!-- VIEW 3: CALENDÁRIO -->
                 <div id="viewCalendario" class="hidden flex-col gap-6 animate-fade-in-down">
                     <div class="print-hide bg-white p-4 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 relative z-30">
-                        <div class="flex flex-wrap gap-3 sm:gap-4 items-end">
-                            <div class="flex-auto w-full sm:w-auto min-w-[200px] lg:max-w-[260px] transition-all duration-300">
+                        <div class="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:gap-4 items-end">
+                            <div class="col-span-2 flex-auto w-full sm:w-auto min-w-[200px] lg:max-w-[260px] transition-all duration-300">
                                 <label class="text-[11px] font-bold text-slate-400 uppercase mb-2 block tracking-wider">Período Estimado</label>
                                 <input type="text" id="startMonthCal" class="date-range-picker w-full p-2 border border-slate-200 rounded-xl text-sm font-semibold outline-none transition-colors focus:ring-2 focus:ring-brand-500/50 bg-white" placeholder="Período automático">
                             </div>
@@ -398,8 +405,8 @@
                 <!-- VIEW 4: RANKING -->
                 <div id="viewRanking" class="hidden flex-col gap-6 animate-fade-in-down">
                     <div class="print-hide bg-white p-4 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 relative z-30">
-                        <div class="flex flex-wrap gap-3 sm:gap-4 items-end">
-                            <div class="flex-auto w-full sm:w-auto min-w-[200px] lg:max-w-[260px] transition-all duration-300">
+                        <div class="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:gap-4 items-end">
+                            <div class="col-span-2 flex-auto w-full sm:w-auto min-w-[200px] lg:max-w-[260px] transition-all duration-300">
                                 <label class="text-[11px] font-bold text-slate-400 uppercase mb-2 block tracking-wider">Período de Colheita</label>
                                 <input type="text" id="startMonthRank" class="date-range-picker w-full p-2 border border-slate-200 rounded-xl text-sm font-semibold outline-none transition-colors focus:ring-2 focus:ring-brand-500/50 bg-white" placeholder="Período automático">
                             </div>
@@ -456,8 +463,8 @@
                 <!-- VIEW 5: ANÁLISE AVANÇADA -->
                 <div id="viewAnalise" class="hidden flex-col gap-6 animate-fade-in-down">
                     <div class="print-hide bg-white p-4 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 relative z-30">
-                        <div class="flex flex-wrap gap-3 sm:gap-4 items-end">
-                            <div class="flex-auto w-full sm:w-auto min-w-[200px] lg:max-w-[260px] transition-all duration-300">
+                        <div class="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:gap-4 items-end">
+                            <div class="col-span-2 flex-auto w-full sm:w-auto min-w-[200px] lg:max-w-[260px] transition-all duration-300">
                                 <label class="text-[11px] font-bold text-slate-400 uppercase mb-2 block tracking-wider">Período da Colheita</label>
                                 <input type="text" id="startMonthAnalise" class="date-range-picker w-full p-2 border border-slate-200 rounded-xl text-sm font-semibold outline-none transition-colors focus:ring-2 focus:ring-brand-500/50 bg-white" placeholder="Período automático">
                             </div>
@@ -519,10 +526,12 @@
 
                 <!-- VIEW 6: COMPARAÇÃO -->
                 <div id="viewComparacao" class="hidden flex-col gap-6 animate-fade-in-down">
-                    <div class="print-hide bg-white p-4 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 flex flex-col">
-                        <h2 class="text-lg font-black text-slate-800 uppercase tracking-tight mb-2">Comparador Rápido de Lotes</h2>
-                        <p class="text-xs font-semibold text-slate-500 mb-6">Adicione os setores lado a lado para cruzar e analisar detalhadamente a produtividade, quebras e rendimento final.</p>
-                        <div id="compareCardsWrapper" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 pt-2"></div>
+                    <div id="compareMainCard" class="print-hide bg-white p-4 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 flex flex-col">
+                        <div class="flex items-start justify-between mb-2">
+                            <div><h2 class="text-lg font-black text-slate-800 uppercase tracking-tight">Comparador Rápido de Lotes</h2><p class="text-xs font-semibold text-slate-500 mt-1">Adicione os setores lado a lado para cruzar e analisar detalhadamente a produtividade, quebras e rendimento final.</p></div>
+                            <button id="btnCaptureComparacao" onclick="captureComparisonView()" class="compare-ui-only flex items-center gap-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold transition-all shadow-sm shrink-0 ml-4" title="Baixar imagem da comparação sem filtros"><i data-lucide="camera" class="w-3.5 h-3.5"></i><span>Capturar</span></button>
+                        </div>
+                        <div id="compareCardsWrapper" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 pt-4"></div>
                     </div>
                 </div>
 
@@ -627,6 +636,7 @@
         let cachedApiData = null; 
         let cropVarietyMap = {};
         let blockCycleMap = {};
+        let blockVarietyMap = {};
         let allCrops = new Set();
         let allVarieties = new Set();
         let allBlocks = new Set();
@@ -634,7 +644,8 @@
         let lastProcessedData = { prev: null, prod: null, cal: null, rank: null, analise: null, bruta: null }; 
         const nomesDosMeses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
         let compareCardIdCounter = 3;
-        let compareCardsState = [{ id: 1, bloco: '', ciclo: '' }, { id: 2, bloco: '', ciclo: '' }];
+        let compareCardsState = [{ id: 1, blocos: [], ciclos: [], variedades: [] }, { id: 2, blocos: [], ciclos: [], variedades: [] }];
+        let dragCardId = null;
         let simCronograma = [];
         let simCronogramaId = 0;
 
@@ -655,6 +666,7 @@
         });
 
         document.addEventListener('click', (e) => {
+            if (!document.contains(e.target)) return;
             document.querySelectorAll('.dropdown-menu').forEach(menu => {
                 if (!menu.parentElement.contains(e.target)) menu.classList.add('hidden');
             });
@@ -679,19 +691,36 @@
             lucide.createIcons(); 
         }
 
-        function handleLogin(e) {
+        async function handleLogin(e) {
             e.preventDefault();
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value;
             const rememberMe = document.getElementById('remember-me').checked;
+            const errDiv = document.getElementById('loginError');
+            const btn = e.target.querySelector('button[type=submit]');
 
-            if ((user === 'Assis Paulo' && pass === 'SPG2400@') || (user === 'admin' && pass === 'devtest') || (user === 'Guilherme Ramos' && pass === 'spg_guilherme')) {
-                if (rememberMe) localStorage.setItem('spg_logged_in', 'true');
-                else sessionStorage.setItem('spg_logged_in', 'true');
-                document.getElementById('loginError').classList.add('hidden');
-                showApp();
-            } else {
-                document.getElementById('loginError').classList.remove('hidden');
+            btn.disabled = true;
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Verificando...';
+            lucide.createIcons();
+            errDiv.classList.add('hidden');
+
+            try {
+                const url = `${SCRIPT_URL}?action=login&user=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}`;
+                const res = await fetch(url, { redirect: 'follow' });
+                const data = await res.json();
+                if (data.ok) {
+                    if (rememberMe) localStorage.setItem('spg_logged_in', 'true');
+                    else sessionStorage.setItem('spg_logged_in', 'true');
+                    showApp();
+                } else {
+                    errDiv.classList.remove('hidden');
+                }
+            } catch (err) {
+                errDiv.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Entrar no Sistema<i data-lucide="arrow-right" class="w-4 h-4"></i>';
+                lucide.createIcons();
             }
         }
 
@@ -852,16 +881,16 @@
             const listEl = document.getElementById(`list-${cId}`); if(!listEl) return;
             const isAll = sVals.length === 0 || sVals.length === opts.length;
             let html = `<label class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-xl cursor-pointer border-b border-slate-100 mb-1"><input type="checkbox" class="checkbox-${cId}-all accent-brand-600 w-4 h-4 shrink-0" ${isAll ? 'checked' : ''} onchange="toggleAllMultiSelect('${cId}')"><span class="text-sm font-black text-slate-700">Todos</span></label>`;
-            opts.forEach(opt => { const isC = isAll || sVals.includes(opt); const sOpt = opt.replace(/"/g, '&quot;'); html += `<div class="flex items-center justify-between p-1 hover:bg-slate-50 rounded-xl group"><label class="flex items-center gap-3 cursor-pointer flex-1 overflow-hidden p-1"><input type="checkbox" value="${sOpt}" class="checkbox-${cId} accent-brand-600 w-4 h-4 shrink-0" ${isC ? 'checked' : ''} onchange="handleItemMultiSelect('${cId}')"><span class="text-sm font-semibold text-slate-600 truncate">${opt}</span></label><button type="button" onclick="selectOnlyMultiSelect('${cId}', '${sOpt}')" class="text-[10px] font-bold text-brand-600 opacity-0 group-hover:opacity-100 px-2 py-1 hover:bg-brand-50 rounded shrink-0">Somente</button></div>`; });
+            opts.forEach(opt => { const isC = isAll || sVals.includes(opt); const sOpt = opt.replace(/"/g, '&quot;'); html += `<div class="flex items-center gap-2 px-2 py-1.5 hover:bg-slate-50 rounded-xl group/ms"><label class="flex items-center gap-2 cursor-pointer flex-1 min-w-0"><input type="checkbox" value="${sOpt}" class="checkbox-${cId} accent-brand-600 w-4 h-4 shrink-0" ${isC ? 'checked' : ''} onchange="handleItemMultiSelect('${cId}')"><span class="text-[13px] font-semibold text-slate-700 truncate">${opt}</span></label><button type="button" onclick="selectOnlyMultiSelect('${cId}', '${sOpt}')" class="hidden group-hover/ms:flex items-center px-1.5 py-0.5 bg-brand-50 text-brand-600 border border-brand-200 text-[10px] font-black rounded-lg hover:bg-brand-600 hover:text-white hover:border-brand-600 transition-colors shrink-0 uppercase tracking-wide">Somente</button></div>`; });
             listEl.innerHTML = html; updateMultiSelectText(cId);
         }
 
         function buildFilterMaps(data) {
-            cropVarietyMap = {}; allCrops.clear(); allVarieties.clear(); blockCycleMap = {}; allBlocks.clear(); allCycles.clear();
+            cropVarietyMap = {}; allCrops.clear(); allVarieties.clear(); blockCycleMap = {}; blockVarietyMap = {}; allBlocks.clear(); allCycles.clear();
             const p = (c, v, b, cy) => {
                 const ct = (c || "").trim(), vt = (v || "").trim(), bt = (b || "").toString().trim(), cyt = (cy || "").toString().trim();
                 if (ct) { allCrops.add(ct); const cN = normalizeStr(ct); if (!cropVarietyMap[cN]) cropVarietyMap[cN] = new Set(); if (vt) { cropVarietyMap[cN].add(vt); allVarieties.add(vt); } }
-                if (bt) { allBlocks.add(bt); const bN = normalizeStr(bt); if (!blockCycleMap[bN]) blockCycleMap[bN] = new Set(); if (cyt) { blockCycleMap[bN].add(cyt); allCycles.add(cyt); } }
+                if (bt) { allBlocks.add(bt); const bN = normalizeStr(bt); if (!blockCycleMap[bN]) blockCycleMap[bN] = new Set(); if (cyt) { blockCycleMap[bN].add(cyt); allCycles.add(cyt); } if (vt) { if (!blockVarietyMap[bN]) blockVarietyMap[bN] = new Set(); blockVarietyMap[bN].add(vt); } }
             };
             if (data.historico) data.historico.forEach(i => p(i.cultura, i.variedade_comercial, i.bloco, i.ciclo));
             if (data.pendentes) data.pendentes.forEach(i => p(i.cultura, i.variedade, i.nome, i.ciclo));
@@ -1386,29 +1415,246 @@
             }, 600); // Fim do setTimeout de simulação
         }
 
-        function processCompareCardData(b, c) {
-            let tU = 0, tKg = 0, tCx = 0, ds = new Set(), dTp = 0; const bn = normalizeStr(b), cn = normalizeStr(c);
-            if (!cachedApiData) return { totalU:0, totalKg:0, totalCx:0, diasProducao:0, pMedG:0, percC:0, percPerda:0, dispTotalP:0 };
-            cachedApiData.historico.forEach(r => { if ((bn && normalizeStr(r.bloco) !== bn) || (cn && normalizeStr(r.ciclo) !== cn)) return; if (bn || cn) { const d = parseGoogleDate(r.data_entrega); if (d) ds.add(d.toISOString().split('T')[0]); tU += r.qtd_cabecas || 0; tKg += r.peso_total_kg || 0; tCx += r.caixas || 0; } });
-            cachedApiData.pendentes.forEach(bl => { if ((bn && normalizeStr(bl.nome) !== bn) || (cn && normalizeStr(bl.ciclo) !== cn)) return; if (bn || cn) dTp += bl.qtd_plantas || 0; });
+        function processCompareCardData(bArr, cArr, vArr) {
+            const bN = bArr.map(normalizeStr), cN = cArr.map(normalizeStr), vN = vArr.map(normalizeStr);
+            let tU = 0, tKg = 0, tCx = 0, ds = new Set(), dTp = 0, minDate = null, maxDate = null, tCm = 0, nCm = 0, dataPlantio = null, tDescUn = 0, tDescKg = 0;
+            const varSet = new Set();
+            const empty = { totalU:0, totalKg:0, totalCx:0, diasProducao:0, pMedG:0, percC:0, percPerda:0, dispTotalP:0, primeiraColheita:null, ultimaColheita:null, kgPorPlanta:0, unidadePorPlanta:0, cmMedio:0, dataPlantio:null, duracaoColheita:0, descUn:0, descKg:0, percDescarte:0, variedades:[] };
+            if (!cachedApiData) return empty;
+            cachedApiData.historico.forEach(r => {
+                if (bN.length > 0 && !bN.includes(normalizeStr(r.bloco))) return;
+                if (cN.length > 0 && !cN.includes(normalizeStr(r.ciclo))) return;
+                if (vN.length > 0 && !vN.includes(normalizeStr(r.variedade_comercial))) return;
+                const d = parseGoogleDate(r.data_entrega); if (d) { ds.add(d.toISOString().split('T')[0]); if (!minDate || d < minDate) minDate = d; if (!maxDate || d > maxDate) maxDate = d; }
+                tU += r.qtd_cabecas || 0; tKg += r.peso_total_kg || 0; tCx += r.caixas || 0;
+                if (r.tamanho_medio_cm > 0) { tCm += r.tamanho_medio_cm; nCm++; }
+                if (r.variedade_comercial) varSet.add(r.variedade_comercial.trim());
+            });
+            cachedApiData.pendentes.forEach(bl => {
+                if (bN.length > 0 && !bN.includes(normalizeStr(bl.nome))) return;
+                if (cN.length > 0 && !cN.includes(normalizeStr(bl.ciclo))) return;
+                if (vN.length > 0 && !vN.includes(normalizeStr(bl.variedade))) return;
+                dTp += bl.qtd_plantas || 0;
+                if (!dataPlantio) { const dp = parseGoogleDate(bl.data_plantio); if (dp) dataPlantio = dp; }
+                if (bl.variedade) varSet.add(bl.variedade.trim());
+            });
+            (cachedApiData.descartes || []).forEach(r => {
+                if (bN.length > 0 && !bN.includes(normalizeStr(r.setor))) return;
+                if (cN.length > 0 && !cN.includes(normalizeStr(r.ciclo))) return;
+                if (vN.length > 0 && !vN.includes(normalizeStr(r.variedade))) return;
+                tDescUn += r.qtd_perda || r.quantidade || 0; tDescKg += r.peso_perda || r.peso || 0;
+            });
             const cP = Math.max(dTp, tU), pC = cP > 0 ? Math.min(100, Math.round((tU / cP) * 100)) : 0;
-            return { totalU: tU, totalKg: tKg, totalCx: tCx, diasProducao: ds.size, pMedG: tU > 0 ? Math.round((tKg / tU) * 1000) : 0, percC: pC, percPerda: cP > 0 ? Math.max(0, 100 - pC) : 0, dispTotalP: dTp };
+            const dur = (minDate && maxDate) ? Math.round((maxDate - minDate) / 86400000) + 1 : 0;
+            const totalBruto = tU + tDescUn;
+            return { totalU: tU, totalKg: tKg, totalCx: tCx, diasProducao: ds.size, pMedG: tU > 0 ? Math.round((tKg / tU) * 1000) : 0, percC: pC, percPerda: cP > 0 ? Math.max(0, 100 - pC) : 0, dispTotalP: dTp, primeiraColheita: minDate, ultimaColheita: maxDate, kgPorPlanta: dTp > 0 ? tKg / dTp : 0, unidadePorPlanta: dTp > 0 ? tU / dTp : 0, cmMedio: nCm > 0 ? tCm / nCm : 0, dataPlantio: dataPlantio, duracaoColheita: dur, descUn: tDescUn, descKg: tDescKg, percDescarte: totalBruto > 0 ? Math.round((tDescUn / totalBruto) * 100) : 0, variedades: Array.from(varSet) };
+        }
+
+        function renderCompareDropdown(cId, field, items, selVals, placeholder) {
+            const menuId = `compare-${field}-${cId}`;
+            const esc = s => (s||'').replace(/'/g, "\\'");
+            const isBlocos = field === 'blocos';
+            const nenhum = selVals.length === 0;
+
+            let displayText;
+            if (nenhum) displayText = `<span class="text-slate-400 font-semibold">${placeholder}</span>`;
+            else if (selVals.length === 1) displayText = `<span class="font-bold text-slate-700">${selVals[0]}</span>`;
+            else displayText = `<span class="font-bold text-brand-600">${selVals.length} selecionados</span>`;
+
+            // Todos os campos: "Todos" marcado quando array vazio (= sem filtro)
+            const todosChecked = nenhum;
+            let optHtml = `<label class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-xl cursor-pointer border-b border-slate-100 mb-1"><input type="checkbox" class="accent-brand-600 w-4 h-4 shrink-0" ${todosChecked ? 'checked' : ''} onchange="toggleAllCompareCard(${cId},'${esc(field)}')"><span class="text-sm font-black text-slate-700">Todos</span></label>`;
+
+            items.forEach(item => {
+                const checked = todosChecked || selVals.includes(item.v);
+                const safeVal = item.v.replace(/"/g, '&quot;');
+                optHtml += `<div class="flex items-center gap-2 px-2 py-1.5 hover:bg-slate-50 rounded-xl group/opt"><label class="flex items-center gap-2 cursor-pointer flex-1 min-w-0"><input type="checkbox" class="accent-brand-600 w-4 h-4 shrink-0" value="${safeVal}" ${checked ? 'checked' : ''} onchange="updateCompareCardMulti(${cId},'${esc(field)}','${esc(item.v)}',this.checked)"><span class="text-[13px] font-semibold text-slate-700 truncate">${item.l}</span></label><button onclick="selectOnlyCompareCard(${cId},'${esc(field)}','${esc(item.v)}')" class="hidden group-hover/opt:flex items-center px-1.5 py-0.5 bg-brand-50 text-brand-600 border border-brand-200 text-[10px] font-black rounded-lg hover:bg-brand-600 hover:text-white hover:border-brand-600 transition-colors shrink-0 uppercase tracking-wide">Somente</button></div>`;
+            });
+
+            return `<div class="relative" id="container-${menuId}"><div onclick="toggleDropdown('${menuId}')" class="w-full px-2 border border-slate-200 rounded-xl text-sm cursor-pointer flex justify-between items-center h-[38px] bg-slate-50 gap-1 hover:border-brand-300 transition-colors"><span class="whitespace-nowrap truncate text-[13px]">${displayText}</span><i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0"></i></div><div id="menu-${menuId}" class="dropdown-menu hidden absolute z-50 w-full min-w-[170px] mt-1 bg-white border border-slate-100 rounded-2xl shadow-float p-1.5"><div class="max-h-52 overflow-y-auto">${optHtml}</div></div></div>`;
         }
 
         function renderCompareCards() {
             const cont = document.getElementById('compareCardsWrapper'); if(!cont || !cachedApiData) return; let h = '';
             compareCardsState.forEach(c => {
-                const d = processCompareCardData(c.bloco, c.ciclo);
-                let bOpts = '<option value="">Selecionar setor...</option>'; Array.from(allBlocks).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true})).forEach(b => { bOpts += `<option value="${b}" ${c.bloco === b ? 'selected' : ''}>${b}</option>`; });
-                let cOpts = '<option value="">Todos Ciclos</option>'; const cyc = Array.from((c.bloco && blockCycleMap[normalizeStr(c.bloco)]) ? blockCycleMap[normalizeStr(c.bloco)] : allCycles).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true})); cyc.forEach(cy => { cOpts += `<option value="${cy}" ${c.ciclo === cy ? 'selected' : ''}>Ciclo ${cy}</option>`; });
-                h += `<div class="bg-white rounded-[24px] shadow-soft border border-slate-100 flex flex-col w-full h-full p-5 relative"><button onclick="removeCompareCard(${c.id})" class="absolute top-4 right-4 text-slate-400 hover:text-rose-500 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button><div class="flex gap-2 mb-6 pr-6"><div class="flex-1"><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 block tracking-wider">Local</label><select onchange="updateCompareCard(${c.id}, 'bloco', this.value)" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-brand-500/50 truncate">${bOpts}</select></div><div class="w-24"><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 block tracking-wider">Ciclo</label><select onchange="updateCompareCard(${c.id}, 'ciclo', this.value)" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-brand-500/50 truncate">${cOpts}</select></div></div><div class="grid grid-cols-2 gap-y-6 gap-x-4"><div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Unidades</p><p class="text-xl font-black text-slate-800 leading-none">${d.totalU.toLocaleString('pt-BR')}</p></div><div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Peso (kg)</p><p class="text-xl font-black text-slate-800 leading-none">${Math.round(d.totalKg).toLocaleString('pt-BR')}</p></div><div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Peso Médio</p><p class="text-xl font-black text-slate-800 leading-none">${d.pMedG.toLocaleString('pt-BR')} <span class="text-xs text-slate-400 font-semibold">g</span></p></div><div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 text-emerald-600">Colhido</p><p class="text-xl font-black text-emerald-600 leading-none">${d.percC}%</p></div><div class="col-span-2 border-t border-slate-100 pt-4 mt-2"></div><div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tot. de Plantas</p><p class="text-lg font-black text-slate-700 leading-none">${d.dispTotalP.toLocaleString('pt-BR')}</p></div><div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Dias de Prod.</p><p class="text-lg font-black text-slate-700 leading-none">${d.diasProducao}</p></div><div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Caixas</p><p class="text-lg font-black text-slate-700 leading-none">${d.totalCx.toLocaleString('pt-BR')}</p></div><div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 text-rose-500">Pendente</p><p class="text-lg font-black text-rose-500 leading-none">${d.percPerda}%</p></div></div></div>`;
+                const d = processCompareCardData(c.blocos, c.ciclos, c.variedades);
+                const bItems = Array.from(allBlocks).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true})).map(b=>({v:b,l:b}));
+                const cycSet = new Set(); if (c.blocos.length > 0) c.blocos.forEach(b => { const m = blockCycleMap[normalizeStr(b)]; if(m) m.forEach(cy => cycSet.add(cy)); }); else allCycles.forEach(cy => cycSet.add(cy));
+                const cItems = Array.from(cycSet).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true})).map(cy=>({v:cy,l:`Ciclo ${cy}`}));
+                const varSet2 = new Set(); if (c.blocos.length > 0) c.blocos.forEach(b => { const m = blockVarietyMap[normalizeStr(b)]; if(m) m.forEach(v => varSet2.add(v)); }); else allVarieties.forEach(v => varSet2.add(v));
+                const vItems = Array.from(varSet2).sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'})).map(v=>({v:v,l:v}));
+                const secLabel = (txt, color) => { const map = { emerald:'text-emerald-700 bg-emerald-50 border-emerald-100', amber:'text-amber-700 bg-amber-50 border-amber-100', sky:'text-sky-700 bg-sky-50 border-sky-100', violet:'text-violet-700 bg-violet-50 border-violet-100' }; const cls = map[color]||map.emerald; return `<div class="col-span-2 flex items-center gap-2 pt-4 pb-1"><span class="text-[9px] font-black uppercase tracking-widest ${cls} px-2 py-0.5 rounded-full border shrink-0">${txt}</span><div class="flex-1 h-px bg-slate-100"></div></div>`; };
+                const metric = (label, value, size='text-lg', color='text-slate-800') => `<div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">${label}</p><p class="${size} font-black ${color} leading-none">${value}</p></div>`;
+                h += `<div class="bg-white rounded-[24px] shadow-soft border border-slate-100 flex flex-col w-full relative overflow-hidden transition-shadow" data-card-id="${c.id}" draggable="true" ondragstart="onCardDragStart(event,${c.id})" ondragend="onCardDragEnd(event)" ondragover="onCardDragOver(event)" ondragleave="onCardDragLeave(event)" ondrop="onCardDrop(event,${c.id})">
+  <div class="h-1 w-full bg-gradient-to-r from-brand-400 to-brand-600"></div>
+  <div class="p-5 flex flex-col flex-1">
+    <div class="compare-ui-only absolute top-3 right-4 flex items-center gap-1.5 z-10">
+      <span class="cursor-grab active:cursor-grabbing text-slate-300 hover:text-slate-500 transition-colors p-0.5" title="Arrastar para reordenar"><i data-lucide="grip-vertical" class="w-4 h-4"></i></span>
+      <button onclick="removeCompareCard(${c.id})" class="text-slate-300 hover:text-rose-500 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
+    <div class="mb-3 pr-16">
+      <p class="text-lg font-black text-slate-800 leading-tight">${c.blocos.length === 0 ? 'Todos os Setores' : `${c.blocos.length === 1 ? 'Setor' : 'Setores'} ${c.blocos.join(', ')}`}${c.ciclos.length > 0 ? ` <span class="text-sm font-semibold text-slate-500">— Ciclo ${c.ciclos.join(', ')}</span>` : ''}${c.variedades.length > 0 ? ` <span class="text-sm font-bold text-brand-500">· ${c.variedades.join(', ')}</span>` : ''}</p>
+      ${d.variedades.length > 0 ? `<div class="flex flex-wrap gap-1 mt-1.5">${d.variedades.map(v => `<span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">${v}</span>`).join('')}</div>` : ''}
+    </div>
+    <div class="compare-filter-row flex flex-col gap-2 mb-2 border-b border-slate-100 pb-4"><div class="flex gap-2"><div class="flex-1"><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 block tracking-wider">Setor</label>${renderCompareDropdown(c.id,'blocos',bItems,c.blocos,'Todos')}</div><div class="w-[90px]"><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 block tracking-wider">Ciclo</label>${renderCompareDropdown(c.id,'ciclos',cItems,c.ciclos,'Todos')}</div></div><div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 block tracking-wider">Variedade</label>${renderCompareDropdown(c.id,'variedades',vItems,c.variedades,'Todas variedades')}</div></div>
+    <div class="grid grid-cols-2 gap-y-4 gap-x-4">
+      ${secLabel('Colheita','emerald')}
+      ${metric('Unidades', d.totalU.toLocaleString('pt-BR'), 'text-2xl')}
+      ${metric('Peso Total', Math.round(d.totalKg).toLocaleString('pt-BR') + '<span class="text-sm font-semibold text-slate-400 ml-1">kg</span>', 'text-2xl')}
+      ${metric('Peso Médio', d.pMedG.toLocaleString('pt-BR') + '<span class="text-xs font-semibold text-slate-400 ml-1">g</span>')}
+      ${metric('Tot. Plantas', d.dispTotalP.toLocaleString('pt-BR'))}
+      ${metric('Caixas', d.totalCx.toLocaleString('pt-BR'))}
+      <div></div>
+      <div class="col-span-2">
+        <div class="flex justify-between mb-1.5"><span class="text-[10px] font-black text-emerald-600 uppercase tracking-wider">Colhido ${d.percC}%</span><span class="text-[10px] font-black text-rose-500 uppercase tracking-wider">Pendente ${d.percPerda}%</span></div>
+        <div class="h-2 bg-rose-100 rounded-full overflow-hidden"><div class="h-full bg-emerald-500 rounded-full transition-all" style="width:${d.percC}%"></div></div>
+      </div>
+      ${secLabel('Descarte','amber')}
+      ${metric('Descarte (un)', d.descUn > 0 ? d.descUn.toLocaleString('pt-BR') : '--', 'text-lg', d.descUn > 0 ? 'text-amber-600' : 'text-slate-300')}
+      ${metric('Descarte (kg)', d.descKg > 0 ? Math.round(d.descKg).toLocaleString('pt-BR') + '<span class="text-xs font-semibold text-amber-400 ml-1">kg</span>' : '--', 'text-lg', d.descKg > 0 ? 'text-amber-600' : 'text-slate-300')}
+      <div class="col-span-2">
+        <div class="flex items-center justify-between mb-1.5"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">% s/ produção bruta</p><p class="text-sm font-black ${d.percDescarte > 0 ? 'text-amber-600' : 'text-slate-300'}">${d.percDescarte > 0 ? d.percDescarte + '%' : '--'}</p></div>
+        ${d.percDescarte > 0 ? `<div class="h-2 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-amber-400 rounded-full" style="width:${Math.min(d.percDescarte,100)}%"></div></div>` : ''}
+      </div>
+      ${secLabel('Cronologia','sky')}
+      ${metric('Data Plantio', d.dataPlantio ? d.dataPlantio.toLocaleDateString('pt-BR') : '--', 'text-base', d.dataPlantio ? 'text-slate-800' : 'text-slate-300')}
+      ${metric('Início Colheita', d.primeiraColheita ? d.primeiraColheita.toLocaleDateString('pt-BR') : '--', 'text-base', d.primeiraColheita ? 'text-slate-800' : 'text-slate-300')}
+      ${metric('Fim Colheita', d.ultimaColheita ? d.ultimaColheita.toLocaleDateString('pt-BR') : '--', 'text-base', d.ultimaColheita ? 'text-slate-800' : 'text-slate-300')}
+      ${metric('Duração Colheita', d.duracaoColheita > 0 ? d.duracaoColheita + '<span class="text-xs font-semibold text-slate-400 ml-1">dias corridos</span>' : '--', 'text-base', d.duracaoColheita > 0 ? 'text-slate-800' : 'text-slate-300')}
+      ${metric('Dias Ativos', d.diasProducao > 0 ? d.diasProducao + '<span class="text-xs font-semibold text-slate-400 ml-1">dias c/ colheita</span>' : '--', 'text-base', d.diasProducao > 0 ? 'text-slate-800' : 'text-slate-300')}
+      <div></div>
+      ${secLabel('Eficiência por Planta','violet')}
+      ${metric('CM Médio', d.cmMedio > 0 ? d.cmMedio.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}) + '<span class="text-xs font-semibold text-slate-400 ml-1">cm</span>' : '--', 'text-lg', d.cmMedio > 0 ? 'text-violet-700' : 'text-slate-300')}
+      ${metric('Kg / Planta', d.kgPorPlanta > 0 ? d.kgPorPlanta.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) + '<span class="text-xs font-semibold text-slate-400 ml-1">kg</span>' : '--', 'text-lg', d.kgPorPlanta > 0 ? 'text-violet-700' : 'text-slate-300')}
+      ${metric('Unid. / Planta', d.unidadePorPlanta > 0 ? d.unidadePorPlanta.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}) : '--', 'text-lg', d.unidadePorPlanta > 0 ? 'text-violet-700' : 'text-slate-300')}
+    </div>
+  </div>
+</div>`;
             });
-            h += `<button onclick="addCompareCard()" class="bg-slate-100/50 hover:bg-slate-100 rounded-[24px] border-2 border-dashed border-slate-200 flex flex-col items-center justify-center w-full min-h-[250px] h-full p-5 transition-all text-slate-400 hover:text-brand-600 group"><div class="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"><i data-lucide="plus" class="w-6 h-6"></i></div><span class="text-sm font-bold tracking-wider uppercase">Adicionar Setor</span></button>`;
+            h += `<button onclick="addCompareCard()" class="compare-ui-only bg-slate-100/50 hover:bg-slate-100 rounded-[24px] border-2 border-dashed border-slate-200 flex flex-col items-center justify-center w-full min-h-[250px] h-full p-5 transition-all text-slate-400 hover:text-brand-600 group"><div class="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"><i data-lucide="plus" class="w-6 h-6"></i></div><span class="text-sm font-bold tracking-wider uppercase">Adicionar Setor</span></button>`;
             cont.innerHTML = h; lucide.createIcons();
         }
-        function addCompareCard() { compareCardsState.push({ id: compareCardIdCounter++, bloco: '', ciclo: '' }); renderCompareCards(); }
+        function addCompareCard() { compareCardsState.push({ id: compareCardIdCounter++, blocos: [], ciclos: [], variedades: [] }); renderCompareCards(); }
         function removeCompareCard(id) { compareCardsState = compareCardsState.filter(c => c.id !== id); renderCompareCards(); }
-        function updateCompareCard(id, f, v) { const c = compareCardsState.find(x => x.id === id); if(c) { c[f] = v; if(f === 'bloco') c.ciclo = ''; renderCompareCards(); } }
+        function getAllItemsForField(c, field) {
+            if (field === 'blocos') return Array.from(allBlocks).sort((a,b) => a.localeCompare(b, undefined, {numeric:true}));
+            const s = new Set();
+            if (field === 'ciclos') { if (c.blocos.length > 0) c.blocos.forEach(b => { const m = blockCycleMap[normalizeStr(b)]; if(m) m.forEach(cy => s.add(cy)); }); else allCycles.forEach(cy => s.add(cy)); }
+            if (field === 'variedades') { if (c.blocos.length > 0) c.blocos.forEach(b => { const m = blockVarietyMap[normalizeStr(b)]; if(m) m.forEach(v => s.add(v)); }); else allVarieties.forEach(v => s.add(v)); }
+            return Array.from(s);
+        }
+        function updateCompareCardMulti(cardId, field, val, checked) {
+            const c = compareCardsState.find(x => x.id === cardId); if (!c) return;
+            if (checked) {
+                if (!c[field].includes(val)) c[field].push(val);
+            } else {
+                if (c[field].length === 0) {
+                    // estava em modo "todos" — troca para "todos exceto este"
+                    c[field] = getAllItemsForField(c, field).filter(v => v !== val);
+                } else {
+                    c[field] = c[field].filter(v => v !== val);
+                }
+            }
+            if (field === 'blocos') { c.ciclos = []; c.variedades = []; }
+            renderCompareCards();
+            const menu = document.getElementById(`menu-compare-${field}-${cardId}`);
+            if (menu) menu.classList.remove('hidden');
+        }
+        function selectOnlyCompareCard(cardId, field, val) {
+            const c = compareCardsState.find(x => x.id === cardId); if (!c) return;
+            c[field] = [val];
+            if (field === 'blocos') { c.ciclos = []; c.variedades = []; }
+            renderCompareCards();
+            const menu = document.getElementById(`menu-compare-${field}-${cardId}`);
+            if (menu) menu.classList.remove('hidden');
+        }
+        function toggleAllCompareCard(cardId, field) {
+            const c = compareCardsState.find(x => x.id === cardId); if (!c) return;
+            c[field] = [];
+            if (field === 'blocos') { c.ciclos = []; c.variedades = []; }
+            renderCompareCards();
+            const menu = document.getElementById(`menu-compare-${field}-${cardId}`);
+            if (menu) menu.classList.remove('hidden');
+        }
+
+        function onCardDragStart(e, id) {
+            dragCardId = id;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', id);
+            setTimeout(() => { const el = document.querySelector(`[data-card-id="${id}"]`); if(el) { el.style.opacity = '0.35'; el.style.transform = 'scale(0.97)'; } }, 0);
+        }
+        function onCardDragEnd(e) {
+            document.querySelectorAll('[data-card-id]').forEach(el => { el.style.opacity = ''; el.style.transform = ''; el.classList.remove('ring-2','ring-brand-400','ring-offset-2'); });
+            dragCardId = null;
+        }
+        function onCardDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            const card = e.currentTarget;
+            if (card.dataset.cardId != dragCardId) card.classList.add('ring-2','ring-brand-400','ring-offset-2');
+        }
+        function onCardDragLeave(e) {
+            if (!e.currentTarget.contains(e.relatedTarget)) e.currentTarget.classList.remove('ring-2','ring-brand-400','ring-offset-2');
+        }
+        function onCardDrop(e, targetId) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('ring-2','ring-brand-400','ring-offset-2');
+            if (dragCardId === null || dragCardId === targetId) return;
+            const fromIdx = compareCardsState.findIndex(c => c.id === dragCardId);
+            const toIdx   = compareCardsState.findIndex(c => c.id === targetId);
+            if (fromIdx === -1 || toIdx === -1) return;
+            const [moved] = compareCardsState.splice(fromIdx, 1);
+            compareCardsState.splice(toIdx, 0, moved);
+            dragCardId = null;
+            renderCompareCards();
+        }
+
+        async function captureComparisonView() {
+            const container = document.getElementById('compareMainCard');
+            const btn = document.getElementById('btnCaptureComparacao');
+            if (!container || typeof htmlToImage === 'undefined') { alert('Biblioteca de captura não carregada. Verifique sua conexão.'); return; }
+
+            // Feedback visual no botão
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i><span>Gerando...</span>';
+            btn.disabled = true;
+            lucide.createIcons();
+
+            // Esconde dropdowns, botão X, botão adicionar, cards vazios e próprio botão capturar
+            const uiEls = container.querySelectorAll('.compare-ui-only, .compare-filter-row, .compare-empty-card');
+            uiEls.forEach(el => { el.dataset.prevDisplay = el.style.display; el.style.display = 'none'; });
+
+            // Ajusta o grid para não deixar colunas vazias na captura
+            const wrapper = document.getElementById('compareCardsWrapper');
+            const prevGridStyle = wrapper ? wrapper.style.gridTemplateColumns : '';
+            if (wrapper) {
+                const filledCards = wrapper.querySelectorAll('[data-card-id]:not(.compare-empty-card)').length;
+                const cols = Math.max(1, Math.min(filledCards, 3));
+                wrapper.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+            }
+
+            try {
+                const now = new Date();
+                const stamp = `${String(now.getDate()).padStart(2,'0')}-${String(now.getMonth()+1).padStart(2,'0')}-${now.getFullYear()}`;
+                const dataUrl = await htmlToImage.toPng(container, {
+                    backgroundColor: '#ffffff',
+                    pixelRatio: 2,
+                    quality: 1
+                });
+                const link = document.createElement('a');
+                link.download = `comparacao-setores-${stamp}.png`;
+                link.href = dataUrl;
+                link.click();
+            } catch(err) {
+                alert('Erro ao gerar imagem: ' + err.message);
+            } finally {
+                uiEls.forEach(el => { el.style.display = el.dataset.prevDisplay || ''; });
+                if (wrapper) wrapper.style.gridTemplateColumns = prevGridStyle;
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+                lucide.createIcons();
+            }
+        }
 
         function maskInt(input) { let v = input.value.replace(/\D/g, ''); if (v === '') { input.value = ''; return; } input.value = parseInt(v, 10).toLocaleString('pt-BR'); }
         function getSimVal(id) { const e = document.getElementById(id); if (!e) return 0; return parseFloat(e.value.replace(/\./g, '')) || 0; }
@@ -1596,9 +1842,9 @@
                 
                 sum = `<table class="ind-table" style="margin-top: 20px;"><tr class="ind-title-row"><td colspan="2">1. Parâmetros</td></tr><tr><td class="ind-bold" style="width: 50%">Físico</td><td>${qE} Estufas c/ ${sE} Setores de ${pS.toLocaleString('pt-BR')} pl (Tot: ${tP.toLocaleString('pt-BR')} pl)</td></tr><tr><td class="ind-bold">Aproveitamento / Frutos</td><td>${getSimVal('simAprov')}% / ${getSimVal('simFrutos')} un</td></tr><tr><td class="ind-bold">Peso Médio / Dias Colh.</td><td>${getSimVal('simPesoMedio')}g / ${getSimVal('simDiasColheita')}d</td></tr><tr><td class="ind-bold">Meta Diária (Kg)</td><td>${getSimVal('simMetaKg').toLocaleString('pt-BR')} kg</td></tr></table><table class="ind-table"><tr class="ind-title-row"><td colspan="2">2. Resultados do Cenário</td></tr><tr><td class="ind-bold" style="width: 50%">Total / Dia (Cenário)</td><td>${document.getElementById('simOutTotalKg').innerText} kg / ${document.getElementById('simOutKgDia').innerText} kg/dia</td></tr></table><table class="ind-table"><tr class="ind-title-row"><td colspan="2">3. Projeção Para a Meta</td></tr><tr><td class="ind-bold" style="width: 50%">Simultaneidade</td><td>${document.getElementById('simOutEstufas').innerText} estufas ativas (${document.getElementById('simOutSetoresReq').innerText} setores)</td></tr><tr><td class="ind-bold">Plantas Ativas</td><td>${document.getElementById('simOutPlantasReq').innerText} plantas</td></tr><tr style="background-color: #ecfdf5"><td class="ind-bold">Plantando p/ Setor Padrão</td><td>1 set. a cada ${document.getElementById('simOutIntervaloSetor').innerText}d</td></tr><tr style="background-color: #ecfdf5"><td class="ind-bold">Plantando p/ Estufa</td><td>1 est. a cada ${document.getElementById('simOutIntervaloEstufa').innerText}d</td></tr></table><table class="ind-table"><tr class="ind-title-row"><td colspan="5">4. Cronograma Sugerido</td></tr><tr class="ind-header"><th style="width:30%">Estufa / Setor</th><th class="ind-center" style="width:15%">Plantas</th><th class="ind-center" style="width:15%">Plantio</th><th class="ind-center" style="width:20%">Início Colheita</th><th class="ind-center" style="width:20%">Fim</th></tr>${sHtml}</table><table class="ind-table" style="margin-top: 10px;"><tr class="ind-title-row"><td colspan="6">5. Projeção de Colheita por Lote</td></tr><tr class="ind-header"><th style="width: 20%">Estufa / Setor</th><th style="width: 30%">Datas (Cronograma)</th><th class="ind-right" style="width: 12.5%">Unidades</th><th class="ind-right" style="width: 12.5%">Kg Estimado</th><th class="ind-right" style="width: 12.5%">Média (Kg/d)</th><th class="ind-right" style="width: 12.5%">% Vol.</th></tr>${dHtml}</table>`;
             } else if (t === 'Comparacao') {
-                let cH='', cU='', cP='', cM='', cA='', cPl='', cD='', cCx='', cPe='';
-                compareCardsState.forEach(c => { const d=processCompareCardData(c.bloco, c.ciclo); cH+=`<th class="ind-center" style="width:${100/compareCardsState.length}%">${c.bloco?`${c.bloco} ${c.ciclo?`(C${c.ciclo})`:''}`:'-'}</th>`; cU+=`<td class="ind-center">${d.totalU.toLocaleString('pt-BR')}</td>`; cP+=`<td class="ind-center">${Math.round(d.totalKg).toLocaleString('pt-BR')} kg</td>`; cM+=`<td class="ind-center">${d.pMedG.toLocaleString('pt-BR')} g</td>`; cA+=`<td class="ind-center ind-bold" style="color: #059669">${d.percC}%</td>`; cPl+=`<td class="ind-center">${d.dispTotalP.toLocaleString('pt-BR')}</td>`; cD+=`<td class="ind-center">${d.diasProducao}</td>`; cCx+=`<td class="ind-center">${d.totalCx.toLocaleString('pt-BR')}</td>`; cPe+=`<td class="ind-center ind-bold" style="color: #e11d48">${d.percPerda}%</td>`; });
-                sum = `<table class="ind-table" style="margin-top: 20px;"><tr class="ind-title-row"><td style="width: 15%">Métrica</td>${cH}</tr><tr><td class="ind-bold">Aproveitamento Final</td>${cA}</tr><tr><td class="ind-bold">Peso Médio Global</td>${cM}</tr><tr><td class="ind-bold">Unidades Colhidas</td>${cU}</tr><tr><td class="ind-bold">Peso Total (Kg)</td>${cP}</tr><tr><td class="ind-bold">Total de Plantas</td>${cPl}</tr><tr><td class="ind-bold">Perdas / Pendentes</td>${cPe}</tr><tr><td class="ind-bold">Dias de Produção</td>${cD}</tr></table>`;
+                let cH='', cU='', cP='', cM='', cA='', cPl='', cD='', cCx='', cPe='', cDtp='', cUlc='', cPic='', cDur='', cCm='', cKpp='', cUpp='', cDscUn='', cDscKg='', cDscPc='';
+                compareCardsState.forEach(c => { const d=processCompareCardData(c.blocos, c.ciclos, c.variedades); const cardLabel = c.blocos.length>0 ? `${c.blocos.join('+')}${c.ciclos.length>0?' (C'+c.ciclos.join(',')+')'  :''}` : '-'; cH+=`<th class="ind-center" style="width:${100/compareCardsState.length}%">${cardLabel}</th>`; cU+=`<td class="ind-center">${d.totalU.toLocaleString('pt-BR')}</td>`; cP+=`<td class="ind-center">${Math.round(d.totalKg).toLocaleString('pt-BR')} kg</td>`; cM+=`<td class="ind-center">${d.pMedG.toLocaleString('pt-BR')} g</td>`; cA+=`<td class="ind-center ind-bold" style="color: #059669">${d.percC}%</td>`; cPl+=`<td class="ind-center">${d.dispTotalP.toLocaleString('pt-BR')}</td>`; cD+=`<td class="ind-center">${d.diasProducao}</td>`; cCx+=`<td class="ind-center">${d.totalCx.toLocaleString('pt-BR')}</td>`; cPe+=`<td class="ind-center ind-bold" style="color: #e11d48">${d.percPerda}%</td>`; cDtp+=`<td class="ind-center">${d.dataPlantio?d.dataPlantio.toLocaleDateString('pt-BR'):'--'}</td>`; cPic+=`<td class="ind-center">${d.primeiraColheita?d.primeiraColheita.toLocaleDateString('pt-BR'):'--'}</td>`; cUlc+=`<td class="ind-center">${d.ultimaColheita?d.ultimaColheita.toLocaleDateString('pt-BR'):'--'}</td>`; cDur+=`<td class="ind-center">${d.duracaoColheita>0?d.duracaoColheita+' dias':'--'}</td>`; cCm+=`<td class="ind-center">${d.cmMedio>0?d.cmMedio.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})+' cm':'--'}</td>`; cKpp+=`<td class="ind-center">${d.kgPorPlanta>0?d.kgPorPlanta.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' kg':'--'}</td>`; cUpp+=`<td class="ind-center">${d.unidadePorPlanta>0?d.unidadePorPlanta.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}):'--'}</td>`; cDscUn+=`<td class="ind-center" style="color:#d97706">${d.descUn>0?d.descUn.toLocaleString('pt-BR'):'--'}</td>`; cDscKg+=`<td class="ind-center" style="color:#d97706">${d.descKg>0?Math.round(d.descKg).toLocaleString('pt-BR')+' kg':'--'}</td>`; cDscPc+=`<td class="ind-center ind-bold" style="color:#d97706">${d.percDescarte>0?d.percDescarte+'%':'--'}</td>`; });
+                sum = `<table class="ind-table" style="margin-top: 20px;"><tr class="ind-title-row"><td style="width: 15%">Métrica</td>${cH}</tr><tr><td class="ind-bold">Aproveitamento Final</td>${cA}</tr><tr><td class="ind-bold">Peso Médio Global</td>${cM}</tr><tr><td class="ind-bold">CM Médio</td>${cCm}</tr><tr><td class="ind-bold">Unidades Colhidas</td>${cU}</tr><tr><td class="ind-bold">Peso Total (Kg)</td>${cP}</tr><tr><td class="ind-bold">Total de Plantas</td>${cPl}</tr><tr><td class="ind-bold">Perdas / Pendentes</td>${cPe}</tr><tr><td class="ind-bold">Kg / Planta</td>${cKpp}</tr><tr><td class="ind-bold">Unid. / Planta</td>${cUpp}</tr><tr><td class="ind-bold" style="color:#d97706">Descarte (un)</td>${cDscUn}</tr><tr><td class="ind-bold" style="color:#d97706">Descarte (kg)</td>${cDscKg}</tr><tr><td class="ind-bold" style="color:#d97706">% Descarte s/ Bruto</td>${cDscPc}</tr><tr><td class="ind-bold">Data de Plantio</td>${cDtp}</tr><tr><td class="ind-bold">Início da Colheita</td>${cPic}</tr><tr><td class="ind-bold">Fim da Colheita</td>${cUlc}</tr><tr><td class="ind-bold">Dias de Colheita</td>${cDur}</tr><tr><td class="ind-bold">Dias de Prod. (ativos)</td>${cD}</tr></table>`;
             } else {
                 const smp = document.getElementById('startMonth'+t);
                 const fP = (smp && smp.value) ? smp.value.replace(' to ', ' até ') : 'Histórico';
@@ -1640,8 +1886,16 @@
                 det = `<table class="ind-table"><tr class="ind-title-row"><td colspan="4">1. Filtros</td></tr><tr><th class="ind-header" style="width:20%">Período:</th><td style="width:30%">${fP}</td><th class="ind-header" style="width:20%">Cultura:</th><td style="width:30%">${fC}</td></tr><tr><th class="ind-header">Setor:</th><td>${fB}</td><th class="ind-header">Var:</th><td>${fV}</td></tr><tr><th class="ind-header">Ciclo:</th><td colspan="3">${fCy}</td></tr></table>` + det;
             }
 
-            document.getElementById('printDocumentContainer').innerHTML = `<table class="ind-table" style="border: 1.5px solid #000; margin-bottom: 5px;"><tr><td rowspan="2" style="width: 15%; text-align: center; padding: 5px;"><img src="https://i.imgur.com/tSv2eig.png" style="max-height: 45px;"></td><td rowspan="2" style="width: 60%; text-align: center; font-size: 12pt; font-weight: bold; color: #000;">RELATÓRIO DE GESTÃO<br><span style="font-size: 9pt; font-weight: normal;">${rt}</span></td><td style="width: 25%; background-color: #f1f5f9; font-weight: bold; font-size: 7pt; text-align: center;">EMISSÃO</td></tr><tr><td style="font-weight: bold; text-align: center; font-size: 8pt;">${dtF} às ${hrF}</td></tr><tr style="background-color: #f1f5f9;"><td colspan="3" style="font-size: 6.5pt; font-weight: bold; color: #334155; padding: 2px 5px;">SISTEMA DE PLANEJAMENTO E GESTÃO - SPG ESTUFA</td></tr></table>${sum}${det}<div style="font-size: 6.5pt; color: #555; margin-top: 10px; border-top: 1px solid #ccc; padding-top: 3px;">* Relatório gerado automaticamente pelo Sistema de Planejamento e Gestão (SPG) Estufa.<br>* Uso interno.</div>`;
+            document.getElementById('printDocumentContainer').innerHTML = `<table class="ind-table" style="border: 1.5px solid #000; margin-bottom: 5px;"><tr><td rowspan="2" style="width: 15%; text-align: center; padding: 5px;"><img src="https://i.imgur.com/YwliV4K.png" style="max-height: 45px;"></td><td rowspan="2" style="width: 60%; text-align: center; font-size: 12pt; font-weight: bold; color: #000;">RELATÓRIO DE GESTÃO<br><span style="font-size: 9pt; font-weight: normal;">${rt}</span></td><td style="width: 25%; background-color: #f1f5f9; font-weight: bold; font-size: 7pt; text-align: center;">EMISSÃO</td></tr><tr><td style="font-weight: bold; text-align: center; font-size: 8pt;">${dtF} às ${hrF}</td></tr><tr style="background-color: #f1f5f9;"><td colspan="3" style="font-size: 6.5pt; font-weight: bold; color: #334155; padding: 2px 5px;">SISTEMA DE PLANEJAMENTO E GESTÃO - SPG ESTUFA</td></tr></table>${sum}${det}<div style="font-size: 6.5pt; color: #555; margin-top: 10px; border-top: 1px solid #ccc; padding-top: 3px;">* Relatório gerado automaticamente pelo Sistema de Planejamento e Gestão (SPG) Estufa.<br>* Uso interno.</div>`;
             setTimeout(() => { window.print(); }, 100);
+        }
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .catch(err => console.warn('Service Worker:', err));
+            });
         }
     </script>
 </body>
