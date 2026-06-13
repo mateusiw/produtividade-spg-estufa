@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SPG Estufa | Gestão de Cultivos</title>
-    <link rel="icon" type="image/png" href="https://i.imgur.com/YwliV4K.png">
+    <link id="siteFavicon" rel="icon" type="image/svg+xml" href="">
     <meta name="theme-color" content="#0f172a">
-    <link rel="manifest" href="manifest.json">
+    <link id="siteManifest" rel="manifest" href="">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="SPG Estufa">
-    <link rel="apple-touch-icon" href="https://i.imgur.com/YwliV4K.png">
+    <link id="siteAppleTouchIcon" rel="apple-touch-icon" href="">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { theme: { extend: { colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 800: '#075985', 900: '#0c4a6e' }, prod: { green: '#749d83', yellow: '#e3d39e', grey: '#9ca3af', lightgreen: '#86b693' } }, boxShadow: { 'soft': '0 10px 40px -10px rgba(0,0,0,0.04)', 'float': '0 20px 40px -10px rgba(15,23,42,0.1)' } } } }
@@ -92,7 +92,7 @@
     <div id="loginScreen" class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative z-50 print-hide">
         <div class="max-w-md w-full space-y-8 animate-fade-in-down">
             <div>
-                <img class="mx-auto h-20 w-auto drop-shadow-md" src="https://i.imgur.com/YwliV4K.png" alt="Logo Estufa">
+                <img class="mx-auto h-20 w-auto drop-shadow-md" src="https://i.imgur.com/hzstkNM.png" alt="Logo Estufa">
                 <h2 class="mt-6 text-center text-3xl font-black text-slate-900 tracking-tight">SPG ESTUFA</h2>
                 <p class="mt-2 text-center text-[11px] font-bold text-slate-500 uppercase tracking-widest">Acesso Restrito ao Sistema</p>
             </div>
@@ -1888,11 +1888,55 @@
                 det = `<table class="ind-table"><tr class="ind-title-row"><td colspan="4">1. Filtros</td></tr><tr><th class="ind-header" style="width:20%">Período:</th><td style="width:30%">${fP}</td><th class="ind-header" style="width:20%">Cultura:</th><td style="width:30%">${fC}</td></tr><tr><th class="ind-header">Setor:</th><td>${fB}</td><th class="ind-header">Var:</th><td>${fV}</td></tr><tr><th class="ind-header">Ciclo:</th><td colspan="3">${fCy}</td></tr></table>` + det;
             }
 
-            document.getElementById('printDocumentContainer').innerHTML = `<table class="ind-table" style="border: 1.5px solid #000; margin-bottom: 5px;"><tr><td rowspan="2" style="width: 15%; text-align: center; padding: 5px;"><img src="https://i.imgur.com/YwliV4K.png" style="max-height: 45px;"></td><td rowspan="2" style="width: 60%; text-align: center; font-size: 12pt; font-weight: bold; color: #000;">RELATÓRIO DE GESTÃO<br><span style="font-size: 9pt; font-weight: normal;">${rt}</span></td><td style="width: 25%; background-color: #f1f5f9; font-weight: bold; font-size: 7pt; text-align: center;">EMISSÃO</td></tr><tr><td style="font-weight: bold; text-align: center; font-size: 8pt;">${dtF} às ${hrF}</td></tr><tr style="background-color: #f1f5f9;"><td colspan="3" style="font-size: 6.5pt; font-weight: bold; color: #334155; padding: 2px 5px;">SISTEMA DE PLANEJAMENTO E GESTÃO - SPG ESTUFA</td></tr></table>${sum}${det}<div style="font-size: 6.5pt; color: #555; margin-top: 10px; border-top: 1px solid #ccc; padding-top: 3px;">* Relatório gerado automaticamente pelo Sistema de Planejamento e Gestão (SPG) Estufa.<br>* Uso interno.</div>`;
+            document.getElementById('printDocumentContainer').innerHTML = `<table class="ind-table" style="border: 1.5px solid #000; margin-bottom: 5px;"><tr><td rowspan="2" style="width: 15%; text-align: center; padding: 5px;"><img src="https://i.imgur.com/hzstkNM.png" style="max-height: 45px;"></td><td rowspan="2" style="width: 60%; text-align: center; font-size: 12pt; font-weight: bold; color: #000;">RELATÓRIO DE GESTÃO<br><span style="font-size: 9pt; font-weight: normal;">${rt}</span></td><td style="width: 25%; background-color: #f1f5f9; font-weight: bold; font-size: 7pt; text-align: center;">EMISSÃO</td></tr><tr><td style="font-weight: bold; text-align: center; font-size: 8pt;">${dtF} às ${hrF}</td></tr><tr style="background-color: #f1f5f9;"><td colspan="3" style="font-size: 6.5pt; font-weight: bold; color: #334155; padding: 2px 5px;">SISTEMA DE PLANEJAMENTO E GESTÃO - SPG ESTUFA</td></tr></table>${sum}${det}<div style="font-size: 6.5pt; color: #555; margin-top: 10px; border-top: 1px solid #ccc; padding-top: 3px;">* Relatório gerado automaticamente pelo Sistema de Planejamento e Gestão (SPG) Estufa.<br>* Uso interno.</div>`;
             setTimeout(() => { window.print(); }, 100);
         }
     </script>
     <script>
+        async function applyBrandAssets() {
+            const ICON_URL = 'https://i.imgur.com/hzstkNM.png';
+            const favicon = document.getElementById('siteFavicon');
+            const appleTouchIcon = document.getElementById('siteAppleTouchIcon');
+            const manifestLink = document.getElementById('siteManifest');
+
+            // Tenta converter a imagem para base64 para embutir no manifest
+            let logoUri = ICON_URL;
+            try {
+                const res = await fetch(ICON_URL);
+                const blob = await res.blob();
+                logoUri = await new Promise(resolve => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsDataURL(blob);
+                });
+            } catch(e) {
+                // Fallback: usa a URL direta se CORS bloquear
+            }
+
+            if (favicon) { favicon.href = logoUri; favicon.type = 'image/png'; }
+            if (appleTouchIcon) appleTouchIcon.href = logoUri;
+            if (manifestLink) {
+                const manifest = {
+                    name: 'SPG Estufa — Gestão de Cultivos',
+                    short_name: 'SPG Estufa',
+                    description: 'Gestão de Cultivos e Produtividade',
+                    start_url: '.',
+                    display: 'standalone',
+                    orientation: 'any',
+                    background_color: '#f8fafc',
+                    theme_color: '#0f172a',
+                    lang: 'pt-BR',
+                    icons: [
+                        { src: logoUri, sizes: '192x192', type: 'image/png' },
+                        { src: logoUri, sizes: '512x512', type: 'image/png' }
+                    ]
+                };
+                manifestLink.href = `data:application/manifest+json,${encodeURIComponent(JSON.stringify(manifest))}`;
+            }
+        }
+
+        applyBrandAssets();
+
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
