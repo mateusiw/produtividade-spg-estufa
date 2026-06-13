@@ -139,7 +139,7 @@
             <div class="print-hide flex gap-2 sm:gap-6 md:gap-8 border-b border-slate-200/80 px-2 overflow-x-auto hide-scrollbar pb-1">
                 <button onclick="switchTab('previsao')" id="tab-previsao" class="tab-btn active pb-3 text-xs sm:text-sm uppercase tracking-tight sm:tracking-wider flex items-center gap-1 sm:gap-2"><i data-lucide="calendar-days" class="w-4 h-4"></i><span class="hidden sm:inline"> Previsões</span></button>
                 <button onclick="switchTab('produtividade')" id="tab-produtividade" class="tab-btn inactive pb-3 text-xs sm:text-sm uppercase tracking-tight sm:tracking-wider flex items-center gap-1 sm:gap-2"><i data-lucide="layout-dashboard" class="w-4 h-4"></i><span class="hidden sm:inline"> Produtividade</span></button>
-                <button onclick="switchTab('bruta')" id="tab-bruta" class="tab-btn inactive pb-3 text-xs sm:text-sm uppercase tracking-tight sm:tracking-wider flex items-center gap-1 sm:gap-2 text-rose-600"><i data-lucide="trash-2" class="w-4 h-4"></i><span class="hidden sm:inline"> Prod. Bruta</span></button>
+                <button onclick="switchTab('bruta')" id="tab-bruta" class="tab-btn inactive pb-3 text-xs sm:text-sm uppercase tracking-tight sm:tracking-wider flex items-center gap-1 sm:gap-2 text-rose-600"><i data-lucide="package" class="w-4 h-4"></i><span class="hidden sm:inline"> Prod. Bruta</span></button>
                 <button onclick="switchTab('calendario')" id="tab-calendario" class="tab-btn inactive pb-3 text-xs sm:text-sm uppercase tracking-tight sm:tracking-wider flex items-center gap-1 sm:gap-2"><i data-lucide="list-todo" class="w-4 h-4"></i><span class="hidden sm:inline"> Calendário</span></button>
                 <button onclick="switchTab('ranking')" id="tab-ranking" class="tab-btn inactive pb-3 text-xs sm:text-sm uppercase tracking-tight sm:tracking-wider flex items-center gap-1 sm:gap-2"><i data-lucide="trophy" class="w-4 h-4"></i><span class="hidden sm:inline"> Ranking</span></button>
                 <button onclick="switchTab('analise')" id="tab-analise" class="tab-btn inactive pb-3 text-xs sm:text-sm uppercase tracking-tight sm:tracking-wider flex items-center gap-1 sm:gap-2 text-indigo-600"><i data-lucide="microscope" class="w-4 h-4"></i><span class="hidden sm:inline"> Análise</span></button>
@@ -187,6 +187,7 @@
                                 <label class="text-[11px] font-bold text-slate-400 uppercase mb-2 block tracking-wider">Aproveit.(%)</label>
                                 <input type="number" id="deliveryRatePrev" value="85" class="w-full p-2 border border-slate-200 rounded-xl text-sm font-semibold transition-colors focus:ring-2 focus:ring-brand-500/50 bg-white" oninput="applyFiltersPrev()">
                             </div>
+                            <button type="button" id="btnLabels-Prev" onclick="toggleLabels('Prev')" class="flex-auto sm:flex-none shrink-0 w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 rounded-xl text-xs font-bold transition-all h-[38px]"><i data-lucide="tag" class="w-4 h-4"></i><span id="lblLabels-Prev">Mostrar Rótulos</span></button>
                             <button type="button" onclick="clearFilters('Prev')" class="flex-auto sm:flex-none shrink-0 min-w-[100px] w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition-all h-[38px]"><i data-lucide="eraser" class="w-4 h-4"></i> Limpar</button>
                             <button type="button" onclick="fetchData()" class="flex-auto sm:flex-none shrink-0 min-w-[120px] w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold shadow-lg h-[38px] transition-all"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Atualizar</button>
                         </div>
@@ -245,6 +246,7 @@
                                     <div class="flex items-center justify-between p-1 hover:bg-slate-50 rounded-xl group"><label class="flex items-center gap-3 cursor-pointer flex-1 p-1"><input type="checkbox" value="Em andamento" class="checkbox-statusProd accent-brand-600 w-4 h-4 shrink-0" checked onchange="updateStatusText('Prod')"> <span class="text-sm font-semibold text-slate-600">Em andamento</span></label><button type="button" onclick="selectOnlyStatus('Prod', 'Em andamento')" class="text-[10px] font-bold text-brand-600 opacity-0 group-hover:opacity-100 px-2 hover:bg-brand-50 rounded">Somente</button></div>
                                 </div></div>
                             </div>
+                            <button type="button" id="btnLabels-Prod" onclick="toggleLabels('Prod')" class="flex-auto sm:flex-none shrink-0 w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 rounded-xl text-xs font-bold transition-all h-[38px]"><i data-lucide="tag" class="w-4 h-4"></i><span id="lblLabels-Prod">Mostrar Rótulos</span></button>
                             <button type="button" onclick="clearFilters('Prod')" class="flex-auto sm:flex-none shrink-0 min-w-[100px] w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition-all h-[38px]"><i data-lucide="eraser" class="w-4 h-4"></i> Limpar</button>
                             <button type="button" onclick="fetchData()" class="flex-auto sm:flex-none shrink-0 min-w-[120px] w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold shadow-lg h-[38px] transition-all"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Atualizar</button>
                         </div>
@@ -252,11 +254,16 @@
 
                     <div class="print-hide bg-gradient-to-br from-indigo-500 to-brand-600 p-5 sm:p-6 rounded-[24px] text-white flex flex-col relative overflow-hidden shadow-soft">
                         <i data-lucide="sun-snow" class="absolute -right-4 -bottom-4 w-32 h-32 text-white opacity-10"></i>
-                        <h3 class="text-sm font-black uppercase tracking-wide flex items-center gap-2 mb-2 relative z-10"><i data-lucide="calendar-clock" class="w-4 h-4"></i> Análise de Período e Sazonalidade</h3>
+                        <div class="flex items-center justify-between mb-2 relative z-10">
+                            <h3 class="text-sm font-black uppercase tracking-wide flex items-center gap-2"><i data-lucide="calendar-clock" class="w-4 h-4"></i> Análise de Período e Sazonalidade</h3>
+                            <button onclick="toggleIACard()" id="btnOcultarIA" class="flex items-center gap-1.5 px-3 py-1.5 bg-white/15 hover:bg-white/25 text-white rounded-xl text-[11px] font-bold transition-all border border-white/20"><i data-lucide="eye" class="w-3.5 h-3.5" id="iconIACard"></i><span id="lblIACard">Mostrar</span></button>
+                        </div>
+                        <div id="prodIAContent" class="hidden">
                         <p class="text-sm sm:text-base text-indigo-50 font-medium relative z-10"><span id="prodResumoPeriodoData">Em todo o histórico</span> resultou em <strong class="text-white text-xl" id="prodResumoPeriodoKg">0</strong> kg totais e <strong class="text-white text-xl" id="prodResumoPeriodoUn">0</strong> unidades, alcançando um peso médio de <strong class="text-white text-xl bg-white/20 px-2 py-0.5 rounded"><span id="prodResumoPeriodoMed">0</span>g</strong> por fruto.</p>
                         <div class="mt-6 bg-white/10 rounded-2xl border border-white/20 overflow-x-auto relative z-10">
                             <div class="p-3 border-b border-white/20 bg-black/10"><h4 class="text-xs font-black uppercase tracking-wider text-indigo-100">Setores que produziram nesta época</h4></div>
                             <div class="max-h-[250px] overflow-y-auto hide-scrollbar"><table class="w-full text-left min-w-[600px]"><thead class="bg-black/20 text-[10px] uppercase font-bold text-indigo-200 sticky top-0 backdrop-blur-md"><tr><th class="p-3 pl-4">Setor / Ciclo</th><th class="p-3 text-center">Plantio</th><th class="p-3 text-center">Início Colh.</th><th class="p-3 text-center">Fim Colh.</th><th class="p-3 text-center" title="Dias de Ciclo / Dias de Produção (Janela)">Ciclo / Prod.</th><th class="p-3 text-right">Unidades</th><th class="p-3 text-right">Peso (Kg)</th><th class="p-3 text-right pr-4">Média (g)</th></tr></thead><tbody id="prodBlocosPeriodoBody" class="text-sm divide-y divide-white/10"></tbody></table></div>
+                        </div>
                         </div>
                     </div>
                     
@@ -312,6 +319,7 @@
                                     <div class="flex items-center justify-between p-1 hover:bg-slate-50 rounded-xl group"><label class="flex items-center gap-3 cursor-pointer flex-1 p-1"><input type="checkbox" value="Em andamento" class="checkbox-statusBruta accent-brand-600 w-4 h-4 shrink-0" checked onchange="updateStatusText('Bruta')"> <span class="text-sm font-semibold text-slate-600">Em andamento</span></label><button type="button" onclick="selectOnlyStatus('Bruta', 'Em andamento')" class="text-[10px] font-bold text-brand-600 opacity-0 group-hover:opacity-100 px-2 hover:bg-brand-50 rounded">Somente</button></div>
                                 </div></div>
                             </div>
+                            <button type="button" id="btnLabels-Bruta" onclick="toggleLabels('Bruta')" class="flex-auto sm:flex-none shrink-0 w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 rounded-xl text-xs font-bold transition-all h-[38px]"><i data-lucide="tag" class="w-4 h-4"></i><span id="lblLabels-Bruta">Mostrar Rótulos</span></button>
                             <button type="button" onclick="clearFilters('Bruta')" class="flex-auto sm:flex-none shrink-0 min-w-[100px] w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition-all h-[38px]"><i data-lucide="eraser" class="w-4 h-4"></i> Limpar</button>
                             <button type="button" onclick="fetchData()" class="flex-auto sm:flex-none shrink-0 min-w-[120px] w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold shadow-lg h-[38px] transition-all"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Atualizar</button>
                         </div>
@@ -325,11 +333,14 @@
                                 <h3 class="text-lg font-black uppercase tracking-wide flex items-center gap-2"><i data-lucide="sparkles" class="w-5 h-5 text-fuchsia-200"></i> Inteligência Agronômica</h3>
                                 <p class="text-[11px] text-fuchsia-100 font-medium uppercase tracking-widest mt-1">Análise de Descartes e Recomendações (IA)</p>
                             </div>
-                            <button id="aiGenerateBtn" onclick="generateAIAnalysis()" class="flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-fuchsia-700 hover:bg-fuchsia-50 rounded-xl text-xs font-bold transition-all shadow-md shrink-0 w-full sm:w-auto">
-                                <i data-lucide="sparkles" class="w-4 h-4"></i> Gerar Explicação com IA
-                            </button>
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <button id="aiGenerateBtn" onclick="generateAIAnalysis()" class="flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-fuchsia-700 hover:bg-fuchsia-50 rounded-xl text-xs font-bold transition-all shadow-md shrink-0 flex-1 sm:flex-none">
+                                    <i data-lucide="sparkles" class="w-4 h-4"></i> Gerar Explicação com IA
+                                </button>
+                                <button onclick="toggleBrutaIA()" id="btnOcultarBrutaIA" class="flex items-center gap-1.5 px-3 py-2.5 bg-white/15 hover:bg-white/25 text-white rounded-xl text-xs font-bold transition-all border border-white/20 shrink-0"><i data-lucide="eye" class="w-4 h-4" id="iconBrutaIA"></i><span id="lblBrutaIA">Mostrar</span></button>
+                            </div>
                         </div>
-                        <div id="aiAnalysisContent" class="relative z-10 mt-2">
+                        <div id="aiAnalysisContent" class="relative z-10 mt-2 hidden">
                             <div class="bg-black/10 border border-white/20 p-5 rounded-2xl text-sm text-fuchsia-50 leading-relaxed font-medium">
                                 Baseado nos dados de descarte e quebras filtrados abaixo, clique em "Gerar Explicação" para a IA processar suas causas e propor melhorias de colheita/manejo.
                             </div>
@@ -349,7 +360,7 @@
 
                     <div class="print-hide bg-white rounded-[24px] shadow-soft border border-slate-100 overflow-hidden">
                         <div class="p-4 sm:p-5 border-b bg-rose-50/30"><h3 class="text-sm font-black uppercase text-slate-800">LISTA DETALHADA DE PERDAS E DESCARTES</h3></div>
-                        <div class="overflow-x-auto"><table class="w-full text-left min-w-[700px]"><thead class="bg-slate-50 text-[10px] text-slate-400 uppercase border-b"><tr><th class="p-4 whitespace-nowrap">Data</th><th class="p-4">Setor / Variedade</th><th class="p-4">Motivo / Causa</th><th class="p-4 text-center">Unidades</th><th class="p-4 text-right">Peso Total</th></tr></thead><tbody id="brutaTableBody" class="text-sm divide-y divide-slate-100"></tbody></table></div>
+                        <div class="overflow-x-auto max-h-[400px] overflow-y-auto"><table class="w-full text-left min-w-[700px]"><thead class="bg-slate-50 text-[10px] text-slate-400 uppercase border-b sticky top-0 z-10"><tr><th class="p-4 whitespace-nowrap">Data</th><th class="p-4">Setor / Variedade</th><th class="p-4">Motivo / Causa</th><th class="p-4 text-center">Unidades</th><th class="p-4 text-right">Peso Total</th></tr></thead><tbody id="brutaTableBody" class="text-sm divide-y divide-slate-100"></tbody></table></div>
                     </div>
                 </div>
 
@@ -398,7 +409,7 @@
                     </div>
                     <div class="print-hide bg-white rounded-[24px] shadow-soft border border-slate-100 overflow-hidden">
                         <div class="p-4 sm:p-5 border-b bg-slate-50/50"><h3 class="text-sm font-black uppercase">LISTA DE PLANTIOS (POR SETOR E CICLO)</h3></div>
-                        <div class="overflow-x-auto"><table class="w-full text-left min-w-[700px]"><thead class="bg-white text-[10px] text-slate-400 uppercase border-b"><tr><th class="p-4 sm:p-5 whitespace-nowrap">Plantio</th><th class="p-4 sm:p-5 whitespace-nowrap">Início Estimado</th><th class="p-4 sm:p-5 whitespace-nowrap">Início Real (1º Corte)</th><th class="p-4 sm:p-5">Setor / Ciclo / Cultura / Variedades</th><th class="p-4 sm:p-5 text-center">Status</th><th class="p-4 sm:p-5 text-right">Qtd Total</th></tr></thead><tbody id="calTableBody" class="text-sm divide-y divide-slate-50"></tbody></table></div>
+                        <div class="overflow-x-auto max-h-[400px] overflow-y-auto"><table class="w-full text-left min-w-[700px]"><thead class="bg-white text-[10px] text-slate-400 uppercase border-b sticky top-0 z-10"><tr><th class="p-4 sm:p-5 whitespace-nowrap">Plantio</th><th class="p-4 sm:p-5 whitespace-nowrap">Início Estimado</th><th class="p-4 sm:p-5 whitespace-nowrap">Início Real (1º Corte)</th><th class="p-4 sm:p-5">Setor / Ciclo / Cultura / Variedades</th><th class="p-4 sm:p-5 text-center">Status</th><th class="p-4 sm:p-5 text-right">Qtd Total</th></tr></thead><tbody id="calTableBody" class="text-sm divide-y divide-slate-50"></tbody></table></div>
                     </div>
                 </div>
 
@@ -436,6 +447,7 @@
                                     <div class="flex items-center justify-between p-1 hover:bg-slate-50 rounded-xl group"><label class="flex items-center gap-3 cursor-pointer flex-1 p-1"><input type="checkbox" value="Em andamento" class="checkbox-statusRank accent-brand-600 w-4 h-4 shrink-0" onchange="updateStatusText('Rank')"> <span class="text-sm font-semibold text-slate-600">Em andamento</span></label><button type="button" onclick="selectOnlyStatus('Rank', 'Em andamento')" class="text-[10px] font-bold text-brand-600 opacity-0 group-hover:opacity-100 px-2 hover:bg-brand-50 rounded">Somente</button></div>
                                 </div></div>
                             </div>
+                            <button type="button" id="btnLabels-Rank" onclick="toggleLabels('Rank')" class="flex-auto sm:flex-none shrink-0 w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 rounded-xl text-xs font-bold transition-all h-[38px]"><i data-lucide="tag" class="w-4 h-4"></i><span id="lblLabels-Rank">Mostrar Rótulos</span></button>
                             <button type="button" onclick="clearFilters('Rank')" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition-all h-[38px] flex-auto sm:flex-none shrink-0 min-w-[100px] sm:w-auto"><i data-lucide="eraser" class="w-4 h-4"></i> Limpar</button>
                             <button type="button" onclick="fetchData()" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold shadow-lg h-[38px] transition-all flex-auto sm:flex-none shrink-0 min-w-[120px] sm:w-auto"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Atualizar</button>
                         </div>
@@ -486,41 +498,34 @@
                             </div>
                             <div class="flex-auto w-full sm:w-auto min-w-[160px] transition-all duration-300 relative" id="container-statusAnalise">
                                 <label class="text-[11px] font-bold text-slate-400 uppercase mb-2 block tracking-wider">Status</label>
-                                <div class="w-full p-2 border border-slate-200 rounded-xl text-sm font-semibold cursor-pointer flex justify-between items-center h-[38px] bg-white gap-2" onclick="toggleDropdown('statusAnalise')"><span id="text-statusAnalise" class="whitespace-nowrap truncate max-w-[250px]">Concluído</span><i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0"></i></div>
+                                <div class="w-full p-2 border border-slate-200 rounded-xl text-sm font-semibold cursor-pointer flex justify-between items-center h-[38px] bg-white gap-2" onclick="toggleDropdown('statusAnalise')"><span id="text-statusAnalise" class="whitespace-nowrap truncate max-w-[250px]">Todos</span><i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0"></i></div>
                                 <div id="menu-statusAnalise" class="dropdown-menu hidden absolute z-50 w-full sm:w-[240px] mt-2 bg-white border border-slate-100 rounded-2xl shadow-float top-full right-0 sm:left-0 overflow-hidden"><div class="max-h-60 overflow-y-auto p-2" id="list-statusAnalise">
                                     <div class="flex items-center justify-between p-1 hover:bg-slate-50 rounded-xl group"><label class="flex items-center gap-3 cursor-pointer flex-1 p-1"><input type="checkbox" value="Concluído" class="checkbox-statusAnalise accent-brand-600 w-4 h-4 shrink-0" checked onchange="updateStatusText('Analise')"> <span class="text-sm font-semibold text-slate-600">Concluído</span></label><button type="button" onclick="selectOnlyStatus('Analise', 'Concluído')" class="text-[10px] font-bold text-brand-600 opacity-0 group-hover:opacity-100 px-2 hover:bg-brand-50 rounded">Somente</button></div>
-                                    <div class="flex items-center justify-between p-1 hover:bg-slate-50 rounded-xl group"><label class="flex items-center gap-3 cursor-pointer flex-1 p-1"><input type="checkbox" value="Perda total" class="checkbox-statusAnalise accent-brand-600 w-4 h-4 shrink-0" onchange="updateStatusText('Analise')"> <span class="text-sm font-semibold text-slate-600">Perda total</span></label><button type="button" onclick="selectOnlyStatus('Analise', 'Perda total')" class="text-[10px] font-bold text-brand-600 opacity-0 group-hover:opacity-100 px-2 hover:bg-brand-50 rounded">Somente</button></div>
-                                    <div class="flex items-center justify-between p-1 hover:bg-slate-50 rounded-xl group"><label class="flex items-center gap-3 cursor-pointer flex-1 p-1"><input type="checkbox" value="Pendente" class="checkbox-statusAnalise accent-brand-600 w-4 h-4 shrink-0" onchange="updateStatusText('Analise')"> <span class="text-sm font-semibold text-slate-600">Pendente</span></label><button type="button" onclick="selectOnlyStatus('Analise', 'Pendente')" class="text-[10px] font-bold text-brand-600 opacity-0 group-hover:opacity-100 px-2 hover:bg-brand-50 rounded">Somente</button></div>
-                                    <div class="flex items-center justify-between p-1 hover:bg-slate-50 rounded-xl group"><label class="flex items-center gap-3 cursor-pointer flex-1 p-1"><input type="checkbox" value="Em andamento" class="checkbox-statusAnalise accent-brand-600 w-4 h-4 shrink-0" onchange="updateStatusText('Analise')"> <span class="text-sm font-semibold text-slate-600">Em andamento</span></label><button type="button" onclick="selectOnlyStatus('Analise', 'Em andamento')" class="text-[10px] font-bold text-brand-600 opacity-0 group-hover:opacity-100 px-2 hover:bg-brand-50 rounded">Somente</button></div>
+                                    <div class="flex items-center justify-between p-1 hover:bg-slate-50 rounded-xl group"><label class="flex items-center gap-3 cursor-pointer flex-1 p-1"><input type="checkbox" value="Perda total" class="checkbox-statusAnalise accent-brand-600 w-4 h-4 shrink-0" checked onchange="updateStatusText('Analise')"> <span class="text-sm font-semibold text-slate-600">Perda total</span></label><button type="button" onclick="selectOnlyStatus('Analise', 'Perda total')" class="text-[10px] font-bold text-brand-600 opacity-0 group-hover:opacity-100 px-2 hover:bg-brand-50 rounded">Somente</button></div>
+                                    <div class="flex items-center justify-between p-1 hover:bg-slate-50 rounded-xl group"><label class="flex items-center gap-3 cursor-pointer flex-1 p-1"><input type="checkbox" value="Pendente" class="checkbox-statusAnalise accent-brand-600 w-4 h-4 shrink-0" checked onchange="updateStatusText('Analise')"> <span class="text-sm font-semibold text-slate-600">Pendente</span></label><button type="button" onclick="selectOnlyStatus('Analise', 'Pendente')" class="text-[10px] font-bold text-brand-600 opacity-0 group-hover:opacity-100 px-2 hover:bg-brand-50 rounded">Somente</button></div>
+                                    <div class="flex items-center justify-between p-1 hover:bg-slate-50 rounded-xl group"><label class="flex items-center gap-3 cursor-pointer flex-1 p-1"><input type="checkbox" value="Em andamento" class="checkbox-statusAnalise accent-brand-600 w-4 h-4 shrink-0" checked onchange="updateStatusText('Analise')"> <span class="text-sm font-semibold text-slate-600">Em andamento</span></label><button type="button" onclick="selectOnlyStatus('Analise', 'Em andamento')" class="text-[10px] font-bold text-brand-600 opacity-0 group-hover:opacity-100 px-2 hover:bg-brand-50 rounded">Somente</button></div>
                                 </div></div>
                             </div>
+                            <button type="button" id="btnLabels-Analise" onclick="toggleLabels('Analise')" class="flex-auto sm:flex-none shrink-0 w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 rounded-xl text-xs font-bold transition-all h-[38px]"><i data-lucide="tag" class="w-4 h-4"></i><span id="lblLabels-Analise">Mostrar Rótulos</span></button>
                             <button type="button" onclick="clearFilters('Analise')" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition-all h-[38px] flex-auto sm:flex-none shrink-0 min-w-[100px] sm:w-auto"><i data-lucide="eraser" class="w-4 h-4"></i> Limpar</button>
                             <button type="button" onclick="fetchData()" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold shadow-lg h-[38px] transition-all flex-auto sm:flex-none shrink-0 min-w-[120px] sm:w-auto"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Atualizar</button>
                         </div>
                     </div>
 
-                    <!-- Cards de Resumo Inteligente -->
-                    <div class="print-hide grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
-                        <div class="bg-white p-5 rounded-[24px] shadow-soft border border-slate-100 relative overflow-hidden flex flex-col justify-center"><span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1"><i data-lucide="target" class="w-3 h-3"></i> Acurácia de Volume</span><div class="mt-1 flex items-baseline gap-2"><p id="anaAcuraciaVol" class="text-3xl font-black text-slate-800">0%</p></div><p class="text-[10px] text-slate-500 font-medium mt-1">Colhido vs. Projetado inicial</p></div>
-                        <div class="bg-white p-5 rounded-[24px] shadow-soft border border-slate-100 relative overflow-hidden flex flex-col justify-center"><span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> Acurácia de Data</span><div class="mt-1 flex items-baseline gap-2"><p id="anaAcuraciaData" class="text-3xl font-black text-slate-800">0</p><span class="text-xs font-bold text-slate-400 uppercase">dias</span></div><p class="text-[10px] text-slate-500 font-medium mt-1">Média de atraso para o 1º corte</p></div>
-                        <div class="bg-white p-5 rounded-[24px] shadow-soft border border-slate-100 relative overflow-hidden flex flex-col justify-center"><span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1"><i data-lucide="timer" class="w-3 h-3"></i> Janela de Corte Média</span><div class="mt-1 flex items-baseline gap-2"><p id="anaJanelaMédia" class="text-3xl font-black text-slate-800">0</p><span class="text-xs font-bold text-slate-400 uppercase">dias</span></div><p class="text-[10px] text-slate-500 font-medium mt-1">Dias únicos com colheita</p></div>
-                        <div class="bg-indigo-50 p-5 rounded-[24px] shadow-soft border border-indigo-100 relative overflow-hidden flex flex-col justify-center"><span class="text-[10px] font-bold text-indigo-500 uppercase tracking-widest flex items-center gap-1"><i data-lucide="tractor" class="w-3 h-3"></i> Produtividade Relativa</span><div class="mt-1 flex items-baseline gap-2"><p id="anaProdRelativa" class="text-3xl font-black text-indigo-700">0</p><span class="text-xs font-bold text-indigo-500 uppercase">kg</span></div><p class="text-[10px] text-indigo-600 font-medium mt-1">Para cada 1.000 plantas</p></div>
-                    </div>
-
                     <!-- Layout Principal Analise -->
                     <div class="print-hide grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5">
-                        
-                        <!-- Evolução por Ciclo -->
-                        <div class="bg-white p-5 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 flex flex-col h-[380px]"><div class="flex justify-between items-center mb-4"><div><h3 class="text-sm font-black text-slate-800 uppercase">Histórico Evolutivo do Solo</h3><p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Evolução do Peso Médio (g) por Ciclo</p></div></div><div class="flex-1 relative w-full"><canvas id="analiseEvolucaoChart"></canvas></div></div>
 
                         <!-- Curva de Sazonalidade -->
-                        <div class="bg-white p-5 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 flex flex-col h-[380px]"><div class="flex justify-between items-center mb-4"><div><h3 class="text-sm font-black text-slate-800 uppercase">Curva de Sazonalidade (Mensal)</h3><p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Peso Médio por Mês de Colheita</p></div></div><div class="flex-1 relative w-full"><canvas id="analiseSazonalChart"></canvas></div></div>
+                        <div class="bg-white p-5 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 flex flex-col h-[460px]"><div class="flex justify-between items-center mb-4"><div><h3 class="text-sm font-black text-slate-800 uppercase">Curva de Sazonalidade (Mensal)</h3><p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Peso Médio por Mês de Colheita</p></div></div><div class="flex-1 relative w-full"><canvas id="analiseSazonalChart"></canvas></div></div>
 
-                        <!-- Ofensores de Perda -->
-                        <div class="bg-white p-5 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 flex flex-col h-[340px]"><div class="flex justify-between items-center mb-4"><div><h3 class="text-sm font-black text-slate-800 uppercase">Mapa de Ofensores de Perda</h3><p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Volumes absolutos de perda (un) por Variedade</p></div></div><div class="flex-1 relative w-full flex justify-center"><canvas id="analisePerdasChart"></canvas></div></div>
+                        <!-- Gargalos: Duração da Colheita -->
+                        <div class="bg-white p-5 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 flex flex-col h-[460px]"><div class="flex justify-between items-center mb-4"><div><h3 class="text-sm font-black text-slate-800 uppercase">Gargalos: Duração da Colheita</h3><p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Setores com mais dias únicos de colheita</p></div></div><div class="flex-1 relative w-full"><canvas id="analiseJanelaChart"></canvas></div></div>
 
-                        <!-- Janela de Corte (Top Lentidão) -->
-                        <div class="bg-white p-5 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 flex flex-col h-[340px]"><div class="flex justify-between items-center mb-4"><div><h3 class="text-sm font-black text-slate-800 uppercase">Gargalos: Duração da Colheita</h3><p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Setores com mais dias únicos de colheita</p></div></div><div class="flex-1 relative w-full"><canvas id="analiseJanelaChart"></canvas></div></div>
+                        <!-- Kg por Planta por Setor -->
+                        <div class="bg-white p-5 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 flex flex-col h-[460px]"><div class="flex justify-between items-center mb-4"><div><h3 class="text-sm font-black text-slate-800 uppercase">Produtividade por Setor</h3><p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Kg colhido por planta — Top 10 setores</p></div></div><div class="flex-1 relative w-full"><canvas id="analiseKgPlantaChart"></canvas></div></div>
+
+                        <!-- Evolução do Peso Médio por Ciclo -->
+                        <div class="bg-white p-5 sm:p-6 rounded-[24px] shadow-soft border border-slate-100 flex flex-col h-[460px]"><div class="flex justify-between items-center mb-4"><div><h3 class="text-sm font-black text-slate-800 uppercase">Evolução por Ciclo</h3><p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Peso médio (g) agregado por número de ciclo</p></div></div><div class="flex-1 relative w-full"><canvas id="analiseCicloEvolChart"></canvas></div></div>
                     </div>
                 </div>
 
@@ -919,6 +924,51 @@
         function handleBlockChange(t) { updateCycleDropdownForTab(t); window[`applyFilters${t}`](); }
         function handleCropChange(t) { updateVarietyDropdownForTab(t); window[`applyFilters${t}`](); }
 
+        const labelsHidden = { Prev: true, Prod: true, Bruta: true, Rank: true, Analise: true };
+        const tabChartIds = {
+            Prev:    ['forecastChart','weeklyForecastChart'],
+            Prod:    ['chartProdUnidadesBar','chartProdUnidadesPie','chartProdPesoBar','chartProdPesoPie','chartProdMediaBar','chartProdMediaPie','chartProdCaixasBar','chartProdCaixasPie'],
+            Bruta:   ['chartBrutaCausas','chartBrutaEvolucao'],
+            Rank:    ['rankAprovChart','rankPesoChart'],
+            Analise: ['analiseSazonalChart','analiseJanelaChart','analiseKgPlantaChart','analiseCicloEvolChart']
+        };
+        function toggleBrutaIA() {
+            const content = document.getElementById('aiAnalysisContent');
+            const lbl = document.getElementById('lblBrutaIA');
+            const icon = document.getElementById('iconBrutaIA');
+            const hidden = content.classList.toggle('hidden');
+            lbl.innerText = hidden ? 'Mostrar' : 'Ocultar';
+            icon.setAttribute('data-lucide', hidden ? 'eye' : 'eye-off');
+            lucide.createIcons();
+        }
+
+        function toggleIACard() {
+            const content = document.getElementById('prodIAContent');
+            const lbl = document.getElementById('lblIACard');
+            const icon = document.getElementById('iconIACard');
+            const hidden = content.classList.toggle('hidden');
+            lbl.innerText = hidden ? 'Mostrar' : 'Ocultar';
+            icon.setAttribute('data-lucide', hidden ? 'eye' : 'eye-off');
+            lucide.createIcons();
+        }
+
+        function applyLabelState(tab) {
+            if (!labelsHidden[tab]) return;
+            (tabChartIds[tab]||[]).forEach(id => { if (!charts[id]) return; charts[id].options.plugins.datalabels.display = false; charts[id].update(); });
+        }
+        function toggleLabels(tab) {
+            labelsHidden[tab] = !labelsHidden[tab];
+            const hide = labelsHidden[tab];
+            if (hide) {
+                (tabChartIds[tab]||[]).forEach(id => { if (!charts[id]) return; charts[id].options.plugins.datalabels.display = false; charts[id].update(); });
+            } else {
+                window['applyFilters'+tab]();
+            }
+            const lbl = document.getElementById('lblLabels-'+tab); if (lbl) lbl.innerText = hide ? 'Mostrar Rótulos' : 'Ocultar Rótulos';
+            const btn = document.getElementById('btnLabels-'+tab);
+            if (btn) { btn.classList.toggle('bg-indigo-100', hide); btn.classList.toggle('text-indigo-800', hide); btn.classList.toggle('bg-indigo-50', !hide); btn.classList.toggle('text-indigo-700', !hide); }
+        }
+
         function clearFilters(t) {
             const mi = document.getElementById('startMonth'+t); if (mi && mi._flatpickr) mi._flatpickr.clear(); else if (mi) mi.value = "";
             if (t === 'Prev') { const r = document.getElementById('deliveryRatePrev'); if (r) r.value = "85"; }
@@ -1136,7 +1186,7 @@
                 const d = parseGoogleDate(r.data_entrega); if(!d || (dates.s && (d < dates.s || d > dates.e))) return;
                 lt[k].colhidas += r.qtd_cabecas; lt[k].kg += r.peso_total_kg; if (!lt[k].min_d || d < lt[k].min_d) lt[k].min_d = d; if (!lt[k].max_d || d > lt[k].max_d) lt[k].max_d = d; lt[k].dias_colheita.add(d.toISOString().split('T')[0]);
             });
-            let tPl=0, tCol=0, tKg=0, sAtr=0, cAtr=0, sJan=0, cJan=0; const saz = Array(12).fill().map(()=>({un:0,kg:0})), prd={}, evM={}, jRn=[];
+            let tPl=0, tCol=0, tKg=0, sAtr=0, cAtr=0, sJan=0, cJan=0; const saz = Array(12).fill().map(()=>({un:0,kg:0})), prd={}, evM={}, jRn=[], kgPl={}, cicloAgg={};
             Object.values(lt).forEach(l => {
                 if(l.plantas > 0) tPl += l.plantas;
                 if(l.colhidas > 0) {
@@ -1146,12 +1196,15 @@
                     if(l.min_d) { const m = l.min_d.getMonth(); saz[m].un += l.colhidas; saz[m].kg += l.kg; }
                     if(!evM[l.bloco]) evM[l.bloco] = []; evM[l.bloco].push({ciclo: l.ciclo, pMed: Math.round((l.kg / l.colhidas) * 1000)});
                     const pV = Math.max(l.plantas, l.colhidas) - l.colhidas; if(pV > 0) { const vN = l.variedade || "Não Informado"; if(!prd[vN]) prd[vN] = 0; prd[vN] += pV; }
+                    if(l.plantas>0){if(!kgPl[l.bloco])kgPl[l.bloco]={kg:0,pl:0}; kgPl[l.bloco].kg+=l.kg; kgPl[l.bloco].pl+=l.plantas;}
+                    if(!cicloAgg[l.ciclo])cicloAgg[l.ciclo]={kg:0,un:0}; cicloAgg[l.ciclo].kg+=l.kg; cicloAgg[l.ciclo].un+=l.colhidas;
                 }
             });
             const tBlEv = Object.keys(evM).filter(b => evM[b].length > 1).sort((a,b) => evM[b].length - evM[a].length).slice(0, 5);
             let mCy = 0; tBlEv.forEach(b => { mCy = Math.max(mCy, ...evM[b].map(x=>x.ciclo)); evM[b].sort((x,y) => x.ciclo - y.ciclo); });
             const pL = Object.keys(prd).sort((a,b) => prd[b] - prd[a]).slice(0, 8);
-            return { globalAprov: tPl>0?Math.min(100,Math.round((tCol/tPl)*100)):0, avgAtraso: cAtr>0?Math.round(sAtr/cAtr):0, avgJanela: cJan>0?Math.round(sJan/cJan):0, prod1000: tPl>0?Math.round((tKg/(tPl/1000))):0, sazChartData: saz.map(s => s.un>0?Math.round((s.kg/s.un)*1000):null), evolucaoLabels: Array.from({length: mCy}, (_, i) => `Ciclo ${i+1}`), evolucaoMap: evM, topBlocosEvolucao: tBlEv, perdasLabels: pL, perdasData: pL.map(l => prd[l]), topJanelas: jRn.sort((a,b) => b.days - a.days).slice(0, 5) };
+            const cicloKeys = Object.keys(cicloAgg).map(Number).sort((a,b)=>a-b);
+            return { globalAprov: tPl>0?Math.min(100,Math.round((tCol/tPl)*100)):0, avgAtraso: cAtr>0?Math.round(sAtr/cAtr):0, avgJanela: cJan>0?Math.round(sJan/cJan):0, prod1000: tPl>0?Math.round((tKg/(tPl/1000))):0, sazChartData: saz.map(s => s.un>0?Math.round((s.kg/s.un)*1000):null), evolucaoLabels: Array.from({length: mCy}, (_, i) => `Ciclo ${i+1}`), evolucaoMap: evM, topBlocosEvolucao: tBlEv, perdasLabels: pL, perdasData: pL.map(l => prd[l]), topJanelas: jRn.sort((a,b) => b.days - a.days).slice(0, 5), kgPlantaTop: Object.entries(kgPl).map(([b,d])=>({name:b,val:parseFloat((d.kg/d.pl).toFixed(2))})).sort((a,b)=>b.val-a.val).slice(0,10), cicloEvolLabels: cicloKeys.map(c=>`Ciclo ${c}`), cicloEvolData: cicloKeys.map(c=>cicloAgg[c].un>0?Math.round((cicloAgg[c].kg/cicloAgg[c].un)*1000):null) };
         }
 
         function processBruta(hist, pend, desc, dates, bF, cyF, crF, vF, stats) {
@@ -1241,6 +1294,7 @@
             const tb = document.getElementById('forecastTableBody'); if (tb) { tb.innerHTML = res.tabela.length===0?'<tr><td colspan="5" class="p-4 sm:p-6 text-center text-slate-400">Nenhum setor futuro encontrado.</td></tr>':''; res.tabela.forEach(b=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td class="p-4 sm:p-5 font-semibold text-slate-700 whitespace-nowrap">${b.dObj.toLocaleDateString('pt-BR')}</td><td class="p-4 sm:p-5"><div class="font-black text-slate-800">${b.bloco}</div><div class="text-[10px] text-slate-500">CICLO ${b.ciclo} • ${b.cultura} • <span class="text-brand-600 font-semibold">${b.variedade}</span></div></td><td class="p-4 sm:p-5 text-center"><span class="px-3 py-1 rounded-lg text-[10px] font-black ${b.status.toUpperCase().includes('ANDAMENTO')?'bg-amber-100 text-amber-700':'bg-slate-100 text-slate-600'}">${b.status}</span></td><td class="p-4 sm:p-5 text-center"><div class="bg-slate-50 rounded-xl p-2 inline-block border"><span class="font-black text-slate-800">${Math.round(b.pEfet).toLocaleString('pt-BR')}</span> un<div class="text-[9px] text-slate-400 mt-1">C: ${Math.round(b.pRest).toLocaleString('pt-BR')} | E: ${Math.round(b.jaEnt).toLocaleString('pt-BR')}</div><div class="text-[8px] text-slate-400 font-bold mt-1">${b.plantas.toLocaleString('pt-BR')} plantas</div></div></td><td class="p-4 sm:p-5 text-right font-black text-brand-700 text-lg">${Math.round(b.vKg).toLocaleString('pt-BR')}</td>`; tb.appendChild(tr); }); }
             const dt = document.getElementById('forecastDailyTableBody'); if (dt) { dt.innerHTML = res.chartData.length===0?'<tr><td colspan="3" class="p-4 text-center text-slate-400">Sem dados.</td></tr>':''; res.chartData.forEach(d=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td class="p-4 font-bold text-xs text-slate-700 whitespace-nowrap">${d.label}</td><td class="p-4 text-center"><span class="bg-slate-100 px-2 py-1 rounded font-black text-slate-800">${Math.round(d.unidades).toLocaleString('pt-BR')}</span></td><td class="p-4 text-right"><span class="bg-brand-50 text-brand-600 px-2 py-1 rounded font-black text-sm">${Math.round(d.peso).toLocaleString('pt-BR')}</span></td>`; dt.appendChild(tr); }); }
             createGroupedBarChart('forecastChart', res.chartData); createGroupedBarChart('weeklyForecastChart', res.weeklyData);
+            applyLabelState('Prev');
         }
 
         function updateProdutividadeView(p) {
@@ -1255,6 +1309,7 @@
             safeSetText('prodResumoPeriodoData', labelData);
             
             safeSetText('prodResumoPeriodoKg', Math.round(p.totalKg).toLocaleString('pt-BR')); safeSetText('prodResumoPeriodoUn', p.totalU.toLocaleString('pt-BR')); safeSetText('prodResumoPeriodoMed', p.totalU>0?Math.round((p.totalKg/p.totalU)*1000).toLocaleString('pt-BR'):'0');
+            applyLabelState('Prod');
             const tb = document.getElementById('prodBlocosPeriodoBody'); if (tb) { tb.innerHTML=''; const ba=Object.values(p.blocos).sort((a,b)=>b.kg-a.kg); if(ba.length===0) tb.innerHTML='<tr><td colspan="8" class="p-4 text-center text-indigo-200">Nenhuma colheita neste período.</td></tr>'; else ba.forEach(b=>{ const dP = b.plantio ? b.plantio.toLocaleDateString('pt-BR') : '--'; const dI = b.inicio ? b.inicio.toLocaleDateString('pt-BR') : '--'; const dF = b.fim ? b.fim.toLocaleDateString('pt-BR') : '--'; const cic = (b.inicio && b.plantio) ? Math.ceil((b.inicio - b.plantio)/86400000) : '--'; const prd = (b.fim && b.inicio) ? Math.ceil((b.fim - b.inicio)/86400000)+1 : '--'; tb.innerHTML+=`<tr><td class="p-3 pl-4 font-black text-white">${b.nome} <span class="text-[10px] text-indigo-200 font-semibold ml-1">C${b.ciclo}</span></td><td class="p-3 text-center text-[11px] font-semibold text-indigo-100">${dP}</td><td class="p-3 text-center text-[11px] font-semibold text-sky-200">${dI}</td><td class="p-3 text-center text-[11px] font-semibold text-indigo-100">${dF}</td><td class="p-3 text-center text-[11px] font-bold"><span class="bg-indigo-900/40 px-1.5 py-0.5 rounded text-indigo-200">${cic}d</span> <span class="text-indigo-400">/</span> <span class="bg-brand-900/40 px-1.5 py-0.5 rounded text-sky-200">${prd}d</span></td><td class="p-3 text-right font-semibold text-indigo-50">${b.un.toLocaleString('pt-BR')} un</td><td class="p-3 text-right font-black text-white">${Math.round(b.kg).toLocaleString('pt-BR')} kg</td><td class="p-3 text-right pr-4 font-bold text-indigo-200">${b.un>0?Math.round((b.kg/b.un)*1000):0} g</td></tr>`; }); }
         }
 
@@ -1271,11 +1326,15 @@
             const rT=(d,tbId,vK,suf)=>{ const tb=document.getElementById(tbId); if(!tb)return; tb.innerHTML=d.length===0?'<tr><td colspan="3" class="p-4 text-center text-slate-400">Nenhum dado</td></tr>':''; d.slice(0,10).forEach((i,x)=>{ tb.innerHTML+=`<tr><td class="p-3 w-10 text-center">${x===0?`<i data-lucide="medal" class="w-5 h-5 text-yellow-500"></i>`:x===1?`<i data-lucide="medal" class="w-5 h-5 text-slate-400"></i>`:x===2?`<i data-lucide="medal" class="w-5 h-5 text-amber-600"></i>`:`<span class="text-slate-400 font-bold">${x+1}º</span>`}</td><td class="p-3"><div class="font-black text-slate-800 text-xs">${i.bloco}</div><div class="text-[9px] text-slate-500">C${i.ciclo} • ${i.cultura}</div></td><td class="p-3 text-right font-black text-slate-700 text-sm">${i[vK].toLocaleString('pt-BR')}${suf}</td></tr>`; }); };
             rT(tA,'rankTopAprovBody','aprov','%'); rT(wA,'rankWorstAprovBody','aprov','%'); rT(tP,'rankTopPesoBody','pMed','g'); lucide.createIcons();
             createHorizontalBarChart('rankAprovChart', tA.slice(0,5).map(i=>`${i.bloco} (C${i.ciclo})`), tA.slice(0,5).map(i=>i.aprov), '#10b981', 'Aproveitamento (%)', '%'); createHorizontalBarChart('rankPesoChart', tP.slice(0,5).map(i=>`${i.bloco} (C${i.ciclo})`), tP.slice(0,5).map(i=>i.pMed), '#0ea5e9', 'Peso Médio (g)', 'g');
+            applyLabelState('Rank');
         }
 
         function updateAnaliseView(r) {
-            safeSetText('anaAcuraciaVol', r.globalAprov+'%'); safeSetText('anaAcuraciaData', r.avgAtraso>0?'+'+r.avgAtraso:r.avgAtraso); safeSetText('anaJanelaMédia', r.avgJanela); safeSetText('anaProdRelativa', r.prod1000.toLocaleString('pt-BR'));
-            createSimpleBarChart('analiseSazonalChart', nomesDosMeses, r.sazChartData, '#0284c7', 'Peso Médio (g)', false, 'g'); createLineChart('analiseEvolucaoChart', r.evolucaoLabels, r.evolucaoMap, r.topBlocosEvolucao); createHorizontalBarChart('analiseJanelaChart', r.topJanelas.map(i=>i.name), r.topJanelas.map(i=>i.days), '#f59e0b', 'Dias de Colheita', ' dias'); createPieChart('analisePerdasChart', r.perdasLabels, r.perdasData, ['#f43f5e','#f97316','#8b5cf6','#10b981','#14b8a6','#d946ef','#eab308','#64748b'], false);
+            createSimpleBarChart('analiseSazonalChart', nomesDosMeses, r.sazChartData, '#0284c7', 'Peso Médio (g)', false, 'g');
+            createHorizontalBarChart('analiseJanelaChart', r.topJanelas.map(i=>i.name), r.topJanelas.map(i=>i.days), '#f59e0b', 'Dias de Colheita', ' dias');
+            createHorizontalBarChart('analiseKgPlantaChart', r.kgPlantaTop.map(i=>i.name), r.kgPlantaTop.map(i=>i.val), '#10b981', 'Kg por Planta', ' kg');
+            createSimpleBarChart('analiseCicloEvolChart', r.cicloEvolLabels, r.cicloEvolData, '#6366f1', 'Peso Médio (g)', false, 'g');
+            applyLabelState('Analise');
         }
 
         function updateBrutaView(r) {
@@ -1301,6 +1360,7 @@
 
             createPieChart('chartBrutaCausas', r.causasSummary.map(c=>c.causa), r.causasSummary.map(c=>c.unidades), ['#f43f5e','#f97316','#eab308','#8b5cf6','#14b8a6','#10b981','#64748b'], false);
             createSimpleBarChart('chartBrutaEvolucao', r.evolucaoLabels, r.evolucaoUnidades, '#f43f5e', 'Descarte (un)', false, ' un');
+            applyLabelState('Bruta');
 
             const tb = document.getElementById('brutaTableBody');
             if (tb) {
@@ -1487,8 +1547,8 @@
                 const vItems = Array.from(varSet2).sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'})).map(v=>({v:v,l:v}));
                 const secLabel = (txt, color) => { const map = { emerald:'text-emerald-700 bg-emerald-50 border-emerald-100', amber:'text-amber-700 bg-amber-50 border-amber-100', sky:'text-sky-700 bg-sky-50 border-sky-100', violet:'text-violet-700 bg-violet-50 border-violet-100' }; const cls = map[color]||map.emerald; return `<div class="col-span-2 flex items-center gap-2 pt-4 pb-1"><span class="text-[9px] font-black uppercase tracking-widest ${cls} px-2 py-0.5 rounded-full border shrink-0">${txt}</span><div class="flex-1 h-px bg-slate-100"></div></div>`; };
                 const metric = (label, value, size='text-lg', color='text-slate-800') => `<div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">${label}</p><p class="${size} font-black ${color} leading-none">${value}</p></div>`;
-                h += `<div class="bg-white rounded-[24px] shadow-soft border border-slate-100 flex flex-col w-full relative overflow-hidden transition-shadow" data-card-id="${c.id}" draggable="true" ondragstart="onCardDragStart(event,${c.id})" ondragend="onCardDragEnd(event)" ondragover="onCardDragOver(event)" ondragleave="onCardDragLeave(event)" ondrop="onCardDrop(event,${c.id})">
-  <div class="h-1 w-full bg-gradient-to-r from-brand-400 to-brand-600"></div>
+                h += `<div class="bg-white rounded-[24px] shadow-soft border border-slate-100 flex flex-col w-full relative transition-shadow" data-card-id="${c.id}" draggable="true" ondragstart="onCardDragStart(event,${c.id})" ondragend="onCardDragEnd(event)" ondragover="onCardDragOver(event)" ondragleave="onCardDragLeave(event)" ondrop="onCardDrop(event,${c.id})">
+  <div class="h-1 w-full bg-gradient-to-r from-brand-400 to-brand-600 rounded-t-[24px]"></div>
   <div class="p-5 flex flex-col flex-1">
     <div class="compare-ui-only absolute top-3 right-4 flex items-center gap-1.5 z-10">
       <span class="cursor-grab active:cursor-grabbing text-slate-300 hover:text-slate-500 transition-colors p-0.5" title="Arrastar para reordenar"><i data-lucide="grip-vertical" class="w-4 h-4"></i></span>
@@ -1785,7 +1845,7 @@
         }
         function createSimpleBarChart(id, l, d, c, t, isF=false, s='') {
             const ctx=document.getElementById(id); if(!ctx)return; const c2=ctx.getContext('2d'); if(charts[id])charts[id].destroy(); const bD=l.length===0;
-            charts[id] = new Chart(c2, { type: 'bar', data: { labels: bD?["Sem Dados"]:l, datasets: [{ label:t, data:bD?[0]:d, backgroundColor:bD?'#f1f5f9':c, borderRadius:4, barPercentage:0.95, categoryPercentage:0.95 }] }, options: { responsive:true, maintainAspectRatio:false, plugins: { legend:{display:false}, tooltip:{backgroundColor:'rgba(15, 23, 42, 0.95)',padding:12,cornerRadius:8,callbacks:{label:ct=>bD?" Sem Dados":` ${ct.dataset.label}: ${isF?ct.raw.toFixed(3):Math.round(ct.raw).toLocaleString('pt-BR')}`}}, datalabels:{display:function(){return !bD;},anchor:'end',align:'bottom',color:'#ffffff',backgroundColor:'rgba(148, 163, 184, 0.6)',borderRadius:4,padding:{top:2,bottom:2,left:4,right:4},font:{weight:'800',size:10},formatter:function(v){return v?(isF?v.toFixed(3).replace('.',','):Math.round(v).toLocaleString('pt-BR'))+s:'';}} }, scales: { y:{display:false}, x:{grid:{display:false},ticks:{display:!bD}} } } });
+            charts[id] = new Chart(c2, { type: 'bar', data: { labels: bD?["Sem Dados"]:l, datasets: [{ label:t, data:bD?[0]:d, backgroundColor:bD?'#f1f5f9':c, borderRadius:4, barPercentage:0.95, categoryPercentage:0.95 }] }, options: { responsive:true, maintainAspectRatio:false, plugins: { legend:{display:false}, tooltip:{backgroundColor:'rgba(15, 23, 42, 0.95)',padding:12,cornerRadius:8,callbacks:{label:ct=>bD?" Sem Dados":` ${ct.dataset.label}: ${isF?ct.raw.toFixed(3):Math.round(ct.raw).toLocaleString('pt-BR')}`}}, datalabels:{display:function(ctx){return !bD && ctx.dataset.data[ctx.dataIndex] != null && ctx.dataset.data[ctx.dataIndex] > 0;},anchor:'end',align:'bottom',color:'#ffffff',backgroundColor:'rgba(148, 163, 184, 0.6)',borderRadius:4,padding:{top:2,bottom:2,left:4,right:4},font:{weight:'800',size:10},formatter:function(v){return v?(isF?v.toFixed(3).replace('.',','):Math.round(v).toLocaleString('pt-BR'))+s:'';}} }, scales: { y:{display:false}, x:{grid:{display:false},ticks:{display:!bD}} } } });
         }
         function createHorizontalBarChart(id, l, d, c, t, s='') {
             const ctx=document.getElementById(id); if(!ctx)return; const c2=ctx.getContext('2d'); if(charts[id])charts[id].destroy(); const bD=l.length===0;
