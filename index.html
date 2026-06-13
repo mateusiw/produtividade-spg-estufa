@@ -631,7 +631,7 @@
     <div id="printDocumentContainer"></div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzt4UBRu0x2QtC15SXBvi27LWsEfoC1yXCbryOxKYp-MBUTAobSSqL__u5abQv6ZYA/exec"; 
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbynVfB2ZWCgPtnZh6oktvT7QXx5BbUQn_I7ZqTRQXVcsEvCY7pwnKw0e48fQoP1grdoAQ/exec"; 
         let charts = {}; 
         let cachedApiData = null; 
         let cropVarietyMap = {};
@@ -716,6 +716,8 @@
                     errDiv.classList.remove('hidden');
                 }
             } catch (err) {
+                console.error('Login fetch error:', err);
+                errDiv.textContent = 'Erro de conexão: ' + err.message;
                 errDiv.classList.remove('hidden');
             } finally {
                 btn.disabled = false;
